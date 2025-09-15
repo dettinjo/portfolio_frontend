@@ -1,0 +1,119 @@
+/* src/app/globals.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    --background: 240 5.9% 90%;                  /* Original: rgb(218, 22, 22) */
+    --foreground: 240 5.9% 10%;                   /* Original: oklch(0.21 0.01 286) */
+    --card: 240 5.9% 90%;                       /* Original: oklch(0.92 0.00 286) */
+    --card-foreground: 240 5.6% 8.8%;             /* Original: oklch(0.141 0.005 285.823) */
+    --popover: 240 5.2% 93.9%;                    /* Original: oklch(0.92 0.00 286) */
+    --popover-foreground: 240 5.6% 8.8%;          /* Original: oklch(0.141 0.005 285.823) */
+    --primary: 240 5.9% 10%;                      /* Original: oklch(0.21 0.01 286) */
+    --primary-foreground: 0 0% 98%;               /* Original: oklch(0.985 0 0) */
+    --secondary: 240 4.8% 95.9%;                  /* Original: oklch(0.967 0.001 286.375) */
+    --secondary-foreground: 240 5.9% 10%;         /* Original: oklch(0.21 0.01 286) */
+    --muted: 240 4.8% 95.9%;                      /* Original: oklch(0.967 0.001 286.375) */
+    --muted-foreground: 240 3.8% 46.1%;           /* Original: oklch(0.552 0.016 285.938) */
+    --accent: 240 4.8% 95.9%;                     /* Original: oklch(0.967 0.001 286.375) */
+    --accent-foreground: 240 5.9% 10%;            /* Original: oklch(0.21 0.01 286) */
+    --destructive: 0 84.2% 60.2%;                 /* Original: oklch(0.577 0.245 27.325) */
+    --border: 240 5.9% 91%;                       /* Original: oklch(0.92 0.004 286.32) */
+    --input: 240 5.9% 91%;                        /* Original: oklch(0.92 0.004 286.32) */
+    --ring: 240 4.9% 65.1%;                       /* Original: oklch(0.705 0.015 286.067) */
+    --chart-1: 21 92.1% 62.5%;                    /* Original: oklch(0.646 0.222 41.116) */
+    --chart-2: 175 42.6% 45.1%;                   /* Original: oklch(0.6 0.118 184.704) */
+    --chart-3: 214 47.4% 28.2%;                   /* Original: oklch(0.398 0.07 227.392) */
+    --chart-4: 66 73.1% 75.9%;                    /* Original: oklch(0.828 0.189 84.429) */
+    --chart-5: 48 64.9% 69.2%;                    /* Original: oklch(0.769 0.188 70.08) */
+    --sidebar: 0 0% 98%;                          /* Original: oklch(0.985 0 0) */
+    --sidebar-foreground: 240 5.6% 8.8%;          /* Original: oklch(0.141 0.005 285.823) */
+    --sidebar-primary: 240 5.9% 10%;              /* Original: oklch(0.21 0.01 286) */
+    --sidebar-primary-foreground: 0 0% 98%;       /* Original: oklch(0.985 0 0) */
+    --sidebar-accent: 240 4.8% 95.9%;             /* Original: oklch(0.967 0.001 286.375) */
+    --sidebar-accent-foreground: 240 5.9% 10%;    /* Original: oklch(0.21 0.01 286) */
+    --sidebar-border: 240 5.9% 91%;               /* Original: oklch(0.92 0.004 286.32) */
+    --sidebar-ring: 240 4.9% 65.1%;               /* Original: oklch(0.705 0.015 286.067) */
+  }
+
+  .dark {
+    --background: 240 5.9% 10%;                  /* Original: rgb(30, 30, 201) */
+    --foreground: 240 5.9% 90% 5.2% 93.9%;                 /* Original: oklch(0.92 0.00 286) */
+    --card: 240 5.9% 10%;                         /* Original: oklch(0.21 0.01 286) */
+    --card-foreground: 0 0% 98%;                  /* Original: oklch(0.985 0 0) */
+    --popover: 240 5.9% 10%;                      /* Original: oklch(0.21 0.01 286) */
+    --popover-foreground: 0 0% 98%;               /* Original: oklch(0.985 0 0) */
+    --primary: 240 5.9% 91%;                      /* Original: oklch(0.92 0.004 286.32) */
+    --primary-foreground: 240 5.9% 10%;           /* Original: oklch(0.21 0.01 286) */
+    --secondary: 240 3.7% 15.9%;                  /* Original: oklch(0.274 0.006 286.033) */
+    --secondary-foreground: 0 0% 98%;             /* Original: oklch(0.985 0 0) */
+    --muted: 240 3.7% 15.9%;                      /* Original: oklch(0.274 0.006 286.033) */
+    --muted-foreground: 240 4.9% 65.1%;           /* Original: oklch(0.705 0.015 286.067) */
+    --accent: 240 3.7% 15.9%;                     /* Original: oklch(0.274 0.006 286.033) */
+    --accent-foreground: 0 0% 98%;                /* Original: oklch(0.985 0 0) */
+    --destructive: 0 62.8% 30.6%;                 /* Original: oklch(0.704 0.191 22.216) */
+    --border: 240 3.7% 15.9%;                     /* oklch(1 0 0 / 10%) ist ein transparentes Weiß, hier als solide Farbe angenähert */
+    --input: 240 3.7% 15.9%;                      /* oklch(1 0 0 / 15%) ist ein transparentes Weiß, hier als solide Farbe angenähert */
+    --ring: 240 3.8% 46.1%;                       /* Original: oklch(0.552 0.016 285.938) */
+    --chart-1: 260 81.3% 49%;                     /* Original: oklch(0.488 0.243 264.376) */
+    --chart-2: 159 47.9% 61.2%;                   /* Original: oklch(0.696 0.17 162.48) */
+    --chart-3: 48 64.9% 69.2%;                    /* Original: oklch(0.769 0.188 70.08) */
+    --chart-4: 297 87.2% 57.5%;                   /* Original: oklch(0.627 0.265 303.9) */
+    --chart-5: 6 86.8% 59.8%;                     /* Original: oklch(0.645 0.246 16.439) */
+    --sidebar: 240 5.9% 10%;                      /* Original: oklch(0.21 0.01 286) */
+    --sidebar-foreground: 0 0% 98%;               /* Original: oklch(0.985 0 0) */
+    --sidebar-primary: 260 81.3% 49%;             /* Original: oklch(0.488 0.243 264.376) */
+    --sidebar-primary-foreground: 0 0% 98%;       /* Original: oklch(0.985 0 0) */
+    --sidebar-accent: 240 3.7% 15.9%;             /* Original: oklch(0.274 0.006 286.033) */
+    --sidebar-accent-foreground: 0 0% 98%;        /* Original: oklch(0.985 0 0) */
+    --sidebar-border: 240 3.7% 15.9%;             /* oklch(1 0 0 / 10%) angenähert */
+    --sidebar-ring: 240 3.8% 46.1%;               /* Original: oklch(0.552 0.016 285.938) */
+  }
+}
+
+/* --- Definitive Skill Pill Styles (Light & Dark Mode) --- */
+
+/* Default State */
+.skill-pill {
+  background-color: transparent;
+  transition: background-color 0.2s ease-in-out;
+}
+.skill-pill .skill-icon,
+.skill-pill .skill-text {
+  color: hsl(var(--foreground));
+  transition: color 0.2s ease-in-out;
+}
+.skill-pill .dot-filled {
+  background-color: hsl(var(--foreground));
+}
+.skill-pill .dot {
+  border: 1px solid hsl(var(--foreground));
+}
+
+/* Hover State */
+.skill-pill[data-hovered="true"] {
+  background-color: hsl(var(--foreground)); /* Becomes light in dark mode */
+}
+.skill-pill[data-hovered="true"] .skill-icon,
+.skill-pill[data-hovered="true"] .skill-text {
+  color: hsl(var(--background)); /* Becomes dark in dark mode */
+}
+.skill-pill[data-hovered="true"] .dot-filled {
+  background-color: hsl(var(--background)); /* Becomes dark in dark mode */
+}
+.skill-pill[data-hovered="true"] .dot {
+  border-color: hsl(var(--background)); /* Becomes dark in dark mode */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "SoftwareHeader": {
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact"
+  },
+  "PhotographyHeader": {
+    "galleries": "Galleries",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "HomePage": {
+    "code": "Code",
+    "photos": "Photos"
+  },
+  "SoftwareHeroSection": {
+    "greeting": "Hi, I'm Joel",
+    "intro": "A Full-Stack Developer passionate about designing and building robust, scalable, and user-friendly web applications."
+  },
+  "SoftwareProjectsSection": {
+    "title": "Projects",
+    "subtitle": "An insight into my problem-solving skills and technical execution.",
+    "button_details": "View Details"
+  },
+  "SoftwareSkillsSection": {
+    "title": "Technologies & Skills",
+    "subtitle": "My toolkit for developing modern, robust, and scalable software solutions.",
+    "category_frontend": "Frontend",
+    "category_backend": "Backend",
+    "category_devops": "DevOps & Tools"
+  }
+}
