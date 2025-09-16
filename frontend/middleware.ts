@@ -4,11 +4,7 @@ import {routing} from './src/i18n/routing';
 export default createMiddleware(routing);
  
 export const config = {
-  // This explicitly tells the middleware to run on the root, and on any path
-  // that is NOT a system file or an API route.
-  matcher: [
-    '/',
-    '/(de|en)/:path*',
-    '/((?!api|_next/static|_next/image|favicon.ico).*)'
-  ]
+  // This matcher ensures the middleware runs on all paths
+  // except for specific asset folders and files with extensions.
+  matcher: '/((?!api|_next|_vercel|.*\\..*).*)'
 };

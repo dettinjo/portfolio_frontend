@@ -9,13 +9,14 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-// 1. Define the correct Props type where params is a Promise.
+// 1. DEFINE THE CORRECT PROPS TYPE
+// The `params` prop is a Promise that resolves to the object.
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
 
-// 2. The component MUST be `async`.
+// 2. THE COMPONENT MUST BE `async`.
 export default async function LocaleLayout({ children, params }: Props) {
   // 3. You MUST await the params Promise to get the value.
   const { locale } = await params;
