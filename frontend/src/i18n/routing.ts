@@ -7,11 +7,10 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: 'en',
 
-  // --- THIS IS CRITICAL ---
-  // We set this back to 'always'. This tells the i18n middleware that when it
-  // receives a path without a locale (like our rewritten `/software` path),
-  // it MUST perform a redirect to a path WITH a locale (e.g., `/de/software`).
-  localePrefix: 'always'
+  // --- THIS IS THE CRITICAL AND FINAL FIX ---
+  // We explicitly tell next-intl to NEVER add a prefix to the URL.
+  // The language will be handled by a cookie, not the path.
+  localePrefix: 'never'
 });
 
 // Helper type for type safety

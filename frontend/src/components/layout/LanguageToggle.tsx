@@ -1,24 +1,22 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import React, { useTransition } from "react";
+import React from "react";
 
 export function LanguageToggle() {
   const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
 
   const toggleLanguage = () => {
     const nextLocale = locale === "de" ? "en" : "de";
 
-    // THE FINAL FIX: We use `startTransition` to tell React this is a
-    // non-urgent update that should trigger a server data refetch.
-    startTransition(() => {
-      router.replace(pathname, { locale: nextLocale });
-    });
+    // Set the cookie to expire in one year
+    const date = new Date();
+    date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
+    document.cookie = `NEXT_LOCALE=${nextLocale};expires=${date.toUTCString()};path=/`;
+
+    // Force a full page reload to make the server read the new cookie
+    window.location.reload();
   };
 
   return (
@@ -26,7 +24,6 @@ export function LanguageToggle() {
       variant="outline"
       size="icon"
       onClick={toggleLanguage}
-      disabled={isPending} // Disable the button during the transition
       aria-label="Toggle language"
     >
       <span className="text-sm font-semibold">{locale.toUpperCase()}</span>
