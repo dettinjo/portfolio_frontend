@@ -8,9 +8,9 @@ export const routing = defineRouting({
   defaultLocale: 'en',
 
   // --- THIS IS THE CRITICAL AND FINAL FIX ---
-  // This tells the middleware to ALWAYS add the locale prefix to the URL.
-  // It forces the language detection to happen before any other routing logic.
-  localePrefix: 'always'
+  // We disable next-intl's automatic prefixing entirely.
+  // Our middleware will now have full control over the URL structure.
+  localePrefix: 'never'
 });
 
 // This type is now more robust thanks to `as const`.

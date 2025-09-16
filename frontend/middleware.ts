@@ -1,38 +1,65 @@
-import { NextRequest } from 'next/server';
-import createMiddleware from 'next-intl/middleware';
-import { routing } from './src/i18n/routing';
+import { NextRequest, NextResponse } from 'next/server';
+import { routing, isValidLocale } from './src/i18n/routing';
 
 // Get the domain names from environment variables
 const SOFTWARE_DOMAIN = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || 'codeby.joeldettinger.de';
 const PHOTOGRAPHY_DOMAIN = process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || 'photosby.joeldettinger.de';
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'joeldettinger.de';
+
+// A helper function to determine the user's preferred language
+function getLocale(request: NextRequest): string {
+  const acceptLanguage = request.headers.get('accept-language');
+  if (acceptLanguage) {
+    // A simple parser to get the primary language (e.g., 'de' from 'de-DE,de;q=0.9...')
+    const primaryLanguage = acceptLanguage.split(',')[0].split('-')[0];
+    if (isValidLocale(primaryLanguage)) {
+      return primaryLanguage;
+    }
+  }
+  // Fallback to the default if no supported language is found
+  return routing.defaultLocale;
+}
 
 export function middleware(request: NextRequest) {
-  const url = request.nextUrl;
-  
-  // Get the hostname from the headers
+  const { pathname } = request.nextUrl;
   const hostname = request.headers.get('x-forwarded-host') || request.headers.get('host');
+
+  // Skip middleware for Next.js internal files and static assets
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    /\..*$/.test(pathname)
+  ) {
+    return;
+  }
 
   // --- THIS IS THE DEFINITIVE ROUTING LOGIC ---
 
-  // Check if the hostname matches the software domain AND the path doesn't already have the /software prefix
-  if (hostname === SOFTWARE_DOMAIN && !url.pathname.includes('/software')) {
-    // Rewrite the path to include the /software prefix
-    url.pathname = `/software${url.pathname}`;
+  // 1. Determine the user's locale
+  const locale = getLocale(request);
+  let finalPath = '';
 
-  // Check if the hostname matches the photography domain AND the path doesn't already have the /photography prefix
-  } else if (hostname === PHOTOGRAPHY_DOMAIN && !url.pathname.includes('/photography')) {
-    // Rewrite the path to include the /photography prefix
-    url.pathname = `/photography${url.pathname}`;
+  // 2. Determine the internal path based on the domain
+  if (hostname === SOFTWARE_DOMAIN) {
+    // A request to codeby.joeldettinger.de/some/path becomes an internal request
+    // to /en/software/some/path
+    finalPath = `/${locale}/software${pathname}`;
+  } else if (hostname === PHOTOGRAPHY_DOMAIN) {
+    // A request to photosby.joeldettinger.de/some/path becomes an internal request
+    // to /en/photography/some/path
+    finalPath = `/${locale}/photography${pathname}`;
+  } else {
+    // A request to the root domain joeldettinger.de/some/path becomes
+    // an internal request to /en/some/path
+    finalPath = `/${locale}${pathname}`;
   }
   
-  // We create a new request with the (potentially) MODIFIED path
-  const newRequest = new NextRequest(url, request);
-  // We pass this new request to the standard `next-intl` middleware,
-  // which will handle all the language prefixing and redirection correctly.
-  return createMiddleware(routing)(newRequest);
+  // 3. Rewrite the request to the final, internal path.
+  // The URL in the user's browser remains clean and unchanged.
+  return NextResponse.rewrite(new URL(finalPath, request.url));
 }
 
 export const config = {
-  // This matcher ensures the middleware runs on every single navigation request.
+  // Match all paths to give the middleware full control
   matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)'
 };
