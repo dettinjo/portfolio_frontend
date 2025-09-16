@@ -2,17 +2,18 @@ import { PhotographyHeader } from "@/components/layout/PhotographyHeader";
 import { Footer } from "@/components/layout/Footer";
 import React from "react";
 
+// The Props type MUST match the parent's structure
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
 
-// THE FIX: We accept `params` but don't use it.
+// The component MUST be `async`.
 export default async function PhotographyPageLayout({
   children,
   params,
 }: Props) {
-  // Awaiting the promise is still necessary.
+  // We MUST await the params here as well.
   await params;
 
   return (

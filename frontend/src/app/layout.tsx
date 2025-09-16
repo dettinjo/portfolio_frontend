@@ -4,21 +4,23 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/Theme-Provider";
-import { NextIntlClientProvider, useMessages } from "next-intl";
+
+// 1. Import the Vercel components here
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  /* ... */
+  title: "Portfolio by Joel Dettinger",
+  description: "Software Development and Photography",
 };
 
-// This root layout now wraps EVERY page and provides all providers.
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  const messages = useMessages();
-
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -27,10 +29,17 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+
+          {/* 2. Add the components here, inside the body but outside the main children */}
+          <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

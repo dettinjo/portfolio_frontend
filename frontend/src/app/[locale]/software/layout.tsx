@@ -2,14 +2,16 @@ import { SoftwareHeader } from "@/components/layout/SoftwareHeader";
 import { Footer } from "@/components/layout/Footer";
 import React from "react";
 
+// The Props type MUST match the parent's structure
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
 
-// THE FIX: We accept `params` but don't use it, which is valid.
+// The component MUST be `async`.
 export default async function SoftwarePageLayout({ children, params }: Props) {
-  // Awaiting the promise is still necessary to match the expected type.
+  // We MUST await the params, even if we don't use the locale directly here.
+  // This satisfies the type system and prevents rendering before the locale is known.
   await params;
 
   return (
