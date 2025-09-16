@@ -1,31 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-const SOFTWARE_DOMAIN = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || 'codeby.joeldettinger.de';
-const PHOTOGRAPHY_DOMAIN = process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || 'photosby.joeldettinger.de';
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const hostname = request.headers.get('x-forwarded-host') || request.headers.get('host');
-
-  // Skip middleware for Next.js internal files and static assets
-  if (pathname.startsWith('/_next') || /\..*$/.test(pathname)) {
-    return;
-  }
-
-  // --- THIS IS THE DEFINITIVE ROUTING LOGIC ---
-  let rewritePath = pathname;
-  
-  if (hostname === SOFTWARE_DOMAIN) {
-    rewritePath = `/software${pathname}`;
-  } else if (hostname === PHOTOGRAPHY_DOMAIN) {
-    rewritePath = `/photography${pathname}`;
-  }
-
-  // Rewrite to the internal path. The URL in the browser remains clean.
-  // The locale is implicitly handled by the cookie via `request.ts`.
-  return NextResponse.rewrite(new URL(rewritePath, request.url));
-}
-
+import createMiddleware from 'next-intl/middleware';
+import {routing} from './src/i18n/routing';
+ 
+// This is the standard middleware from the next-intl documentation.
+// Its only job is to set the language context for the request based on the cookie.
+// It will NOT change the URL because of our routing config.
+export default createMiddleware(routing);
+ 
 export const config = {
-  matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)'
+  // This matcher ensures the middleware runs on all paths to set the language context.
+  matcher: ['/', '/(de|en)/:path*'] // Keep this matcher for robustness
 };

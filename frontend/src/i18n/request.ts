@@ -3,17 +3,12 @@ import {getRequestConfig} from 'next-intl/server';
 import {isValidLocale, routing} from './routing';
  
 export default getRequestConfig(async () => {
-  // We correctly `await` the `cookies()` function.
-  const cookieStore = await cookies();
-  let locale = cookieStore.get('NEXT_LOCALE')?.value;
+  // 1. Read the language from the 'NEXT_LOCALE' cookie.
+  let locale = (await cookies()).get('NEXT_LOCALE')?.value;
 
-  // We check for the locale only if the cookie was not found.
+  // 2. If no cookie, check the `Accept-Language` header for the first visit.
   if (!locale) {
-    // --- THIS IS THE CRITICAL AND FINAL FIX ---
-    // We MUST `await` the `headers()` function to get the headers object.
-    const headersStore = await headers();
-    const acceptLanguage = headersStore.get('accept-language');
-
+    const acceptLanguage = (await headers()).get('accept-language');
     if (acceptLanguage) {
       const primaryLanguage = acceptLanguage.split(',')[0].split('-')[0];
       if (isValidLocale(primaryLanguage)) {
@@ -22,14 +17,15 @@ export default getRequestConfig(async () => {
     }
   }
   
-  // Fallback to the default locale if no other was found.
+  // 3. Fallback to the default locale if no cookie and no valid header.
   if (!locale || !isValidLocale(locale)) {
     locale = routing.defaultLocale;
   }
  
   return {
     locale,
-    // The path here is also corrected to `../../`
+    // The path here is corrected to `../../` to correctly point
+    // from `src/i18n/` to the root `messages` folder.
     messages: (await import(`../../messages/${locale}.json`)).default
   };
 });
