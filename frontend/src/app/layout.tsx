@@ -29,18 +29,11 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-
-          {/* 2. Add the components here, inside the body but outside the main children */}
-          <Analytics />
-          <SpeedInsights />
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
