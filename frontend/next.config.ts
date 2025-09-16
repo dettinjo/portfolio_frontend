@@ -10,10 +10,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       // These rewrites are checked after the filesystem and middleware.
-      // This is crucial because it means the i18n middleware has already
-      // added the /de or /en prefix before this rule runs.
+      // This is crucial because it means the i18n middleware can add the
+      // /de or /en prefix before this rule runs.
       afterFiles: [
-        // For the software domain...
+        // Rule for the software domain
         {
           // Match any path on this host (e.g., /de, /de/some-project)
           source: '/:path*', 
@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
             },
           ],
         },
-        // For the photography domain...
+        // Rule for the photography domain
         {
           source: '/:path*',
           destination: '/photography/:path*',
