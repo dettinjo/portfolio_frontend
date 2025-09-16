@@ -98,7 +98,7 @@ const skillsData = [
       },
       {
         name: "Next.js",
-        iconClassName: "devicon-nextjs-original",
+        iconClassName: "devicon-nextjs-plain",
         level: 4,
         url: "https://nextjs.org/",
       },
@@ -180,7 +180,7 @@ const skillsData = [
       },
       {
         name: "GitHub Actions",
-        iconClassName: "devicon-githubactions-original",
+        iconClassName: "devicon-githubactions-plain",
         level: 3,
         url: "https://github.com/features/actions",
       },
