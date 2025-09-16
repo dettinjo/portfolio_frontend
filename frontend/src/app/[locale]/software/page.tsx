@@ -1,6 +1,7 @@
 // src/appsections/software/page.tsx
 
 // Importieren Sie Ihre neuen Sektions-Komponenten
+import { getTranslations } from "next-intl/server";
 import { ContactSection } from "@/components/sections/software/ContactSection";
 import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
@@ -17,7 +18,7 @@ const projectsData = [
     tags: ["Next.js", "React", "Strapi", "TypeScript"],
     imageUrl:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1280&auto=format&fit=crop",
-    projectType: "Full-Stack Web App", // <-- Neues Feld
+    projectType: "Full-Stack Web App",
   },
   {
     id: 2,
@@ -26,9 +27,10 @@ const projectsData = [
     description:
       "Eine robuste Backend-API, die Produktmanagement, Benutzerauthentifizierung und Bestellabwicklung unterstützt.",
     tags: ["Node.js", "Express", "MongoDB", "JWT"],
+    // --- NEW IMAGE --- (Abstract blue server/network lights)
     imageUrl:
-      "https://images.unsplash.com/photo-1580894742597-87bc8789db3d?q=80&w=1280&auto=format&fit=crop",
-    projectType: "Backend & API", // <-- Neues Feld
+      "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1280&auto=format&fit=crop",
+    projectType: "Backend & API",
   },
   {
     id: 3,
@@ -48,9 +50,9 @@ const projectsData = [
     description:
       "Automatisierung von Build-, Test- und Deployment-Prozessen für eine Microservices-Architektur mit Docker und GitHub Actions.",
     tags: ["Docker", "GitHub Actions", "CI/CD", "DevOps"],
-    // Abstract pipeline / automation graphic
+    // --- NEW IMAGE --- (Physical representation of a pipeline/flow)
     imageUrl:
-      "https://images.unsplash.com/photo-1581093450021-4a7360aa9a2f?q=80&w=1280&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1332&auto=format&fit=crop",
     projectType: "DevOps & Automation",
   },
   {
@@ -60,7 +62,6 @@ const projectsData = [
     description:
       "Ein interaktives Dashboard zur Visualisierung komplexer Datensätze mit D3.js, das Einblicke in Geschäftskennzahlen bietet.",
     tags: ["D3.js", "React", "Datenvisualisierung"],
-    // Colorful charts and graphs on a screen
     imageUrl:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1280&auto=format&fit=crop",
     projectType: "Data Visualization",
@@ -72,10 +73,9 @@ const projectsData = [
     description:
       "Ein Python-Service, der ein Machine-Learning-Modell verwendet, um Bilder automatisch zu analysieren und relevante Tags zu generieren.",
     tags: ["Python", "TensorFlow", "FastAPI", "AI/ML"],
-    // Abstract neural network / AI graphic
     imageUrl:
       "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1280&auto=format&fit=crop",
-    projectType: "AI & Machine Learning",
+    projectType: "AI / Machine Learning",
   },
 ];
 
@@ -89,59 +89,124 @@ const skillsData = [
         name: "TypeScript",
         iconClassName: "devicon-typescript-plain",
         level: 5,
+        url: "https://www.typescriptlang.org/",
       },
-      { name: "React", iconClassName: "devicon-react-original", level: 5 },
-      { name: "Next.js", iconClassName: "devicon-nextjs-plain", level: 4 },
+      {
+        name: "React",
+        iconClassName: "devicon-react-original",
+        level: 5,
+        url: "https://react.dev/",
+      },
+      {
+        name: "Next.js",
+        iconClassName: "devicon-nextjs-original",
+        level: 4,
+        url: "https://nextjs.org/",
+      },
       {
         name: "Tailwind CSS",
         iconClassName: "devicon-tailwindcss-plain",
         level: 5,
+        url: "https://tailwindcss.com/",
       },
       {
         name: "Framer Motion",
         iconClassName: "devicon-framermotion-original",
         level: 3,
+        url: "https://www.framer.com/motion/",
       },
-      { name: "HTML5", iconClassName: "devicon-html5-plain", level: 5 },
+      {
+        name: "HTML5",
+        iconClassName: "devicon-html5-plain",
+        level: 5,
+        url: "https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5",
+      },
     ],
   },
   {
     category: "Backend",
     skills: [
-      { name: "Node.js", iconClassName: "devicon-nodejs-plain", level: 4 },
+      {
+        name: "Node.js",
+        iconClassName: "devicon-nodejs-plain",
+        level: 4,
+        url: "https://nodejs.org/",
+      },
       {
         name: "Express.js",
         iconClassName: "devicon-express-original",
         level: 4,
+        url: "https://expressjs.com/",
       },
-      { name: "Python", iconClassName: "devicon-python-plain", level: 3 },
-      { name: "FastAPI", iconClassName: "devicon-fastapi-plain", level: 2 },
+      {
+        name: "Python",
+        iconClassName: "devicon-python-plain",
+        level: 3,
+        url: "https://www.python.org/",
+      },
+      {
+        name: "FastAPI",
+        iconClassName: "devicon-fastapi-plain",
+        level: 2,
+        url: "https://fastapi.tiangolo.com/",
+      },
       {
         name: "PostgreSQL",
         iconClassName: "devicon-postgresql-plain",
         level: 4,
+        url: "https://www.postgresql.org/",
       },
-      { name: "Strapi", iconClassName: "devicon-strapi-plain", level: 4 },
+      {
+        name: "Strapi",
+        iconClassName: "devicon-strapi-plain",
+        level: 4,
+        url: "https://strapi.io/",
+      },
     ],
   },
   {
     category: "DevOps & Tools",
     skills: [
-      { name: "Docker", iconClassName: "devicon-docker-plain", level: 3 },
-      { name: "Git", iconClassName: "devicon-git-plain", level: 5 },
+      {
+        name: "Docker",
+        iconClassName: "devicon-docker-plain",
+        level: 3,
+        url: "https://www.docker.com/",
+      },
+      {
+        name: "Git",
+        iconClassName: "devicon-git-plain",
+        level: 5,
+        url: "https://git-scm.com/",
+      },
       {
         name: "GitHub Actions",
-        iconClassName: "devicon-githubactions-plain",
+        iconClassName: "devicon-githubactions-original",
         level: 3,
+        url: "https://github.com/features/actions",
       },
-      { name: "Vercel", iconClassName: "devicon-vercel-plain", level: 5 },
-      { name: "Linux", iconClassName: "devicon-linux-plain", level: 3 },
-      { name: "Figma", iconClassName: "devicon-figma-plain", level: 2 },
+      {
+        name: "Vercel",
+        iconClassName: "devicon-vercel-original",
+        level: 5,
+        url: "https://vercel.com/",
+      },
+      {
+        name: "Linux",
+        iconClassName: "devicon-linux-plain",
+        level: 3,
+        url: "https://www.linux.org/",
+      },
+      {
+        name: "Figma",
+        iconClassName: "devicon-figma-plain",
+        level: 2,
+        url: "https://www.figma.com/",
+      },
     ],
   },
 ];
-
-export default function DevPage() {
+export default async function DevPage() {
   return (
     <div className="space-y-24">
       <HeroSection />

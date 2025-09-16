@@ -15,7 +15,8 @@
   },
   "SoftwareHeroSection": {
     "greeting": "Hi, I'm Joel",
-    "intro": "A Full-Stack Developer passionate about designing and building robust, scalable, and user-friendly web applications."
+    "intro": "A Full-Stack Developer with a passion for designing and building robust, scalable, and user-friendly web applications.",
+    "button_projects": "See my Work"
   },
   "SoftwareProjectsSection": {
     "title": "Projects",
@@ -28,5 +29,33 @@
     "category_frontend": "Frontend",
     "category_backend": "Backend",
     "category_devops": "DevOps & Tools"
+  },
+  "Footer": {
+    "made_with": "Made with",
+    "by": "by",
+    "imprint": "Imprint",
+    "privacy": "Privacy Policy"
+  },
+   "SoftwareContactSection": {
+    "title": "Get in Touch",
+    "subtitle": "Have a project in mind or just want to connect? I'm always open to a good conversation.",
+    "form_name": "Name",
+    "form_name_placeholder": "Your Name",
+    "form_email": "Email",
+    "form_email_placeholder": "your@email.com",
+    "form_message": "Message",
+    "form_message_placeholder": "Your message...",
+    "form_submit": "Send Message",
+    "form_submitting": "Submitting...",
+    "socials_text": "Or find me on:",
+    "success_title": "Thank You!",
+    "success_message": "Your message has been sent successfully. I'll get back to you soon.",
+    "error_message": "Something went wrong. Please try again."
+  },
+  "PhotoContactSection": {
+    "title": "Interested?",
+    "subtitle": "Send me a message for booking inquiries, collaborations, or just to say hello.",
+    "button_email": "Send a Message",
+    "button_instagram": "Follow on Instagram"
   }
 }

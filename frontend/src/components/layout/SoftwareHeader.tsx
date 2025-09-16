@@ -5,18 +5,22 @@ import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useTheme } from "next-themes"; // 1. Import the useTheme hook
+import { useTheme } from "next-themes";
+import { MobileNav } from "./MobileHeader";
 
 export function SoftwareHeader() {
   const t = useTranslations("SoftwareHeader");
-  // 2. Get the current theme. `resolvedTheme` is best as it's always 'light' or 'dark'.
   const { resolvedTheme } = useTheme();
-
-  // 3. Determine the correct image source based on the theme.
   const avatarSrc =
     resolvedTheme === "dark"
       ? "/images/avatar-dark.png"
       : "/images/avatar-light.png";
+
+  const navLinks = [
+    { href: "#projekte", label: t("projects") },
+    { href: "#skills", label: t("skills") },
+    { href: "#kontakt", label: t("contact") },
+  ];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -27,27 +31,38 @@ export function SoftwareHeader() {
         >
           <span>Code by</span>
           <Avatar className="h-8 w-8">
-            {/* 4. Use the dynamic avatarSrc variable for the image source */}
-            <AvatarImage src={avatarSrc} alt="Joel's profile picture" />
-            <AvatarFallback>Joel</AvatarFallback>
+            <AvatarImage src={avatarSrc} alt="Your Name" />
+            <AvatarFallback>JD</AvatarFallback>
           </Avatar>
         </Link>
 
-        {/* ... (rest of the header remains the same) ... */}
-        <div className="flex items-center gap-6 text-sm">
-          <a href="#projekte" className="...">
-            {t("projects")}
-          </a>
-          <a href="#skills" className="...">
-            {t("skills")}
-          </a>
-          <a href="#kontakt" className="...">
-            {t("contact")}
-          </a>
+        {/* Desktop Navigation remains the same */}
+        <div className="hidden items-center gap-6 text-sm md:flex">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
+
+        {/* --- THE FIX IS HERE --- */}
+        {/* The toggles are now separate for desktop and mobile */}
         <div className="flex items-center gap-2">
-          <LanguageToggle />
-          <ThemeToggle />
+          {/* These toggles are only visible on desktop */}
+          <div className="hidden md:flex md:items-center md:gap-2">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+          {/* The MobileNav is only visible on mobile */}
+          <MobileNav navLinks={navLinks}>
+            {/* We pass the toggles as children to be rendered inside the sheet */}
+            <LanguageToggle />
+            <ThemeToggle />
+          </MobileNav>
         </div>
       </nav>
     </header>

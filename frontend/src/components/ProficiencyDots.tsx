@@ -3,17 +3,9 @@
 interface ProficiencyDotsProps {
   level: number;
   maxLevel?: number;
-  // It will now receive explicit color strings as props
-  filledColor: string;
-  emptyColor: string;
 }
 
-export function ProficiencyDots({
-  level,
-  maxLevel = 5,
-  filledColor,
-  emptyColor,
-}: ProficiencyDotsProps) {
+export function ProficiencyDots({ level, maxLevel = 5 }: ProficiencyDotsProps) {
   return (
     <div
       className="flex items-center gap-1"
@@ -26,9 +18,15 @@ export function ProficiencyDots({
         return (
           <span
             key={dotLevel}
-            className="h-2 w-2 rounded-full transition-colors duration-200"
-            // The background color is now set directly and un-overrideably from the props
-            style={{ backgroundColor: isFilled ? filledColor : emptyColor }}
+            // This pure Tailwind approach now works because the CSS variables are correct.
+            className={`
+              h-2 w-2 rounded-full transition-colors duration-200
+              ${
+                isFilled
+                  ? "bg-foreground group-hover:bg-background" // Filled: ink -> paper
+                  : "bg-muted group-hover:bg-background/30" // Empty: muted gray -> 30% paper
+              }
+            `}
           />
         );
       })}

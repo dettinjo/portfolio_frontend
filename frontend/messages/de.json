@@ -15,7 +15,8 @@
   },
   "SoftwareHeroSection": {
     "greeting": "Hi, ich bin Joel",
-    "intro": "Ein Full-Stack Entwickler mit einer Leidenschaft für die Gestaltung und Realisierung von robusten, skalierbaren und benutzerfreundlichen Webanwendungen."
+    "intro": "Ein Full-Stack Entwickler mit einer Leidenschaft für die Gestaltung und Realisierung von robusten, skalierbaren und benutzerfreundlichen Webanwendungen.",
+    "button_projects": "Schau dir meine Arbeit an"
   },
   "SoftwareProjectsSection": {
     "title": "Projekte",
@@ -28,5 +29,33 @@
     "category_frontend": "Frontend",
     "category_backend": "Backend",
     "category_devops": "DevOps & Tools"
+  },
+  "Footer": {
+    "made_with": "Made with",
+    "by": "by",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz"
+  },
+  "SoftwareContactSection": {
+    "title": "Kontakt aufnehmen",
+    "subtitle": "Haben Sie ein Projekt im Sinn oder möchten Sie sich vernetzen? Ich freue mich darauf, von Ihnen zu hören.",
+    "form_name": "Name",
+    "form_name_placeholder": "Ihr Name",
+    "form_email": "E-Mail",
+    "form_email_placeholder": "ihre@email.com",
+    "form_message": "Nachricht",
+    "form_message_placeholder": "Ihre Nachricht...",
+    "form_submit": "Nachricht senden",
+    "form_submitting": "Sende...",
+    "socials_text": "Oder finden Sie mich hier:",
+    "success_title": "Vielen Dank!",
+    "success_message": "Ihre Nachricht wurde erfolgreich gesendet. Ich melde mich in Kürze.",
+    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+  },
+  "PhotoContactSection": {
+    "title": "Interesse geweckt?",
+    "subtitle": "Schreiben Sie mir eine Nachricht für Buchungsanfragen, Kooperationen oder um einfach nur 'Hallo' zu sagen.",
+    "button_email": "Nachricht schreiben",
+    "button_instagram": "Auf Instagram folgen"
   }
 }
