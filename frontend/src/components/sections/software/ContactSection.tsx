@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Github, Linkedin, Instagram, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-
 export function ContactSection() {
   const t = useTranslations("SoftwareContactSection");
   const [submissionStatus, setSubmissionStatus] = useState<
@@ -23,14 +22,17 @@ export function ContactSection() {
     const formData = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch("https://formspree.io/f/mkgvayea", {
-        // <-- REPLACE WITH YOUR FORMSPREE ID
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT!,
+        {
+          // <-- REPLACE WITH YOUR FORMSPREE ID
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         setSubmissionStatus("success");

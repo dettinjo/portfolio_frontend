@@ -1,83 +1,49 @@
-// src/app/dev/[slug]/page.tsx
+// This file represents the detail page for a single photo album.
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ExternalLink } from "lucide-react";
+// This async function will eventually fetch data for ONE album from your Strapi API
+// based on the slug provided in the URL.
+async function getAlbumData(slug: string) {
+  console.log(`Fetching data for album with slug: ${slug}`);
 
-// Diese Funktion wird später die Daten für EINEN Slug von der API abrufen
-async function getProjectData(slug: string) {
-  // Mock-Daten für die Vorlage
+  // For now, we'll return mock data.
   return {
-    title: "Portfolio Webseite",
-    longDescription:
-      "Dies ist eine detaillierte Beschreibung des Projekts. Es wurde mit dem Ziel entwickelt, eine moderne und performante Plattform zu schaffen, um meine Fähigkeiten in der Software-Entwicklung und Fotografie zu präsentieren. Der Tech-Stack wurde sorgfältig ausgewählt, um Flexibilität und Skalierbarkeit zu gewährleisten.",
-    tags: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "Strapi",
-      "shadcn/ui",
+    title: `Album: ${slug.charAt(0).toUpperCase() + slug.slice(1)}`,
+    // You can add more mock data here, like an array of image URLs
+    images: [
+      "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=1280&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1517423568342-be24c2f0a8d4?q=80&w=1280&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?q=80&w=1280&auto=format&fit=crop",
     ],
-    liveUrl: "#", // Link zur Live-Seite
-    repoUrl: "#", // Link zum GitHub-Repo
   };
 }
 
-export default async function ProjectDetailPage({
+// --- THE FIX IS HERE ---
+// The function signature is now syntactically correct.
+export default async function AlbumDetailPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const project = await getProjectData(params.slug);
+  const album = await getAlbumData(params.slug);
 
   return (
-    <article className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      {/* Hauptinhalt */}
-      <div className="lg:col-span-2">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">
-          {project.title}
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          {project.longDescription}
-        </p>
-        {/* Hier könnte später mehr Inhalt stehen, z.B. Bilder, Markdown etc. */}
+    <article className="container mx-auto py-24">
+      <h1 className="text-4xl font-bold mb-8 text-center">{album.title}</h1>
+
+      {/* A simple masonry-style grid for the photos */}
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
+        {album.images.map((imageUrl, index) => (
+          // We use `next/image` but need to configure the hostname if it's not already done.
+          // For now, we'll disable the linter warning.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={index}
+            src={imageUrl}
+            alt={`Photograph ${index + 1} from the album ${album.title}`}
+            className="mb-4 rounded-xl w-full h-auto block border-2 border-foreground"
+          />
+        ))}
       </div>
-
-      {/* Sidebar mit Metadaten */}
-      <aside className="lg:col-span-1">
-        <Card>
-          <CardHeader>
-            <CardTitle>Projekt-Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <h3 className="font-semibold mb-2">Technologien</h3>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Button asChild className="w-full">
-                <a href={project.liveUrl} target="_blank">
-                  Live-Vorschau <ExternalLink className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-              <Button asChild variant="secondary" className="w-full">
-                <a href={project.repoUrl} target="_blank">
-                  Code auf GitHub
-                </a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </aside>
     </article>
   );
 }

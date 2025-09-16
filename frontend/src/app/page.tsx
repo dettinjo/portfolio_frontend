@@ -1,5 +1,7 @@
 import { Terminal, Camera } from "lucide-react";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
+// 1. We switch back to using the standard Next.js Link component
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -7,23 +9,24 @@ export default function HomePage() {
       <MinimalHeader />
       <div className="container mx-auto flex min-h-screen items-center justify-center">
         <div className="grid w-full max-w-4xl grid-cols-1 gap-12 md:grid-cols-2">
-          {/* Use <a> tags to force a server request for middleware redirection */}
-          <a
+          {/* 2. We use the Link component with `prefetch={false}` */}
+          <Link
             href="/software"
-            className="group flex flex-col items-center justify-center gap-6 rounded-xl border-4 border-foreground p-16 ..."
+            prefetch={false} // This helps ensure the middleware is triggered
+            className="group flex flex-col items-center justify-center ..."
           >
-            <Terminal className="h-28 w-28 text-foreground ..." />
-            <span className="text-3xl font-semibold text-foreground">Code</span>
-          </a>
-          <a
+            <Terminal className="h-28 w-28 ..." />
+            <span className="text-3xl font-semibold ...">Code</span>
+          </Link>
+
+          <Link
             href="/photography"
-            className="group flex flex-col items-center justify-center gap-6 rounded-xl border-4 border-foreground p-16 ..."
+            prefetch={false}
+            className="group flex flex-col items-center justify-center ..."
           >
-            <Camera className="h-28 w-28 text-foreground ..." />
-            <span className="text-3xl font-semibold text-foreground">
-              Photos
-            </span>
-          </a>
+            <Camera className="h-28 w-28 ..." />
+            <span className="text-3xl font-semibold ...">Photos</span>
+          </Link>
         </div>
       </div>
     </>

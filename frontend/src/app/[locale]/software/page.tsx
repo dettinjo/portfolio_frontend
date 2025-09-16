@@ -1,7 +1,6 @@
 // src/appsections/software/page.tsx
 
 // Importieren Sie Ihre neuen Sektions-Komponenten
-import { getTranslations } from "next-intl/server";
 import { ContactSection } from "@/components/sections/software/ContactSection";
 import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";

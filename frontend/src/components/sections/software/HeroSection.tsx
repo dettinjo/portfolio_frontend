@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Github, Linkedin, Mail } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";

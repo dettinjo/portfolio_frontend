@@ -1,11 +1,12 @@
-"use client"; // This is a client component for Framer Motion.
+"use client"; // This MUST be a client component for Framer Motion.
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wrench, Server, Code } from "lucide-react";
 import { ProficiencyDots } from "@/components/ProficiencyDots";
+import { useTranslations } from "next-intl"; // The correct hook for Client Components
 
-// Interface definitions for type safety
+// Interface definitions for the data it receives as props
 interface Skill {
   name: string;
   iconClassName: string;
@@ -16,15 +17,8 @@ interface SkillCategory {
   category: string;
   skills: Skill[];
 }
-// Define the shape of the translations object we expect to receive
-interface Translations {
-  category_frontend: string;
-  category_backend: string;
-  category_devops: string;
-}
 interface SkillsGridProps {
   skills: SkillCategory[];
-  translations: Translations;
 }
 
 // Helper object for mapping category names to icons
@@ -34,14 +28,17 @@ const categoryDetails = {
   "DevOps & Tools": { icon: <Wrench className="h-8 w-8 text-foreground" /> },
 };
 
-export function SkillsGrid({ skills, translations }: SkillsGridProps) {
-  // 1. This helper function is now corrected.
-  // It correctly uses the `translations` prop to get the right string.
+// This component no longer receives a `translations` prop.
+export function SkillsGrid({ skills }: SkillsGridProps) {
+  // It fetches ONLY the translations it needs using the client-side hook.
+  const t = useTranslations("SoftwareSkillsSection");
+
+  // Helper function to get the translated category title
   const getCategoryTitle = (category: string) => {
-    if (category === "Frontend") return translations.category_frontend;
-    if (category === "Backend") return translations.category_backend;
-    if (category === "DevOps & Tools") return translations.category_devops;
-    return category; // Fallback to the original name if no match
+    if (category === "Frontend") return t("category_frontend");
+    if (category === "Backend") return t("category_backend");
+    if (category === "DevOps & Tools") return t("category_devops");
+    return category;
   };
 
   return (
@@ -57,9 +54,12 @@ export function SkillsGrid({ skills, translations }: SkillsGridProps) {
           <Card className="h-full border-0 shadow-none bg-transparent hover:shadow-none">
             <CardHeader>
               <div className="flex items-center gap-4">
-                {categoryDetails[category.category]?.icon}
+                {
+                  categoryDetails[
+                    category.category as keyof typeof categoryDetails
+                  ]?.icon
+                }
                 <CardTitle className="text-2xl">
-                  {/* 2. The corrected function is called here. */}
                   {getCategoryTitle(category.category)}
                 </CardTitle>
               </div>
