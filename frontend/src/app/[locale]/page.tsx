@@ -32,7 +32,7 @@ export default function HomePage() {
 
           {/* --- AND HERE --- */}
           <a
-            href={`https://s${photographyDomain}`}
+            href={`https://${photographyDomain}`}
             className="group flex flex-col items-center justify-center gap-6 rounded-xl border-4 border-foreground p-16 transition-colors duration-300 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-4 focus:ring-offset-background"
           >
             <Camera
