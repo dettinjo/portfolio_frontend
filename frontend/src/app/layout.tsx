@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/Theme-Provider";
 import "devicon/devicon.min.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
