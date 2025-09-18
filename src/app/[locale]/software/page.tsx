@@ -1,20 +1,27 @@
-// src/appsections/software/page.tsx
+import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
+import { CollectionPage, WithContext } from "schema-dts";
 
-// Importieren Sie Ihre neuen Sektions-Komponenten
+// Import your page sections and components
 import { ContactSection } from "@/components/sections/software/ContactSection";
 import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
 import { SkillsSection } from "@/components/sections/software/SkillsSection";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 
-// --- Beispieldaten (später von API) ---
+// ============================================================================
+// --- MOCK DATA & API FUNCTIONS ---
+// In a real application, this data and these functions would live in a
+// separate directory (e.g., /src/lib/strapi.ts) and fetch data from your CMS.
+// ============================================================================
+
 const projectsData = [
   {
     id: 1,
     slug: "portfolio-website-v2",
-    title: "Portfolio Webseite",
+    title: "Portfolio Website",
     description:
-      "Eine dynamische Portfolio-Seite, gebaut mit Next.js, Strapi CMS und shadcn/ui für ein voll anpassbares Erlebnis.",
+      "A dynamic portfolio site built with Next.js, Strapi CMS, and shadcn/ui for a fully customizable experience.",
     tags: ["Next.js", "React", "Strapi", "TypeScript"],
     imageUrl:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1280&auto=format&fit=crop",
@@ -23,11 +30,10 @@ const projectsData = [
   {
     id: 2,
     slug: "e-commerce-platform-api",
-    title: "E-Commerce Plattform API",
+    title: "E-Commerce Platform API",
     description:
-      "Eine robuste Backend-API, die Produktmanagement, Benutzerauthentifizierung und Bestellabwicklung unterstützt.",
+      "A robust backend API supporting product management, user authentication, and order processing.",
     tags: ["Node.js", "Express", "MongoDB", "JWT"],
-    // --- NEW IMAGE --- (Abstract blue server/network lights)
     imageUrl:
       "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1280&auto=format&fit=crop",
     projectType: "Backend & API",
@@ -37,7 +43,7 @@ const projectsData = [
     slug: "real-time-chat-app",
     title: "Real-Time Chat App",
     description:
-      "Eine Web-Anwendung für sofortige Kommunikation, die WebSockets für eine nahtlose Echtzeit-Interaktion nutzt.",
+      "A web application for instant communication, utilizing WebSockets for seamless real-time interaction.",
     tags: ["React", "Socket.IO", "Node.js"],
     imageUrl:
       "https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=1280&auto=format&fit=crop",
@@ -48,38 +54,13 @@ const projectsData = [
     slug: "devops-ci-cd-pipeline",
     title: "DevOps CI/CD Pipeline",
     description:
-      "Automatisierung von Build-, Test- und Deployment-Prozessen für eine Microservices-Architektur mit Docker und GitHub Actions.",
+      "Automating build, test, and deployment processes for a microservices architecture using Docker and GitHub Actions.",
     tags: ["Docker", "GitHub Actions", "CI/CD", "DevOps"],
-    // --- NEW IMAGE --- (Physical representation of a pipeline/flow)
     imageUrl:
       "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1332&auto=format&fit=crop",
     projectType: "DevOps & Automation",
   },
-  {
-    id: 5,
-    slug: "data-visualization-dashboard",
-    title: "Datenvisualisierungs-Dashboard",
-    description:
-      "Ein interaktives Dashboard zur Visualisierung komplexer Datensätze mit D3.js, das Einblicke in Geschäftskennzahlen bietet.",
-    tags: ["D3.js", "React", "Datenvisualisierung"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1280&auto=format&fit=crop",
-    projectType: "Data Visualization",
-  },
-  {
-    id: 6,
-    slug: "ai-powered-image-tagger",
-    title: "KI-gestützter Image Tagger",
-    description:
-      "Ein Python-Service, der ein Machine-Learning-Modell verwendet, um Bilder automatisch zu analysieren und relevante Tags zu generieren.",
-    tags: ["Python", "TensorFlow", "FastAPI", "AI/ML"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1280&auto=format&fit=crop",
-    projectType: "AI / Machine Learning",
-  },
 ];
-
-// src/app/(app)/[locale]/software/page.tsx
 
 const skillsData = [
   {
@@ -207,24 +188,124 @@ const skillsData = [
   },
 ];
 
-export default async function DevPage() {
+// Mock API function placeholders
+async function fetchProjects(locale: string) {
+  console.log(`Fetching projects for locale: ${locale}`);
+  return Promise.resolve(projectsData);
+}
+
+async function fetchSkills(locale: string) {
+  console.log(`Fetching skills for locale: ${locale}`);
+  return Promise.resolve(skillsData);
+}
+
+// ============================================================================
+// --- SEO METADATA GENERATION ---
+// This function runs on the server at build time to create the page's metadata.
+// ============================================================================
+
+type Props = {
+  params: { locale: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // To make this truly dynamic, fetch SEO fields from a "Software Page" Single Type in Strapi.
+  // For now, we'll use a dedicated namespace in the translation files.
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "SoftwarePageSEO",
+  });
+  const softwareDomain =
+    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: `https://${softwareDomain}`,
+      siteName: "Code by Joel",
+      images: [
+        {
+          url: `https://${rootDomain}/og-software.png`, // A dedicated OG image for this page
+          width: 1200,
+          height: 630,
+          alt: "An overview of software projects by Joel Dettinger",
+        },
+      ],
+      type: "website",
+      locale: params.locale,
+    },
+    alternates: {
+      canonical: `https://${softwareDomain}`,
+      languages: {
+        en: `https://${softwareDomain}`,
+        de: `https://de.${softwareDomain}`, // Adjust if your German domain is different
+        "x-default": `https://${softwareDomain}`,
+      },
+    },
+  };
+}
+
+// ============================================================================
+// --- PAGE COMPONENT ---
+// This is the main component for the software landing page.
+// ============================================================================
+
+export default async function DevPage({ params }: Props) {
+  // Fetch all necessary data for the page
+  const projects = await fetchProjects(params.locale);
+  const skills = await fetchSkills(params.locale);
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "SoftwareProjectsSection",
+  });
+
+  const softwareDomain =
+    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
+
+  // Create the JSON-LD structured data object
+  const jsonLd: WithContext<CollectionPage> = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: t("title"),
+    description: t("subtitle"),
+    url: `https://${softwareDomain}`,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: projects.map((project, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: project.title,
+        url: `https://${softwareDomain}/${project.slug}`,
+      })),
+    },
+  };
+
   return (
     <>
+      {/* This script injects the structured data into the page's <head> */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <HeroSection />
 
       <div className="max-w-6xl mx-auto px-6">
         <div className="py-24">
-          <ProjectsSection projects={projectsData} />
+          <ProjectsSection projects={projects} />
         </div>
         <ScrollIndicator href="#skills" />
         <div className="py-24">
-          <SkillsSection skills={skillsData} />
+          <SkillsSection skills={skills} />
         </div>
         <ScrollIndicator href="#kontakt" />
         <div className="pt-24 pb-64 md:pb-96">
           <ContactSection />
         </div>
-        {/* ----------------------- */}
       </div>
     </>
   );

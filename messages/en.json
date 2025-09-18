@@ -9,6 +9,12 @@
     "services": "Services",
     "contact": "Contact"
   },
+  "Footer": {
+    "made_with": "Made with",
+    "by_me": "by me",
+    "imprint": "Imprint",
+    "privacy": "Privacy Policy"
+  },
   "HomePage": {
     "code": "Code",
     "photos": "Photos"
@@ -32,13 +38,7 @@
     "legend_beginner": "Familiar",
     "legend_expert": "Expert"
   },
-  "Footer": {
-    "made_with": "Made with",
-    "by_me": "by me",
-    "imprint": "Imprint",
-    "privacy": "Privacy Policy"
-  },
-   "SoftwareContactSection": {
+  "SoftwareContactSection": {
     "title": "Get in Touch",
     "subtitle": "Have a project in mind or just want to connect? I'm always open to a good conversation.",
     "form_name": "Name",
@@ -61,15 +61,15 @@
     "button_instagram": "Follow on Instagram"
   },
   "ProjectDetailsPage": {
-  "back_button": "Back to Projects",
-  "about_title": "About this Project",
-  "details_title": "Details",
-  "tech_title": "Technologies Used",
-  "links_title": "Project Links",
-  "live_demo_button": "Live Demo",
-  "source_code_button": "Source Code",
-  "not_available": "Not available",
-  "developed_in_label": "Developed in"
+    "back_button": "Back to Projects",
+    "about_title": "About this Project",
+    "details_title": "Details",
+    "tech_title": "Technologies Used",
+    "links_title": "Project Links",
+    "live_demo_button": "Live Demo",
+    "source_code_button": "Source Code",
+    "not_available": "Not available",
+    "developed_in_label": "Developed in"
   },
   "ImprintPage": {
     "title": "Imprint",
@@ -116,5 +116,9 @@
     "section3_contact_content": "When you use our contact form, your provided information is transmitted to and processed by the service provider Formspree, Inc., 1201 Orange St, Ste 600, Wilmington, DE 19801, USA, to handle your request. The processing of this data is based on your consent (Art. 6(1)(a) GDPR).",
     "section4_title": "3. Your Rights as a Data Subject",
     "section4_content": "Within the framework of the applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipients, and the purpose of the data processing, and, if applicable, a right to correction or deletion of this data."
+  },
+  "SoftwarePageSEO": {
+    "title": "Software Portfolio",
+    "description": "Explore a collection of my software development projects, showcasing my skills in modern web technologies."
   }
 }
