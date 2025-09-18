@@ -9,6 +9,12 @@
     "services": "Services",
     "contact": "Kontakt"
   },
+  "Footer": {
+    "made_with": "Mit",
+    "by_me": "von mir entwickelt",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz"
+  },
   "HomePage": {
     "code": "Code",
     "photos": "Fotos"
@@ -31,12 +37,6 @@
     "category_devops": "DevOps & Tools",
     "legend_beginner": "Grundlagen",
     "legend_expert": "Experte"
-  },
-  "Footer": {
-    "made_with": "Mit",
-    "by_me": "von mir entwickelt",
-    "imprint": "Impressum",
-    "privacy": "Datenschutz"
   },
   "SoftwareContactSection": {
     "title": "Kontakt aufnehmen",
@@ -61,17 +61,17 @@
     "button_instagram": "Auf Instagram folgen"
   },
   "ProjectDetailsPage": {
-  "back_button": "Zurück zu den Projekten",
-  "about_title": "Über dieses Projekt",
-  "details_title": "Details",
-  "tech_title": "Verwendete Technologien",
-  "links_title": "Projekt-Links",
-  "live_demo_button": "Live-Demo",
-  "source_code_button": "Quellcode",
-  "not_available": "Nicht verfügbar",
-  "developed_in_label": "Entwickelt im"
+    "back_button": "Zurück zu den Projekten",
+    "about_title": "Über dieses Projekt",
+    "details_title": "Details",
+    "tech_title": "Verwendete Technologien",
+    "links_title": "Projekt-Links",
+    "live_demo_button": "Live-Demo",
+    "source_code_button": "Quellcode",
+    "not_available": "Nicht verfügbar",
+    "developed_in_label": "Entwickelt im"
   },
-   "ImprintPage": {
+  "ImprintPage": {
     "title": "Impressum",
     "section1_title": "Angaben gemäß § 5 TMG",
     "section1_content": [
@@ -116,5 +116,9 @@
     "section3_contact_content": "Wenn Sie unser Kontaktformular nutzen, werden Ihre Angaben zur Bearbeitung Ihrer Anfrage an den Dienstleister Formspree, Inc., 1201 Orange St, Ste 600, Wilmington, DE 19801, USA, übermittelt und dort verarbeitet. Die Verarbeitung dieser Daten erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO).",
     "section4_title": "3. Ihre Rechte als Betroffener",
     "section4_content": "Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten."
+  },
+  "SoftwarePageSEO": {
+    "title": "Software-Portfolio",
+    "description": "Entdecken Sie eine Sammlung meiner Softwareentwicklungsprojekte, die meine Fähigkeiten in modernen Web-Technologien demonstrieren."
   }
 }

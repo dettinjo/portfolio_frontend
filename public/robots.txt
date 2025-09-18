@@ -1,0 +1,11 @@
+# Allow all user agents to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow crawling of specific paths if needed (e.g., admin panels)
+# Disallow: /admin/
+
+# Location of the sitemap
+Sitemap: https://joeldettinger.de/sitemap.xml
+Sitemap: https://codeby.joeldettinger.de/sitemap.xml
+Sitemap: https://photosby.joeldettinger.de/sitemap.xml

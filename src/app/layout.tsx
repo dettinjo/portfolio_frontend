@@ -11,16 +11,21 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// --- SEO ENHANCEMENT ---
 export const metadata: Metadata = {
-  title: "Welcome to my Landing Page",
+  title: {
+    template: "%s | Joel Dettinger",
+    default: "Joel Dettinger - Software & Photography", // A fallback title
+  },
   description: "Software Development and Photography by Joel Dettinger",
-  icons: {
-    // This is the default icon for the whole application
-    icon: {
-      url: "/favicon-home.svg",
-      type: "image/svg+xml",
+  // Define alternates for hreflang tags here for the root page
+  alternates: {
+    canonical: `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
+    languages: {
+      en: `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
+      de: `https://de.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, // Example alternate
+      "x-default": `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
     },
-    shortcut: "/favicon-home.svg",
   },
 };
 
