@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { ProjectGallery } from "@/components/ProjectGallery";
 
-// --- MOCK DATA REMAINS THE SAME ---
+// --- MOCK DATA ---
 const projectsData = [
   {
     id: 1,
@@ -88,11 +88,7 @@ export default async function ProjectDetailPage({
 }) {
   const project = await getProjectData(params.slug);
   const t = await getTranslations("ProjectDetailsPage");
-
-  // --- THIS IS THE FIX ---
-  // We must `await` the result of getFormatter
   const format = await getFormatter({ locale: params.locale });
-  // -----------------------
 
   if (!project) {
     notFound();
@@ -104,7 +100,6 @@ export default async function ProjectDetailPage({
   let formattedDate = null;
   if (project.developedAt) {
     const date = new Date(`${project.developedAt}-01T12:00:00Z`);
-    // Now the 'format' variable correctly holds the formatter function
     formattedDate = format.dateTime(date, {
       year: "numeric",
       month: "long",
@@ -114,7 +109,7 @@ export default async function ProjectDetailPage({
   return (
     <article className="max-w-6xl mx-auto py-12 px-6">
       <Button asChild variant="ghost" className="-ml-4 mb-8">
-        <Link href="/software#projekte">
+        <Link href="/#projekte">
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t("back_button")}
         </Link>
