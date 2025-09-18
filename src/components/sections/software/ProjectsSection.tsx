@@ -108,9 +108,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               </div>
 
               <Button asChild className="mt-8">
-                <Link href={`/software/${project.slug}`}>
-                  {t("button_details")}
-                </Link>
+                <Link href={`/${project.slug}`}>{t("button_details")}</Link>
               </Button>
             </div>
           </motion.div>

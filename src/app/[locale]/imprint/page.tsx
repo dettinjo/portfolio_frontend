@@ -1,9 +1,26 @@
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next"; // 1. Metadaten-Typ importieren
 
-export default async function ImprintPage() {
+// 2. Diese Funktion für dynamische Metadaten hinzufügen
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("ImprintPage");
 
-  // Helper component for structured content
+  return {
+    title: t("title"),
+    icons: {
+      icon: {
+        url: "/favicon-home.svg", // Das "Haus"-Icon verwenden
+        type: "image/svg+xml",
+      },
+      shortcut: "/favicon-home.svg",
+    },
+  };
+}
+
+export default async function Imprintage() {
+  const t = await getTranslations("ImprintPage");
+
+  // Helper-Komponente für strukturierten Inhalt
   const ContentBlock = ({
     title,
     content,
@@ -37,7 +54,6 @@ export default async function ImprintPage() {
           title={t("section3_title")}
           content={t.raw("section3_content")}
         />
-
         <div>
           <h2 className="text-2xl font-semibold">{t("disclaimer_title")}</h2>
           <div className="mt-4 space-y-4">

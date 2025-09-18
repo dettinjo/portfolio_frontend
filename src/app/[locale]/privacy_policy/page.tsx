@@ -1,6 +1,23 @@
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next"; // 1. Metadaten-Typ importieren
 
-export default async function DataPolicyPage() {
+// 2. Diese Funktion für dynamische Metadaten hinzufügen
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("PrivacyPage");
+
+  return {
+    title: t("title"),
+    icons: {
+      icon: {
+        url: "/favicon-home.svg", // Das "Haus"-Icon verwenden
+        type: "image/svg+xml",
+      },
+      shortcut: "/favicon-home.svg",
+    },
+  };
+}
+
+export default async function PrivacyPolicyPage() {
   const t = await getTranslations("PrivacyPage");
 
   return (
