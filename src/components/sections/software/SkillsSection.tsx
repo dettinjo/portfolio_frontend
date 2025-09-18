@@ -1,6 +1,7 @@
 // This is a clean Server Component. It has no "use client" directive.
 import { getTranslations } from "next-intl/server";
 import { SkillsGrid } from "./SkillsGrid";
+import { ProficiencyLegend } from "@/components/ProficiencyLegend";
 
 // Interface definitions for the data it will receive from the page
 interface Skill {
@@ -23,18 +24,17 @@ export async function SkillsSection({ skills }: SkillsSectionProps) {
   const t = await getTranslations("SoftwareSkillsSection");
 
   return (
-    <section id="skills" className="container mx-auto py-32">
+    <section id="skills">
       <div className="text-center mb-16">
-        {/* It renders its own translated text */}
         <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
           {t("subtitle")}
         </p>
       </div>
-
-      {/* It renders the Client Component, passing ONLY the raw skills data down. */}
-      {/* It does NOT pass any functions or translations. */}
       <SkillsGrid skills={skills} />
+      <div className="mt-16">
+        <ProficiencyLegend />
+      </div>
     </section>
   );
 }

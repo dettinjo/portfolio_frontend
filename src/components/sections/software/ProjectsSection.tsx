@@ -22,11 +22,34 @@ interface ProjectsSectionProps {
   projects: Project[];
 }
 
+const techIconMap: { [key: string]: string } = {
+  "Next.js": "devicon-nextjs-plain",
+  React: "devicon-react-original",
+  Strapi: "devicon-strapi-plain",
+  TypeScript: "devicon-typescript-plain",
+  "Tailwind CSS": "devicon-tailwindcss-plain",
+  "Node.js": "devicon-nodejs-plain",
+  Express: "devicon-express-original",
+  MongoDB: "devicon-mongodb-plain",
+  JWT: "devicon-jsonwebtokens-original",
+  Python: "devicon-python-plain",
+  FastAPI: "devicon-fastapi-plain",
+  PostgreSQL: "devicon-postgresql-plain",
+  Docker: "devicon-docker-plain",
+  "GitHub Actions": "devicon-githubactions-plain",
+  Vercel: "devicon-vercel-original",
+  "D3.js": "devicon-d3js-plain",
+  TensorFlow: "devicon-tensorflow-original",
+  "AI/ML": "devicon-google_ml_kit-original",
+  "CI/CD": "devicon-git-plain", // Using a representative icon for CI/CD
+  Datenvisualisierung: "devicon-grafana-original", // Using a representative icon
+};
+
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const t = useTranslations("SoftwareProjectsSection");
 
   return (
-    <section id="projekte" className="container mx-auto py-24 space-y-24">
+    <section id="projekte" className="space-y-24">
       <div className="text-center">
         <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
         <p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
@@ -67,12 +90,21 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               </p>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {/* --- HIER WIRD DIE NEUE BADGE-VARIANTE VERWENDET --- */}
-                {project.tags.map((tag) => (
-                  <Badge key={tag} variant="outline">
-                    {tag}
-                  </Badge>
-                ))}
+                {project.tags.map((tag) => {
+                  const iconClassName = techIconMap[tag];
+                  return (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className="gap-1.5 px-2 py-1" // Apply consistent padding and gap
+                    >
+                      {iconClassName && (
+                        <i className={`${iconClassName} text-base`}></i>
+                      )}
+                      <span>{tag}</span>
+                    </Badge>
+                  );
+                })}
               </div>
 
               <Button asChild className="mt-8">

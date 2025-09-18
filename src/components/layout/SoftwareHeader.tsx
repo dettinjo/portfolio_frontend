@@ -1,20 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
-import { Link } from "@/i18n/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useTheme } from "next-themes";
+import { Link, usePathname } from "@/i18n/navigation";
 import { MobileNav } from "./MobileHeader";
+import { Terminal } from "lucide-react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
 export function SoftwareHeader() {
   const t = useTranslations("SoftwareHeader");
-  const { resolvedTheme } = useTheme();
-  const avatarSrc =
-    resolvedTheme === "dark"
-      ? "/images/avatar-dark.png"
-      : "/images/avatar-light.png";
+  const pathname = usePathname();
+  const isMainSoftwarePage = pathname === "/software";
+
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
 
   const navLinks = [
     { href: "#projekte", label: t("projects") },
@@ -23,52 +33,49 @@ export function SoftwareHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <motion.header
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: "-100%" },
+      }}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+      className="sticky top-0 z-50 w-full bg-background"
+    >
       <nav className="container mx-auto flex h-14 items-center justify-between">
         <Link
           href="/software"
-          className="flex items-center gap-2 font-bold text-lg"
+          className="flex items-center gap-3 font-bold text-lg"
         >
-          <span>Code by</span>
-          <Avatar className="h-8 w-8">
-            <AvatarImage
-              src={avatarSrc}
-              alt="Your Name"
-              className="object-cover object-top scale-[1.2] origin-bottom"
-            />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
+          <Terminal className="h-6 w-6" />
+          {/* <span>Code by Joel</span> */}
         </Link>
 
-        {/* Desktop Navigation remains the same */}
-        <div className="hidden items-center gap-6 text-sm md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+        {isMainSoftwarePage && (
+          <div className="hidden items-center gap-6 text-sm md:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="font-bold text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
 
-        {/* --- THE FIX IS HERE --- */}
-        {/* The toggles are now separate for desktop and mobile */}
         <div className="flex items-center gap-2">
-          {/* These toggles are only visible on desktop */}
           <div className="hidden md:flex md:items-center md:gap-2">
             <LanguageToggle />
             <ThemeToggle />
           </div>
-          {/* The MobileNav is only visible on mobile */}
-          <MobileNav navLinks={navLinks}>
-            {/* We pass the toggles as children to be rendered inside the sheet */}
+          <MobileNav navLinks={isMainSoftwarePage ? navLinks : undefined}>
             <LanguageToggle />
             <ThemeToggle />
           </MobileNav>
         </div>
       </nav>
-    </header>
+    </motion.header>
   );
 }

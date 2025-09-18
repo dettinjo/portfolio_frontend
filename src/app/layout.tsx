@@ -12,8 +12,16 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Portfolio by Joel Dettinger",
-  description: "Software Development and Photography",
+  title: "Welcome to my Landing Page",
+  description: "Software Development and Photography by Joel Dettinger",
+  icons: {
+    // This is the default icon for the whole application
+    icon: {
+      url: "/favicon-home.svg",
+      type: "image/svg+xml",
+    },
+    shortcut: "/favicon-home.svg",
+  },
 };
 
 export default function RootLayout({

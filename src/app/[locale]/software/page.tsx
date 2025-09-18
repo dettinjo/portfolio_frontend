@@ -5,6 +5,7 @@ import { ContactSection } from "@/components/sections/software/ContactSection";
 import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
 import { SkillsSection } from "@/components/sections/software/SkillsSection";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
 
 // --- Beispieldaten (später von API) ---
 const projectsData = [
@@ -164,7 +165,7 @@ const skillsData = [
     ],
   },
   {
-    category: "DevOps & Tools",
+    category: "DevOps",
     skills: [
       {
         name: "Docker",
@@ -205,13 +206,26 @@ const skillsData = [
     ],
   },
 ];
+
 export default async function DevPage() {
   return (
-    <div className="space-y-24">
+    <>
       <HeroSection />
-      <ProjectsSection projects={projectsData} />
-      <SkillsSection skills={skillsData} />
-      <ContactSection />
-    </div>
+
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="py-24">
+          <ProjectsSection projects={projectsData} />
+        </div>
+        <ScrollIndicator href="#skills" />
+        <div className="py-24">
+          <SkillsSection skills={skillsData} />
+        </div>
+        <ScrollIndicator href="#kontakt" />
+        <div className="pt-24 pb-64 md:pb-96">
+          <ContactSection />
+        </div>
+        {/* ----------------------- */}
+      </div>
+    </>
   );
 }

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, Server, Code } from "lucide-react";
+import { Workflow, Server, Code } from "lucide-react";
 import { ProficiencyDots } from "@/components/ProficiencyDots";
 import { useTranslations } from "next-intl"; // The correct hook for Client Components
 
@@ -25,7 +25,7 @@ interface SkillsGridProps {
 const categoryDetails = {
   Frontend: { icon: <Code className="h-8 w-8 text-foreground" /> },
   Backend: { icon: <Server className="h-8 w-8 text-foreground" /> },
-  "DevOps & Tools": { icon: <Wrench className="h-8 w-8 text-foreground" /> },
+  DevOps: { icon: <Workflow className="h-8 w-8 text-foreground" /> },
 };
 
 // This component no longer receives a `translations` prop.
@@ -42,7 +42,7 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 -mx-6">
       {skills.map((category: SkillCategory, index: number) => (
         <motion.div
           key={category.category}
@@ -51,7 +51,7 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-          <Card className="h-full border-0 shadow-none bg-transparent hover:shadow-none">
+          <Card className="h-full border-0 shadow-none bg-transparent hover:shadow-none flex flex-col gap-4">
             <CardHeader>
               <div className="flex items-center gap-4">
                 {

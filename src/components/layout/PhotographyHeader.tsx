@@ -7,6 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import { MobileNav } from "./MobileHeader";
+import { Camera } from "lucide-react";
 
 export function PhotographyHeader() {
   const t = useTranslations("PhotographyHeader");
@@ -27,13 +28,14 @@ export function PhotographyHeader() {
       <nav className="container mx-auto flex h-14 items-center justify-between">
         <Link
           href="/photography"
-          className="flex items-center gap-2 font-bold text-lg"
+          className="flex items-center gap-3 font-bold text-lg" // Adjusted gap for better spacing
         >
-          <span>Photos by</span>
+          <Camera className="h-6 w-6" />
+          {/* <span>Photos by Joel</span>
           <Avatar className="h-8 w-8">
             <AvatarImage src={avatarSrc} alt="Your Name" />
             <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
         </Link>
 
         {/* Desktop Navigation remains the same */}

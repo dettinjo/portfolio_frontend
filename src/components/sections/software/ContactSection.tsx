@@ -46,11 +46,7 @@ export function ContactSection() {
   };
 
   return (
-    <section
-      id="kontakt"
-      className="container mx-auto flex min-h-screen items-center justify-center py-24"
-    >
-      {/* 1. New two-column layout for text and form */}
+    <section id="kontakt">
       <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         {/* Column 1: Call-to-Action Text & Socials */}
         <motion.div

@@ -27,23 +27,23 @@ export function Footer() {
           {/* THE INVERTED HEART ICON */}
           <Heart className="h-5 w-5 fill-background text-foreground" />
 
-          <span>{t("by")}</span>
-          <Avatar className="h-6 w-6">
+          <span>{t("by_me")}</span>
+          {/*           <Avatar className="h-6 w-6">
             <AvatarImage src={avatarSrc} alt="Your profile picture" />
             <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
         </div>
 
         {/* Right Side: Legal Links */}
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <Link
-            href="/impressum"
+            href="/imprint"
             className="transition-colors hover:text-foreground"
           >
             {t("imprint")}
           </Link>
           <Link
-            href="/datenschutz"
+            href="/privacy_policy"
             className="transition-colors hover:text-foreground"
           >
             {t("privacy")}
