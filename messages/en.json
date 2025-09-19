@@ -54,11 +54,22 @@
     "success_message": "Your message has been sent successfully. I'll get back to you soon.",
     "error_message": "Something went wrong. Please try again."
   },
-  "PhotoContactSection": {
+   "PhotoContactSection": {
     "title": "Interested?",
     "subtitle": "Send me a message for booking inquiries, collaborations, or just to say hello.",
-    "button_email": "Send a Message",
-    "button_instagram": "Follow on Instagram"
+    "button_instagram": "Follow on Instagram",
+    "form_name": "Name",
+    "form_name_placeholder": "Your Name",
+    "form_email": "Email",
+    "form_email_placeholder": "your@email.com",
+    "form_message": "Message",
+    "form_message_placeholder": "Tell me about your project or idea...",
+    "form_submit": "Send Inquiry",
+    "form_submitting": "Submitting...",
+    "success_title": "Thank You!",
+    "success_message": "Your inquiry has been sent. I'll get back to you soon.",
+    "error_message": "Something went wrong. Please try again.",
+    "socials_text": "Or find me on Instagram:"
   },
   "ProjectDetailsPage": {
     "back_button": "Back to Projects",

@@ -57,8 +57,19 @@
   "PhotoContactSection": {
     "title": "Interesse geweckt?",
     "subtitle": "Schreiben Sie mir eine Nachricht für Buchungsanfragen, Kooperationen oder um einfach nur 'Hallo' zu sagen.",
-    "button_email": "Nachricht schreiben",
-    "button_instagram": "Auf Instagram folgen"
+    "button_instagram": "Auf Instagram folgen",
+    "form_name": "Name",
+    "form_name_placeholder": "Ihr Name",
+    "form_email": "E-Mail",
+    "form_email_placeholder": "ihre@email.com",
+    "form_message": "Nachricht",
+    "form_message_placeholder": "Erzählen Sie mir von Ihrem Projekt oder Ihrer Idee...",
+    "form_submit": "Anfrage senden",
+    "form_submitting": "Sende...",
+    "success_title": "Vielen Dank!",
+    "success_message": "Ihre Anfrage wurde erfolgreich gesendet. Ich melde mich in Kürze.",
+    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "socials_text": "Oder finden Sie mich auf Instagram:"
   },
   "ProjectDetailsPage": {
     "back_button": "Zurück zu den Projekten",

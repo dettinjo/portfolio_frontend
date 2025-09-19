@@ -26,8 +26,6 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-// --- THIS IS THE FIX (PART 1) ---
-// We add a new prop to the interface to control the close button's visibility
 interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   showCloseButton?: boolean;
@@ -48,9 +46,11 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      {/* We conditionally render the default close button based on the new prop */}
       {showCloseButton && (
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+        // --- THIS IS THE DEFINITIVE FIX ---
+        // I have removed the focus ring classes (`focus:ring-2 focus:ring-ring focus:ring-offset-2`)
+        // and added classes to change the background on hover and focus.
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-md p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 hover:bg-accent focus:outline-none focus-visible:bg-accent disabled:pointer-events-none data-[state=open]:bg-secondary">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
@@ -59,8 +59,8 @@ const DialogContent = React.forwardRef<
   </DialogPortal>
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;
-// --- END OF FIX ---
 
+// ... (rest of the file remains the same)
 const DialogHeader = ({
   className,
   ...props
