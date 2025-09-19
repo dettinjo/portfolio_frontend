@@ -13,33 +13,73 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 
-interface GalleryLightboxProps {
+// ... (interfaces and other component code remains the same)
+interface Album {
   images: string[];
-  startIndex?: number;
+  title: string;
+}
+
+interface GalleryLightboxProps {
+  allAlbums: Album[];
+  startAlbumIndex?: number;
+  startPhotoIndex?: number;
   children: React.ReactNode;
-  altPrefix: string;
 }
 
 export function GalleryLightbox({
-  images,
-  startIndex = 0,
+  allAlbums,
+  startAlbumIndex = 0,
+  startPhotoIndex = 0,
   children,
-  altPrefix,
 }: GalleryLightboxProps) {
-  const [currentIndex, setCurrentIndex] = useState(startIndex);
+  const [currentAlbumIndex, setCurrentAlbumIndex] = useState(startAlbumIndex);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(startPhotoIndex);
   const [isOpen, setIsOpen] = useState(false);
 
+  // ... (all other logic like goToNext, goToPrevious, useEffect remains the same)
+  const currentAlbum = allAlbums[currentAlbumIndex];
+  const currentImage = currentAlbum.images[currentPhotoIndex];
+
   const goToNext = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  }, [images.length]);
+    const isLastPhotoInAlbum =
+      currentPhotoIndex >= currentAlbum.images.length - 1;
+    const isLastAlbum = currentAlbumIndex >= allAlbums.length - 1;
+
+    if (!isLastPhotoInAlbum) {
+      setCurrentPhotoIndex((prev) => prev + 1);
+    } else if (!isLastAlbum) {
+      setCurrentAlbumIndex((prev) => prev + 1);
+      setCurrentPhotoIndex(0);
+    } else {
+      setCurrentAlbumIndex(0);
+      setCurrentPhotoIndex(0);
+    }
+  }, [
+    currentAlbumIndex,
+    currentPhotoIndex,
+    allAlbums,
+    currentAlbum.images.length,
+  ]);
 
   const goToPrevious = useCallback(() => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length
-    );
-  }, [images.length]);
+    const isFirstPhotoInAlbum = currentPhotoIndex === 0;
+    const isFirstAlbum = currentAlbumIndex === 0;
 
-  // Keyboard navigation
+    if (!isFirstPhotoInAlbum) {
+      setCurrentPhotoIndex((prev) => prev - 1);
+    } else if (!isFirstAlbum) {
+      const prevAlbumIndex = currentAlbumIndex - 1;
+      const prevAlbum = allAlbums[prevAlbumIndex];
+      setCurrentAlbumIndex(prevAlbumIndex);
+      setCurrentPhotoIndex(prevAlbum.images.length - 1);
+    } else {
+      const lastAlbumIndex = allAlbums.length - 1;
+      const lastAlbum = allAlbums[lastAlbumIndex];
+      setCurrentAlbumIndex(lastAlbumIndex);
+      setCurrentPhotoIndex(lastAlbum.images.length - 1);
+    }
+  }, [currentAlbumIndex, currentPhotoIndex, allAlbums]);
+
   useEffect(() => {
     if (isOpen) {
       const handleKeyDown = (event: KeyboardEvent) => {
@@ -58,73 +98,83 @@ export function GalleryLightbox({
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
-        if (open) setCurrentIndex(startIndex);
+        if (open) {
+          setCurrentAlbumIndex(startAlbumIndex);
+          setCurrentPhotoIndex(startPhotoIndex);
+        } else {
+          // --- THIS IS THE DEFINITIVE FIX ---
+          // After the dialog closes, we find whatever element the browser
+          // currently has focused (which will be the trigger) and tell it to blur.
+          // This removes the focus state and the unwanted outline.
+          setTimeout(() => {
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+          }, 0);
+        }
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
-        // --- THIS IS THE DEFINITIVE FIX ---
-        // This prevents the dialog from automatically focusing the first button on open.
         onOpenAutoFocus={(e) => e.preventDefault()}
         className="bg-black/80 backdrop-blur-sm border-none shadow-none w-screen h-screen max-w-full p-0 flex items-center justify-center"
       >
+        {/* ... (rest of the DialogContent remains the same) ... */}
         <VisuallyHidden asChild>
-          <DialogTitle>{`${altPrefix} - Image ${
-            currentIndex + 1
+          <DialogTitle>{`${currentAlbum.title} - Image ${
+            currentPhotoIndex + 1
           }`}</DialogTitle>
         </VisuallyHidden>
 
-        {images.length > 1 && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              stopPropagation(e);
-              goToPrevious();
-            }}
-            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
-            aria-label="Previous image"
-          >
-            <ArrowLeft className="h-8 w-8" />
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            stopPropagation(e);
+            goToPrevious();
+          }}
+          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
+          aria-label="Previous image"
+        >
+          <ArrowLeft className="h-8 w-8" />
+        </Button>
 
         <div
           className="relative w-full h-full max-w-[90vw] max-h-[85vh]"
           onClick={stopPropagation}
         >
           <Image
-            src={images[currentIndex]}
-            alt={`${altPrefix} - Image ${currentIndex + 1}`}
+            src={currentImage}
+            alt={`${currentAlbum.title} - Image ${currentPhotoIndex + 1}`}
             fill
             sizes="100vw"
             className="object-contain"
+            key={currentImage}
           />
         </div>
 
-        {images.length > 1 && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              stopPropagation(e);
-              goToNext();
-            }}
-            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
-            aria-label="Next image"
-          >
-            <ArrowRight className="h-8 w-8" />
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            stopPropagation(e);
+            goToNext();
+          }}
+          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
+          aria-label="Next image"
+        >
+          <ArrowRight className="h-8 w-8" />
+        </Button>
 
-        {images.length > 1 && (
-          <div
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-full bg-black/50 text-white text-sm px-3 py-1 pointer-events-none"
-            onClick={stopPropagation}
-          >
-            {currentIndex + 1} / {images.length}
+        <div
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-full bg-black/50 text-white text-sm px-3 py-1.5 pointer-events-none text-center"
+          onClick={stopPropagation}
+        >
+          <div className="font-semibold">{currentAlbum.title}</div>
+          <div className="text-xs opacity-80">
+            {currentPhotoIndex + 1} / {currentAlbum.images.length}
           </div>
-        )}
+        </div>
 
         <DialogClose asChild>
           <Button

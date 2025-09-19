@@ -16,10 +16,20 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
 
+  // --- THIS IS THE DEFINITIVE FIX (PART 1) ---
+  // Create a single "album" object on the fly to match the data structure
+  // that the updated GalleryLightbox component now expects.
+  const albumForLightbox = [
+    {
+      title: altPrefix,
+      images: images,
+    },
+  ];
+
   const checkArrows = useCallback(() => {
+    // ... (this function remains the same)
     const gallery = galleryRef.current;
     if (!gallery) return;
-
     const { scrollLeft, scrollWidth, clientWidth } = gallery;
     setShowLeftArrow(scrollLeft > 1);
     const isAtEnd = scrollWidth - scrollLeft - clientWidth < 1;
@@ -27,6 +37,7 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
   }, [images.length]);
 
   useEffect(() => {
+    // ... (this hook remains the same)
     const gallery = galleryRef.current;
     if (gallery) {
       checkArrows();
@@ -58,16 +69,19 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
       <div className="overflow-hidden border-2 border-foreground rounded-lg shadow-md">
         <div
           ref={galleryRef}
-          // --- THIS IS THE DEFINITIVE FIX ---
-          // `overflow-y-hidden` explicitly forbids vertical scrolling on this element.
           className="flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth scrollbar-thin scrollbar-thumb-muted-foreground/50 scrollbar-track-transparent gap-0"
         >
           {images.map((imgSrc, index) => (
+            // --- THIS IS THE DEFINITIVE FIX (PART 2) ---
+            // Pass the data using the new prop names:
+            // - `allAlbums` instead of `images`
+            // - `startAlbumIndex` (which is always 0 here)
+            // - `startPhotoIndex` instead of `startIndex`
             <GalleryLightbox
               key={index}
-              images={images}
-              startIndex={index}
-              altPrefix={altPrefix}
+              allAlbums={albumForLightbox}
+              startAlbumIndex={0}
+              startPhotoIndex={index}
             >
               <div className="group/image relative aspect-video w-full flex-shrink-0 snap-center cursor-pointer">
                 <Image
