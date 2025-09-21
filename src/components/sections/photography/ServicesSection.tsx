@@ -1,9 +1,20 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-// ... (imports remain the same)
-import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   Mail,
   Box,
@@ -16,36 +27,30 @@ import {
   MapPin,
   Zap,
 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 
 export function ServicesSection() {
   const t = useTranslations("photography.ServicesSection");
+  const tCalculator = useTranslations("photography.ServicesSection.calculator");
+
   const yourEmail = "your-photo-email@example.com";
 
-  // ... (calculator state and logic remain the same)
   const [hours, setHours] = useState(1);
   const [images, setImages] = useState(10);
   const [retouchLevel, setRetouchLevel] = useState(1);
   const [distance, setDistance] = useState("");
   const [addExpress, setAddExpress] = useState(false);
-  const retouchLevels = [
-    t("calculator.levels.basic"),
-    t("calculator.levels.advanced"),
-    t("calculator.levels.pro"),
-  ];
+
+  const retouchLevels = useMemo(
+    () => [
+      tCalculator("levels.basic"),
+      tCalculator("levels.advanced"),
+      tCalculator("levels.pro"),
+    ],
+    [tCalculator]
+  );
+
   const calculatedPrice = useMemo(() => {
     const sessionFee = 40;
     const hourlyRate = 55;
@@ -75,15 +80,31 @@ export function ServicesSection() {
     },
   ];
 
-  const individualMailto = `mailto:${yourEmail}?subject=${encodeURIComponent(
-    "Inquiry for Individual Shoot"
-  )}&body=${encodeURIComponent(
-    `Hi,\n\nI'd like to book a custom session with the following configuration:\n- Duration: ${hours} hours\n- Edited Images: ${images}\n- Retouching Level: ${
-      retouchLevels[retouchLevel - 1]
-    }\n- Travel Distance: ${distance || 0} km\n- Express Delivery (24h): ${
-      addExpress ? "Yes" : "No"
-    }\n\nEstimated Price: ${calculatedPrice} €\n\nLooking forward to hearing from you!`
-  )}`;
+  const individualMailto = useMemo(() => {
+    const subject = t("mail.subject");
+    const body = t("mail.body", {
+      hours: hours,
+      images: images,
+      retouchLevel: retouchLevels[retouchLevel - 1],
+      distance: distance || 0,
+      expressDelivery: addExpress ? tCalculator("yes") : tCalculator("no"),
+      price: calculatedPrice,
+    });
+    return `mailto:${yourEmail}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+  }, [
+    t,
+    tCalculator,
+    yourEmail,
+    hours,
+    images,
+    retouchLevel,
+    distance,
+    addExpress,
+    calculatedPrice,
+    retouchLevels,
+  ]);
 
   return (
     <section id="services">
@@ -94,15 +115,14 @@ export function ServicesSection() {
         </p>
       </div>
 
-      {/* --- THIS IS THE DEFINITIVE FIX: Grid with auto-rows --- */}
+      {/* --- THIS IS THE DEFINITIVE FIX --- */}
+      {/* The `items-start` class has been removed. The grid will now default to `items-stretch`. */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-        // `grid-rows-auto` is the key. It tells the grid to make all cells in a row
-        // as tall as the tallest cell in that row.
-        className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:grid-flow-row"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-8"
       >
         {packages.map((pkg) => (
           <motion.div
@@ -112,7 +132,6 @@ export function ServicesSection() {
               visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
             }}
           >
-            {/* `h-full` is still used to make the card fill the grid cell's height */}
             <Card className="flex flex-col h-full">
               <CardHeader className="p-6">
                 <div className="flex items-center gap-4">
@@ -128,7 +147,6 @@ export function ServicesSection() {
               <CardContent className="flex-grow p-6 pt-0">
                 <Separator className="mb-6" />
                 <ul className="space-y-4">
-                  {/* `t.raw` is used to get the array of strings from your JSON file */}
                   {t.raw(`${pkg.type}.items`).map((item: string) => (
                     <li key={item} className="flex items-start gap-3">
                       <Check className="h-4 w-4 flex-shrink-0 text-green-500 mt-1" />
@@ -188,10 +206,10 @@ export function ServicesSection() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-sm">
                     <Label htmlFor="hours" className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" /> {t("calculator.duration")}
+                      <Clock className="h-4 w-4" /> {tCalculator("duration")}
                     </Label>
                     <span className="font-semibold">
-                      {hours} {t("calculator.hours")}
+                      {hours} {tCalculator("hours")}
                     </span>
                   </div>
                   <Slider
@@ -206,7 +224,7 @@ export function ServicesSection() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-sm">
                     <Label htmlFor="images" className="flex items-center gap-2">
-                      <ImageIcon className="h-4 w-4" /> {t("calculator.images")}
+                      <ImageIcon className="h-4 w-4" /> {tCalculator("images")}
                     </Label>
                     <span className="font-semibold">{images}</span>
                   </div>
@@ -225,7 +243,7 @@ export function ServicesSection() {
                       htmlFor="retouching"
                       className="flex items-center gap-2"
                     >
-                      <Wand2 className="h-4 w-4" /> {t("calculator.retouching")}
+                      <Wand2 className="h-4 w-4" /> {tCalculator("retouching")}
                     </Label>
                     <span className="font-semibold">
                       {retouchLevels[retouchLevel - 1]}
@@ -245,7 +263,7 @@ export function ServicesSection() {
                     htmlFor="distance"
                     className="flex items-center gap-2 text-sm"
                   >
-                    <MapPin className="h-4 w-4" /> {t("calculator.travel")}
+                    <MapPin className="h-4 w-4" /> {tCalculator("travel")}
                   </Label>
                   <Input
                     id="distance"
@@ -257,7 +275,7 @@ export function ServicesSection() {
                 </div>
                 <div className="flex items-center justify-between">
                   <Label htmlFor="express" className="flex items-center gap-2">
-                    <Zap className="h-4 w-4" /> {t("calculator.express")}
+                    <Zap className="h-4 w-4" /> {tCalculator("express")}
                   </Label>
                   <Switch
                     id="express"
