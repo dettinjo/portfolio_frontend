@@ -5,6 +5,7 @@ import Image from "next/image";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, ZoomIn } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ProjectGalleryProps {
   images: string[];
@@ -12,24 +13,19 @@ interface ProjectGalleryProps {
 }
 
 export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
+  // --- DEFINITIVE FIX: Use the 'software' namespace ---
+  const t = useTranslations("software.ProjectGallery");
+
   const galleryRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
 
-  // --- THIS IS THE DEFINITIVE FIX (PART 1) ---
-  // Create a single "album" object on the fly to match the data structure
-  // that the updated GalleryLightbox component now expects.
-  const albumForLightbox = [
-    {
-      title: altPrefix,
-      images: images,
-    },
-  ];
+  const albumForLightbox = [{ title: altPrefix, images: images }];
 
   const checkArrows = useCallback(() => {
-    // ... (this function remains the same)
     const gallery = galleryRef.current;
     if (!gallery) return;
+
     const { scrollLeft, scrollWidth, clientWidth } = gallery;
     setShowLeftArrow(scrollLeft > 1);
     const isAtEnd = scrollWidth - scrollLeft - clientWidth < 1;
@@ -37,7 +33,6 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
   }, [images.length]);
 
   useEffect(() => {
-    // ... (this hook remains the same)
     const gallery = galleryRef.current;
     if (gallery) {
       checkArrows();
@@ -72,11 +67,6 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
           className="flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth scrollbar-thin scrollbar-thumb-muted-foreground/50 scrollbar-track-transparent gap-0"
         >
           {images.map((imgSrc, index) => (
-            // --- THIS IS THE DEFINITIVE FIX (PART 2) ---
-            // Pass the data using the new prop names:
-            // - `allAlbums` instead of `images`
-            // - `startAlbumIndex` (which is always 0 here)
-            // - `startPhotoIndex` instead of `startIndex`
             <GalleryLightbox
               key={index}
               allAlbums={albumForLightbox}
@@ -86,7 +76,10 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
               <div className="group/image relative aspect-video w-full flex-shrink-0 snap-center cursor-pointer">
                 <Image
                   src={imgSrc}
-                  alt={`Thumbnail ${index + 1} for ${altPrefix}`}
+                  alt={t("thumbnailAlt", {
+                    index: index + 1,
+                    prefix: altPrefix,
+                  })}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 75vw, 896px"
                   className="object-cover transition-transform duration-300 group-hover/image:scale-105"
@@ -105,7 +98,7 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
         variant="ghost"
         size="icon"
         onClick={scrollLeft}
-        aria-label="Scroll left"
+        aria-label={t("scrollLeft")}
         className={`absolute top-1/2 -translate-y-1/2 left-4 z-10 h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm transition-opacity hover:bg-background/90
                     ${
                       showLeftArrow
@@ -120,7 +113,7 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
         variant="ghost"
         size="icon"
         onClick={scrollRight}
-        aria-label="Scroll right"
+        aria-label={t("scrollRight")}
         className={`absolute top-1/2 -translate-y-1/2 right-4 z-10 h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm transition-opacity hover:bg-background/90
                     ${
                       showRightArrow

@@ -2,33 +2,45 @@ import { PhotographyHeader } from "@/components/layout/PhotographyHeader";
 import { Footer } from "@/components/layout/Footer";
 import React from "react";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-// The Props type MUST match the parent's structure
-type Props = {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
-};
+// --- THIS IS THE DEFINITIVE FIX ---
 
-export const metadata: Metadata = {
-  title: "Photos by Joel",
-  description: "Photography by Joel Dettinger",
-  icons: {
-    icon: {
-      url: "/favicon-photography.svg",
-      type: "image/svg+xml",
+// We REMOVE the custom `type Props = { ... }` entirely.
+
+// The `generateMetadata` function's props are typed inline.
+// This explicitly tells TypeScript what to expect for this function.
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale,
+    namespace: "photography.PhotographyPageSEO",
+  });
+
+  return {
+    title: {
+      template: `%s | ${t("siteName")}`,
+      default: t("siteName"),
     },
-    shortcut: "/favicon-photography.svg",
-  },
-};
+    description: "Photography by Joel Dettinger",
+    icons: {
+      icon: { url: "/favicon-photography.svg", type: "image/svg+xml" },
+      shortcut: "/favicon-photography.svg",
+    },
+  };
+}
 
-// The component MUST be `async`.
-export default async function PhotographyPageLayout({
+// The Layout component's props are also typed inline.
+// Since it doesn't use the `params` prop, we only need to define `children`.
+// This avoids any conflict with Next.js's internal `LayoutProps`.
+export default function PhotographyPageLayout({
   children,
-  params,
-}: Props) {
-  // We MUST await the params here as well.
-  await params;
-
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative flex min-h-dvh flex-col bg-background">
       <PhotographyHeader />

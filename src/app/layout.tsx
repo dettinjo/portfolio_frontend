@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 // --- SEO ENHANCEMENT ---
 export const metadata: Metadata = {
   title: {
-    template: "%s | Joel Dettinger",
+    template: "%s",
     default: "Joel Dettinger - Software & Photography", // A fallback title
   },
   description: "Software Development and Photography by Joel Dettinger",

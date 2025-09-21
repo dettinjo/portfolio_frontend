@@ -1,0 +1,151 @@
+{
+  "PhotographyHeader": {
+    "galleries": "Galerie",
+    "services": "Services",
+    "contact": "Kontakt"
+  },
+  "PhotographyPage": {
+    "profileBio": "Momente aus einzigartigen Perspektiven einfangen. Die Schnittstelle von Licht, Schatten und Emotionen durch die Linse erkunden. Verfügbar für Porträt-, Event- und Produktfotografie.",
+    "tabs": {
+      "feed": "Fotofeed",
+      "services": "Leistungen",
+      "testimonials": "Referenzen",
+      "contact": "Kontakt"
+    }
+  },
+  "PhotoGridSection": {
+    "backToTop": "Nach oben",
+    "photo": "Foto",
+    "photos": "Fotos"
+  },
+  "ServicesSection": {
+    "title": "Pakete & Preise",
+    "subtitle": "Wählen Sie ein vordefiniertes Paket oder stellen Sie sich Ihr eigenes für ein maßgeschneidertes Erlebnis zusammen.",
+    "standard": {
+      "title": "Standard-Paket",
+      "description": "Ideal für wirkungsvolle Porträts oder Produktfotos.",
+      "items": [
+        "1 Stunde Shooting",
+        "10 bearbeitete Bilder (Basis)",
+        "Vorbesprechung",
+        "Private Online-Galerie"
+      ],
+      "subject": "Anfrage zum Standard-Paket"
+    },
+    "advanced": {
+      "title": "Advanced-Paket",
+      "description": "Perfekt für Familien, Events oder Branding.",
+      "items": [
+        "Bis zu 3 Stunden Shooting",
+        "30 bearbeitete Bilder (Advanced)",
+        "Fortgeschrittene Hautretusche",
+        "Mehrere Orte oder Outfitwechsel",
+        "Priorisierter Support & Beratung",
+        "Downloads in voller Auflösung"
+      ],
+      "subject": "Anfrage zum Advanced-Paket"
+    },
+    "individual": {
+      "title": "Individuell",
+      "description": "Stellen Sie sich Ihr eigenes Paket zusammen."
+    },
+    "calculator": {
+      "sessionFee": "Grundgebühr",
+      "duration": "Dauer",
+      "hours": "Stunden",
+      "images": "Bearbeitete Bilder",
+      "retouching": "Retusche",
+      "levels": {
+        "basic": "Basis",
+        "advanced": "Fortgeschritten",
+        "pro": "Profi"
+      },
+      "travel": "Anfahrt (km)",
+      "express": "Express-Lieferung (24h)"
+    },
+    "price": {
+      "fixed": "Festpreis",
+      "estimated": "Ihr geschätzter Preis"
+    },
+    "button": "Jetzt anfragen",
+    "buttonIndividual": "Mit dieser Konfiguration anfragen"
+  },
+  "PhotoContactSection": {
+    "title": "Interesse geweckt?",
+    "subtitle": "Schreiben Sie mir eine Nachricht für Buchungsanfragen, Kooperationen oder um einfach nur 'Hallo' zu sagen.",
+    "button_instagram": "Auf Instagram folgen",
+    "form_name": "Name",
+    "form_name_placeholder": "Ihr Name",
+    "form_email": "E-Mail",
+    "form_email_placeholder": "ihre@email.com",
+    "form_message": "Nachricht",
+    "form_message_placeholder": "Erzählen Sie mir von Ihrem Projekt oder Ihrer Idee...",
+    "form_submit": "Anfrage senden",
+    "form_submitting": "Sende...",
+    "success_title": "Vielen Dank!",
+    "success_message": "Ihre Anfrage wurde erfolgreich gesendet. Ich melde mich in Kürze.",
+    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "socials_text": "Oder finden Sie mich auf Instagram:"
+  },
+  "TestimonialsSection": {
+    "title": "Was Kunden sagen",
+    "subtitle": "Feedback von Personen, mit denen ich das Vergnügen hatte zu arbeiten.",
+    "averageRatingText": "Durchschnittsbewertung aus {count} Bewertungen",
+    "leaveReviewButton": "Eigene Bewertung abgeben",
+    "dialog": {
+      "title": "Kundenfeedback",
+      "defaultRole": "Kunde",
+      "ratingsTitle": "Detaillierte Bewertungen",
+      "overallRating": "Gesamtbewertung",
+      "ratings": {
+        "communication": "Kommunikation",
+        "creativity": "Kreativität",
+        "professionalism": "Professionalität",
+        "value": "Preis-Leistung"
+      }
+    }
+  },
+  "LeaveReviewPage": {
+    "title": "Bewertung abgeben",
+    "subtitle": "Teilen Sie Ihre Erfahrung, um anderen zu helfen.",
+    "form": {
+      "nameLabel": "Ihr Name",
+      "namePlaceholder": "z.B. Erika Mustermann",
+      "roleLabel": "Organisation / Event (Optional)",
+      "rolePlaceholder": "z.B. Acme Inc. oder Hochzeit",
+      "photoLabel": "Foto hochladen (Optional)",
+      "buttonUpload": "Datei auswählen",
+      "noFileChosen": "Keine Datei ausgewählt",
+      "testimonialLabel": "Ihre Bewertung",
+      "testimonialPlaceholder": "Beschreiben Sie Ihre Erfahrung... was hat Ihnen am besten gefallen?",
+      "buttonPreview": "Speichern & Vorschau"
+    },
+    "ratings": {
+      "title": "Detaillierte Bewertungen",
+      "communication": "Kommunikation",
+      "creativity": "Kreativität",
+      "professionalism": "Professionalität",
+      "value": "Preis-Leistung"
+    },
+    "preview": {
+      "title": "Bewertung überprüfen",
+      "subtitle": "So wird Ihr Feedback aussehen. Wenn Sie bereit sind, senden Sie es ab.",
+      "buttonEdit": "Bearbeiten",
+      "buttonSubmit": "Absenden",
+      "buttonSubmitting": "Sende...",
+      "overallRating": "Gesamtbewertung",
+      "defaultQuote": "Ihr wunderbares Feedback wird hier erscheinen...",
+      "defaultName": "Ihr Name",
+      "defaultRole": "Kunde"
+    },
+    "success": {
+      "title": "Vielen Dank!",
+      "message": "Ihre Bewertung wurde übermittelt und wird nun überprüft."
+    },
+    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+  },
+  "PhotographyPageSEO": {
+    "siteName": "Fotos von Joel",
+    "description": "Entdecken Sie eine Sammlung meiner fotografischen Arbeiten, die meine Fähigkeiten in verschiedenen Fotografie-Stilen und -Techniken zeigen."
+  }
+}

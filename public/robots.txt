@@ -4,6 +4,8 @@ Allow: /
 
 # Disallow crawling of specific paths if needed (e.g., admin panels)
 # Disallow: /admin/
++ Disallow: /photography/leave-a-review/
+
 
 # Location of the sitemap
 Sitemap: https://joeldettinger.de/sitemap.xml

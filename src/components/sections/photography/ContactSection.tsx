@@ -10,7 +10,10 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
 export function ContactSection() {
-  const t = useTranslations("PhotoContactSection");
+  // --- THIS IS THE DEFINITIVE FIX ---
+  // We specify the full path to the translations, including the namespace.
+  const t = useTranslations("photography.PhotoContactSection");
+
   const [submissionStatus, setSubmissionStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
@@ -46,7 +49,6 @@ export function ContactSection() {
   return (
     <section id="kontakt">
       <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-        {/* Column 1: Call-to-Action Text & Socials */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -63,7 +65,7 @@ export function ContactSection() {
             </p>
             <Button asChild variant="secondary">
               <a
-                href="https://instagram.com/joeldettinger" // Your Instagram handle
+                href="https://instagram.com/joeldettinger"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -74,7 +76,6 @@ export function ContactSection() {
           </div>
         </motion.div>
 
-        {/* Column 2: The Interactive Form */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
