@@ -12,8 +12,8 @@ import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
+import { useTranslations } from "next-intl"; // Import the hook
 
-// ... (interfaces and other component code remains the same)
 interface Album {
   images: string[];
   title: string;
@@ -32,11 +32,13 @@ export function GalleryLightbox({
   startPhotoIndex = 0,
   children,
 }: GalleryLightboxProps) {
+  // --- DEFINITIVE FIX: Use the common namespace ---
+  const t = useTranslations("GalleryLightbox");
+
   const [currentAlbumIndex, setCurrentAlbumIndex] = useState(startAlbumIndex);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(startPhotoIndex);
   const [isOpen, setIsOpen] = useState(false);
 
-  // ... (all other logic like goToNext, goToPrevious, useEffect remains the same)
   const currentAlbum = allAlbums[currentAlbumIndex];
   const currentImage = currentAlbum.images[currentPhotoIndex];
 
@@ -102,10 +104,6 @@ export function GalleryLightbox({
           setCurrentAlbumIndex(startAlbumIndex);
           setCurrentPhotoIndex(startPhotoIndex);
         } else {
-          // --- THIS IS THE DEFINITIVE FIX ---
-          // After the dialog closes, we find whatever element the browser
-          // currently has focused (which will be the trigger) and tell it to blur.
-          // This removes the focus state and the unwanted outline.
           setTimeout(() => {
             if (document.activeElement instanceof HTMLElement) {
               document.activeElement.blur();
@@ -117,13 +115,16 @@ export function GalleryLightbox({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
         className="bg-black/80 backdrop-blur-sm border-none shadow-none w-screen h-screen max-w-full p-0 flex items-center justify-center"
       >
-        {/* ... (rest of the DialogContent remains the same) ... */}
         <VisuallyHidden asChild>
-          <DialogTitle>{`${currentAlbum.title} - Image ${
-            currentPhotoIndex + 1
-          }`}</DialogTitle>
+          <DialogTitle>
+            {t("dialogTitle", {
+              prefix: currentAlbum.title,
+              index: currentPhotoIndex + 1,
+            })}
+          </DialogTitle>
         </VisuallyHidden>
 
         <Button
@@ -134,18 +135,18 @@ export function GalleryLightbox({
             goToPrevious();
           }}
           className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
-          aria-label="Previous image"
+          aria-label={t("previousImage")}
         >
           <ArrowLeft className="h-8 w-8" />
         </Button>
 
-        <div
-          className="relative w-full h-full max-w-[90vw] max-h-[85vh]"
-          onClick={stopPropagation}
-        >
+        <div className="relative w-full h-full max-w-[90vw] max-h-[85vh]">
           <Image
             src={currentImage}
-            alt={`${currentAlbum.title} - Image ${currentPhotoIndex + 1}`}
+            alt={t("imageAlt", {
+              prefix: currentAlbum.title,
+              index: currentPhotoIndex + 1,
+            })}
             fill
             sizes="100vw"
             className="object-contain"
@@ -161,15 +162,12 @@ export function GalleryLightbox({
             goToNext();
           }}
           className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
-          aria-label="Next image"
+          aria-label={t("nextImage")}
         >
           <ArrowRight className="h-8 w-8" />
         </Button>
 
-        <div
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-full bg-black/50 text-white text-sm px-3 py-1.5 pointer-events-none text-center"
-          onClick={stopPropagation}
-        >
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 rounded-full bg-black/50 text-white text-sm px-3 py-1.5 pointer-events-none text-center">
           <div className="font-semibold">{currentAlbum.title}</div>
           <div className="text-xs opacity-80">
             {currentPhotoIndex + 1} / {currentAlbum.images.length}
@@ -180,7 +178,7 @@ export function GalleryLightbox({
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Close lightbox"
+            aria-label={t("close")}
             onClick={stopPropagation}
             className="absolute top-2 right-2 md:top-4 md:right-4 z-50 text-white hover:bg-white/20 hover:text-white h-12 w-12 rounded-full"
           >

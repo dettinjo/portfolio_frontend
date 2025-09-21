@@ -1,10 +1,5 @@
 {
-  "SoftwareHeader": {
-    "projects": "Projekte",
-    "skills": "Skills",
-    "contact": "Kontakt"
-  },
-  "PhotographyHeader": {
+"PhotographyHeader": {
     "galleries": "Galerie",
     "services": "Services",
     "contact": "Kontakt"
@@ -19,68 +14,12 @@
     "code": "Code",
     "photos": "Fotos"
   },
-  "SoftwareHeroSection": {
-    "greeting": "Hi, ich bin Joel",
-    "intro": "Ein Full-Stack Entwickler mit einer Leidenschaft für die Gestaltung und Realisierung von robusten, skalierbaren und benutzerfreundlichen Webanwendungen.",
-    "button_projects": "Schau dir meine Arbeit an"
-  },
-  "SoftwareProjectsSection": {
-    "title": "Projekte",
-    "subtitle": "Ein Einblick in meine Problemlösungsfähigkeiten und meine technische Umsetzung.",
-    "button_details": "Details ansehen"
-  },
-  "SoftwareSkillsSection": {
-    "title": "Technologien & Kompetenzen",
-    "subtitle": "Mein Werkzeugkasten für die Entwicklung moderner, robuster und skalierbarer Softwarelösungen.",
-    "category_frontend": "Frontend",
-    "category_backend": "Backend",
-    "category_devops": "DevOps & Tools",
-    "legend_beginner": "Grundlagen",
-    "legend_expert": "Experte"
-  },
-  "SoftwareContactSection": {
-    "title": "Kontakt aufnehmen",
-    "subtitle": "Haben Sie ein Projekt im Sinn oder möchten Sie sich vernetzen? Ich freue mich darauf, von Ihnen zu hören.",
-    "form_name": "Name",
-    "form_name_placeholder": "Ihr Name",
-    "form_email": "E-Mail",
-    "form_email_placeholder": "ihre@email.com",
-    "form_message": "Nachricht",
-    "form_message_placeholder": "Ihre Nachricht...",
-    "form_submit": "Nachricht senden",
-    "form_submitting": "Sende...",
-    "socials_text": "Oder finden Sie mich hier:",
-    "success_title": "Vielen Dank!",
-    "success_message": "Ihre Nachricht wurde erfolgreich gesendet. Ich melde mich in Kürze.",
-    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
-  },
-  "PhotoContactSection": {
-    "title": "Interesse geweckt?",
-    "subtitle": "Schreiben Sie mir eine Nachricht für Buchungsanfragen, Kooperationen oder um einfach nur 'Hallo' zu sagen.",
-    "button_instagram": "Auf Instagram folgen",
-    "form_name": "Name",
-    "form_name_placeholder": "Ihr Name",
-    "form_email": "E-Mail",
-    "form_email_placeholder": "ihre@email.com",
-    "form_message": "Nachricht",
-    "form_message_placeholder": "Erzählen Sie mir von Ihrem Projekt oder Ihrer Idee...",
-    "form_submit": "Anfrage senden",
-    "form_submitting": "Sende...",
-    "success_title": "Vielen Dank!",
-    "success_message": "Ihre Anfrage wurde erfolgreich gesendet. Ich melde mich in Kürze.",
-    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-    "socials_text": "Oder finden Sie mich auf Instagram:"
-  },
-  "ProjectDetailsPage": {
-    "back_button": "Zurück zu den Projekten",
-    "about_title": "Über dieses Projekt",
-    "details_title": "Details",
-    "tech_title": "Verwendete Technologien",
-    "links_title": "Projekt-Links",
-    "live_demo_button": "Live-Demo",
-    "source_code_button": "Quellcode",
-    "not_available": "Nicht verfügbar",
-    "developed_in_label": "Entwickelt im"
+  "GalleryLightbox": {
+    "dialogTitle": "{prefix} - Bild {index}",
+    "imageAlt": "{prefix} - Bild {index}",
+    "previousImage": "Voriges Bild",
+    "nextImage": "Nächstes Bild",
+    "close": "Lightbox schließen"
   },
   "ImprintPage": {
     "title": "Impressum",
@@ -127,9 +66,5 @@
     "section3_contact_content": "Wenn Sie unser Kontaktformular nutzen, werden Ihre Angaben zur Bearbeitung Ihrer Anfrage an den Dienstleister Formspree, Inc., 1201 Orange St, Ste 600, Wilmington, DE 19801, USA, übermittelt und dort verarbeitet. Die Verarbeitung dieser Daten erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO).",
     "section4_title": "3. Ihre Rechte als Betroffener",
     "section4_content": "Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten."
-  },
-  "SoftwarePageSEO": {
-    "title": "Software-Portfolio",
-    "description": "Entdecken Sie eine Sammlung meiner Softwareentwicklungsprojekte, die meine Fähigkeiten in modernen Web-Technologien demonstrieren."
   }
 }

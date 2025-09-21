@@ -1,0 +1,151 @@
+{
+"PhotographyHeader": {
+    "galleries": "Galleries",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "PhotographyPage": {
+    "profileBio": "Capturing moments from unique perspectives. Exploring the intersection of light, shadow, and emotion through the lens. Available for portrait, event, and product photography.",
+    "tabs": {
+      "feed": "Photo Feed",
+      "services": "Services",
+      "testimonials": "Testimonials",
+      "contact": "Contact"
+    }
+  },
+    "PhotoGridSection": {
+    "backToTop": "Back to Top",
+    "photo": "Photo",
+    "photos": "Photos"
+  },
+  "ServicesSection": {
+    "title": "Pakete & Preise",
+    "subtitle": "Wählen Sie ein vordefiniertes Paket oder stellen Sie sich Ihr eigenes für ein maßgeschneidertes Erlebnis zusammen.",
+    "standard": {
+      "title": "Standard-Paket",
+      "description": "Ideal für wirkungsvolle Porträts oder Produktfotos.",
+      "items": [
+        "1 Stunde Shooting",
+        "10 bearbeitete Bilder (Basic)",
+        "Vorbesprechung",
+        "Private Online-Galerie"
+      ],
+      "subject": "Anfrage zum Standard-Paket"
+    },
+    "advanced": {
+      "title": "Advanced-Paket",
+      "description": "Perfekt für Familien, Events oder Branding.",
+      "items": [
+        "Bis zu 3 Stunden Shooting",
+        "30 bearbeitete Bilder (Advanced)",
+        "Fortgeschrittene Hautretusche",
+        "Mehrere Orte oder Outfitwechsel",
+        "Priorisierter Support & Beratung",
+        "Downloads in voller Auflösung"
+      ],
+      "subject": "Anfrage zum Advanced-Paket"
+    },
+    "individual": {
+      "title": "Individuell",
+      "description": "Stellen Sie sich Ihr eigenes Paket zusammen."
+    },
+    "calculator": {
+      "sessionFee": "Grundgebühr",
+      "duration": "Dauer",
+      "hours": "Stunden",
+      "images": "Bearbeitete Bilder",
+      "retouching": "Retusche",
+      "levels": {
+        "basic": "Basis",
+        "advanced": "Fortgeschritten",
+        "pro": "Profi"
+      },
+      "travel": "Anfahrt (km)",
+      "express": "Express-Lieferung (24h)"
+    },
+    "price": {
+      "fixed": "Festpreis",
+      "estimated": "Ihr geschätzter Preis"
+    },
+    "button": "Jetzt anfragen",
+    "buttonIndividual": "Mit dieser Konfiguration anfragen"
+  },
+  "PhotoContactSection": {
+    "title": "Interested?",
+    "subtitle": "Send me a message for booking inquiries, collaborations, or just to say 'Hello'.",
+    "button_instagram": "Follow on Instagram",
+    "form_name": "Name",
+    "form_name_placeholder": "Your Name",
+    "form_email": "Email",
+    "form_email_placeholder": "your@email.com",
+    "form_message": "Message",
+    "form_message_placeholder": "Tell me about your project or idea...",
+    "form_submit": "Send Inquiry",
+    "form_submitting": "Sending...",
+    "success_title": "Thank You!",
+    "success_message": "Your inquiry has been successfully sent. I will get back to you shortly.",
+    "error_message": "Something went wrong. Please try again.",
+    "socials_text": "Or find me on Instagram:"
+  },
+"TestimonialsSection": {
+    "title": "What Clients Say",
+    "subtitle": "Feedback from people I've had the pleasure to work with.",
+    "averageRatingText": "Average Rating from {count} Reviews",
+    "leaveReviewButton": "Leave Your Own Review",
+    "dialog": {
+      "title": "Client Feedback",
+      "defaultRole": "Client",
+      "ratingsTitle": "Detailed Ratings",
+      "overallRating": "Overall Rating",
+      "ratings": {
+        "communication": "Communication",
+        "creativity": "Creativity",
+        "professionalism": "Professionalism",
+        "value": "Value"
+      }
+    }
+  },
+  "LeaveReviewPage": {
+    "title": "Leave a Review",
+    "subtitle": "Share your experience to help others.",
+    "form": {
+      "nameLabel": "Your Name",
+      "namePlaceholder": "e.g. John Doe",
+      "roleLabel": "Organization / Event (Optional)",
+      "rolePlaceholder": "e.g. Acme Inc. or Wedding",
+      "photoLabel": "Upload Photo (Optional)",
+      "buttonUpload": "Select File",
+      "noFileChosen": "No file chosen",
+      "testimonialLabel": "Your Review",
+      "testimonialPlaceholder": "Describe your experience... what did you like best?",
+      "buttonPreview": "Save & Preview"
+    },
+    "ratings": {
+      "title": "Detailed Ratings",
+      "communication": "Communication",
+      "creativity": "Creativity",
+      "professionalism": "Professionalism",
+      "value": "Value for Money"
+    },
+    "preview": {
+      "title": "Review Preview",
+      "subtitle": "This is how your feedback will look. When you're ready, submit it.",
+      "buttonEdit": "Edit",
+      "buttonSubmit": "Submit",
+      "buttonSubmitting": "Sending...",
+      "overallRating": "Overall Rating",
+      "defaultQuote": "Your wonderful feedback will appear here...",
+      "defaultName": "Your Name",
+      "defaultRole": "Client"
+    },
+    "success": {
+      "title": "Thank You!",
+      "message": "Your review has been submitted and is now under review."
+    },
+    "error": "Something went wrong. Please try again."
+  },
+  "PhotographyPageSEO": {
+    "siteName": "Photos by Joel",
+    "description": "Explore a collection of my photographic works showcasing my skills in various photography styles and techniques."
+  }
+}
