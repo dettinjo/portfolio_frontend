@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react"; // 1. Add useEffect
+import { useState } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { Link } from "@/i18n/navigation";
@@ -12,7 +11,6 @@ import { Camera } from "lucide-react";
 export function PhotographyHeader() {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
-  const headerHeight = "56px"; // h-14 = 3.5rem = 56px
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -22,16 +20,6 @@ export function PhotographyHeader() {
       setHidden(false);
     }
   });
-
-  // --- THIS IS THE FIX (PART 1) ---
-  // 2. This effect communicates the header's state to the CSS.
-  useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--header-offset",
-      hidden ? "0px" : headerHeight
-    );
-  }, [hidden]);
-  // --- END OF FIX ---
 
   return (
     <motion.header
@@ -44,10 +32,9 @@ export function PhotographyHeader() {
       className="sticky top-0 z-50 w-full bg-background"
     >
       <nav className="container mx-auto flex h-14 items-center justify-between">
-        <Link
-          href="/photography"
-          className="flex items-center gap-3 font-bold text-lg"
-        >
+        {/* --- THIS IS THE DEFINITIVE FIX --- */}
+        {/* The href is now "/" which correctly links to the root of the current domain */}
+        <Link href="/" className="flex items-center gap-3 font-bold text-lg">
           <Camera className="h-6 w-6" />
         </Link>
 

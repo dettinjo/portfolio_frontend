@@ -1,5 +1,5 @@
 {
-"PhotographyHeader": {
+  "PhotographyHeader": {
     "galleries": "Galleries",
     "services": "Services",
     "contact": "Contact"
@@ -13,62 +13,68 @@
       "contact": "Contact"
     }
   },
-    "PhotoGridSection": {
+  "PhotoGridSection": {
     "backToTop": "Back to Top",
     "photo": "Photo",
     "photos": "Photos"
   },
   "ServicesSection": {
-    "title": "Pakete & Preise",
-    "subtitle": "Wählen Sie ein vordefiniertes Paket oder stellen Sie sich Ihr eigenes für ein maßgeschneidertes Erlebnis zusammen.",
+    "title": "Packages & Pricing",
+    "subtitle": "Choose a pre-defined package or build your own for a fully custom experience.",
     "standard": {
-      "title": "Standard-Paket",
-      "description": "Ideal für wirkungsvolle Porträts oder Produktfotos.",
+      "title": "Standard Package",
+      "description": "Ideal for impactful portraits or product shots.",
       "items": [
-        "1 Stunde Shooting",
-        "10 bearbeitete Bilder (Basic)",
-        "Vorbesprechung",
-        "Private Online-Galerie"
+        "1 Hour Session",
+        "10 Edited Images (Basic)",
+        "Pre-shoot Consultation",
+        "Private Online Gallery"
       ],
-      "subject": "Anfrage zum Standard-Paket"
+      "subject": "Inquiry about Standard Package"
     },
     "advanced": {
-      "title": "Advanced-Paket",
-      "description": "Perfekt für Familien, Events oder Branding.",
+      "title": "Advanced Package",
+      "description": "Perfect for families, events, or branding.",
       "items": [
-        "Bis zu 3 Stunden Shooting",
-        "30 bearbeitete Bilder (Advanced)",
-        "Fortgeschrittene Hautretusche",
-        "Mehrere Orte oder Outfitwechsel",
-        "Priorisierter Support & Beratung",
-        "Downloads in voller Auflösung"
+        "Up to 3 Hours Session",
+        "30 Edited Images (Advanced)",
+        "Advanced Skin Retouching",
+        "Multiple locations or outfit changes",
+        "Priority support & consultation",
+        "Full resolution downloads"
       ],
-      "subject": "Anfrage zum Advanced-Paket"
+      "subject": "Inquiry about Advanced Package"
     },
     "individual": {
-      "title": "Individuell",
-      "description": "Stellen Sie sich Ihr eigenes Paket zusammen."
+      "title": "Individual",
+      "description": "Build your own package for a perfect fit."
     },
     "calculator": {
-      "sessionFee": "Grundgebühr",
-      "duration": "Dauer",
-      "hours": "Stunden",
-      "images": "Bearbeitete Bilder",
-      "retouching": "Retusche",
+      "sessionFee": "Session Fee",
+      "duration": "Duration",
+      "hours": "Hours",
+      "images": "Edited Images",
+      "retouching": "Retouching",
       "levels": {
-        "basic": "Basis",
-        "advanced": "Fortgeschritten",
-        "pro": "Profi"
+        "basic": "Basic",
+        "advanced": "Advanced",
+        "pro": "Pro"
       },
-      "travel": "Anfahrt (km)",
-      "express": "Express-Lieferung (24h)"
+      "travel": "Travel Distance (km)",
+      "express": "Express Delivery (24h)",
+      "yes": "Yes",
+      "no": "No"
     },
     "price": {
-      "fixed": "Festpreis",
-      "estimated": "Ihr geschätzter Preis"
+      "fixed": "Fixed Price",
+      "estimated": "Your Estimated Price"
     },
-    "button": "Jetzt anfragen",
-    "buttonIndividual": "Mit dieser Konfiguration anfragen"
+    "button": "Inquire Now",
+    "buttonIndividual": "Inquire with this Setup",
+    "mail": {
+      "subject": "Inquiry for Individual Shoot",
+      "body": "Hi,\n\nI'd like to book a custom session with the following configuration:\n- Duration: {hours} hours\n- Edited Images: {images}\n- Retouching Level: {retouchLevel}\n- Travel Distance: {distance} km\n- Express Delivery (24h): {expressDelivery}\n\nEstimated Price: {price} €\n\nLooking forward to hearing from you!"
+    }
   },
   "PhotoContactSection": {
     "title": "Interested?",
@@ -87,7 +93,7 @@
     "error_message": "Something went wrong. Please try again.",
     "socials_text": "Or find me on Instagram:"
   },
-"TestimonialsSection": {
+  "TestimonialsSection": {
     "title": "What Clients Say",
     "subtitle": "Feedback from people I've had the pleasure to work with.",
     "averageRatingText": "Average Rating from {count} Reviews",

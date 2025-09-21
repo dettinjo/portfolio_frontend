@@ -61,14 +61,20 @@
         "pro": "Profi"
       },
       "travel": "Anfahrt (km)",
-      "express": "Express-Lieferung (24h)"
+      "express": "Express-Lieferung (24h)",
+      "yes": "Ja",
+      "no": "Nein"
     },
     "price": {
       "fixed": "Festpreis",
       "estimated": "Ihr geschätzter Preis"
     },
     "button": "Jetzt anfragen",
-    "buttonIndividual": "Mit dieser Konfiguration anfragen"
+    "buttonIndividual": "Mit dieser Konfiguration anfragen",
+    "mail": {
+      "subject": "Anfrage für individuelles Shooting",
+      "body": "Hallo,\n\nich würde gerne ein individuelles Shooting mit der folgenden Konfiguration buchen:\n- Dauer: {hours} Stunden\n- Bearbeitete Bilder: {images}\n- Retusche-Level: {retouchLevel}\n- Anfahrt: {distance} km\n- Express-Lieferung (24h): {expressDelivery}\n\nGeschätzter Preis: {price} €\n\nIch freue mich auf Ihre Rückmeldung!"
+    }
   },
   "PhotoContactSection": {
     "title": "Interesse geweckt?",
