@@ -21,7 +21,7 @@ interface SkillsSectionProps {
 // The component is async so it can fetch its own translations
 export async function SkillsSection({ skills }: SkillsSectionProps) {
   // It fetches ONLY the translations it is directly responsible for.
-  const t = await getTranslations("SoftwareSkillsSection");
+  const t = await getTranslations("software.SoftwareSkillsSection");
 
   return (
     <section id="skills">

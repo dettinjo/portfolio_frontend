@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { ProficiencyDots } from "./ProficiencyDots";
 
 export function ProficiencyLegend() {
-  const t = useTranslations("SoftwareSkillsSection");
+  const t = useTranslations("software.SoftwareSkillsSection");
 
   return (
     <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground">

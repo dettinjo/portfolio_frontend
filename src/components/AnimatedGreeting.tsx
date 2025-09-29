@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 export function AnimatedGreeting() {
-  const t = useTranslations("SoftwareHeroSection");
+  const t = useTranslations("software.SoftwareHeroSection");
   const greetingText = t("greeting");
 
   const count = useMotionValue(0);

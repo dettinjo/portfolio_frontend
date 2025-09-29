@@ -12,7 +12,7 @@ interface Testimonial {
   quote: string;
   name: string;
   role: string;
-  avatar: string;
+  avatar: string | null;
   ratings: Record<string, number>;
 }
 
@@ -84,7 +84,11 @@ export function TestimonialsSection({
                   </CardContent>
                   <CardFooter className="flex items-center gap-4 pb-6">
                     <Avatar>
-                      <AvatarImage src={item.avatar} alt={item.name} />
+                      {/* FIX: Explicitly pass undefined if avatar is falsy (null or "") */}
+                      <AvatarImage
+                        src={item.avatar ? item.avatar : undefined}
+                        alt={item.name}
+                      />
                       <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>

@@ -1,58 +1,141 @@
-// frontend/src/app/[locale]/page.tsx
+import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
+import { CollectionPage, WithContext } from "schema-dts";
 
-import { Terminal, Camera } from "lucide-react";
-import { MinimalHeader } from "@/components/layout/MinimalHeader";
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { ContactSection } from "@/components/sections/software/ContactSection";
+import { HeroSection } from "@/components/sections/software/HeroSection";
+import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
+import { SkillsSection } from "@/components/sections/software/SkillsSection";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
+// --- FIX: Import the Skill type for explicit typing ---
+import { fetchSoftwareProjects, fetchSkills, type Skill } from "@/lib/strapi";
 
-export default function HomePage() {
-  const t = useTranslations("HomePage");
+// ============================================================================
+// --- SEO METADATA GENERATION ---
+// ============================================================================
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params; // Await the promise to get the locale
+  const t = await getTranslations({
+    locale: locale,
+    namespace: "software.SoftwarePageSEO",
+  });
   const softwareDomain =
     process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
-  const photographyDomain =
-    process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || "photosby.joeldettinger.de";
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
 
-  const isDevelopment = process.env.NODE_ENV === "development";
+  return {
+    title: t("siteName"),
+    description: t("description"),
+    openGraph: {
+      title: t("siteName"),
+      description: t("description"),
+      url: `https://${softwareDomain}`,
+      siteName: "Code by Joel",
+      images: [
+        {
+          url: `https://${rootDomain}/og-software.png`, // A dedicated OG image for this page
+          width: 1200,
+          height: 630,
+          alt: "An overview of software projects by Joel Dettinger",
+        },
+      ],
+      type: "website",
+      locale: locale,
+    },
+    alternates: {
+      canonical: `https://${softwareDomain}`,
+      languages: {
+        en: `https://${softwareDomain}`,
+        de: `https://de.${softwareDomain}`, // Adjust if your German domain is different
+        "x-default": `https://${softwareDomain}`,
+      },
+    },
+  };
+}
 
-  // --- THIS IS THE DEFINITIVE FIX ---
-  // We set all color logic on the parent link.
-  // 1. `text-foreground`: Sets the default color for the icon and text inside.
-  // 2. `hover:bg-foreground`: Inverts the background color on hover.
-  // 3. `hover:text-background`: Inverts the text/icon color on hover.
-  // The children will now reliably inherit these changes.
-  const linkClassName =
-    "group flex flex-col items-center justify-center gap-6 rounded-xl p-16 transition-all duration-300 text-foreground hover:scale-105 hover:bg-foreground hover:text-background";
+// ============================================================================
+// --- PAGE COMPONENT ---
+// ============================================================================
+
+export default async function DevPage({ params }: Props) {
+  const { locale } = await params; // Await the promise to get the locale
+  const projectsData = await fetchSoftwareProjects();
+  const skillsData = await fetchSkills();
+  const t = await getTranslations({
+    locale: locale,
+    namespace: "software.SoftwareProjectsSection",
+  });
+
+  // --- DEFINITIVE FIX for Skills Data & Key Warning ---
+  // The logic now correctly handles the flat SkillCategory structure.
+  const skills = skillsData
+    .filter((cat) => cat && Array.isArray(cat.skills))
+    .map((cat) => ({
+      category: cat.name,
+      // We also add an explicit type to the 'skill' parameter to fix the implicit 'any' error.
+      skills: cat.skills.map((skill: Skill) => skill),
+    }));
+
+  const cleanProjectsData = projectsData.filter(Boolean);
+
+  const techIconMap: { [key: string]: string } = {};
+  skills.forEach((category) => {
+    category.skills.forEach((skill) => {
+      techIconMap[skill.name] = skill.iconClassName;
+    });
+  });
+
+  const softwareDomain =
+    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
+
+  // Create the JSON-LD structured data object
+  const jsonLd: WithContext<CollectionPage> = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: t("title"),
+    description: t("subtitle"),
+    url: `https://${softwareDomain}`,
+    mainEntity: {
+      "@type": "ItemList",
+      // FIX: Access properties directly from the project object
+      itemListElement: cleanProjectsData.map((project, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: project.title,
+        url: `https://${softwareDomain}/${project.slug}`,
+      })),
+    },
+  };
 
   return (
     <>
-      <MinimalHeader />
-      <div className="container mx-auto flex min-h-screen items-center justify-center">
-        <div className="grid w-full max-w-4xl grid-cols-1 gap-12 md:grid-cols-2">
-          {/* --- CONDITIONAL LINK FOR SOFTWARE --- */}
-          {isDevelopment ? (
-            <Link href="/software" className={linkClassName}>
-              <Terminal className="h-28 w-28" />
-              <span className="text-3xl font-semibold">{t("code")}</span>
-            </Link>
-          ) : (
-            <a href={`https://${softwareDomain}`} className={linkClassName}>
-              <Terminal className="h-28 w-28" />
-              <span className="text-3xl font-semibold">{t("code")}</span>
-            </a>
-          )}
+      {/* This script injects the structured data into the page's <head> */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-          {/* --- CONDITIONAL LINK FOR PHOTOGRAPHY --- */}
-          {isDevelopment ? (
-            <Link href="/photography" className={linkClassName}>
-              <Camera className="h-28 w-28" />
-              <span className="text-3xl font-semibold">{t("photos")}</span>
-            </Link>
-          ) : (
-            <a href={`https://${photographyDomain}`} className={linkClassName}>
-              <Camera className="h-28 w-28" />
-              <span className="text-3xl font-semibold">{t("photos")}</span>
-            </a>
-          )}
+      <HeroSection />
+
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="py-24">
+          <ProjectsSection
+            projects={cleanProjectsData}
+            techIconMap={techIconMap}
+          />
+        </div>
+        <ScrollIndicator href="#skills" />
+        <div className="py-24">
+          <SkillsSection skills={skills} />
+        </div>
+        <ScrollIndicator href="#kontakt" />
+        <div className="pt-24 pb-64 md:pb-96">
+          <ContactSection />
         </div>
       </div>
     </>

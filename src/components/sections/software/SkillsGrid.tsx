@@ -1,12 +1,11 @@
-"use client"; // This MUST be a client component for Framer Motion.
+"use client";
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Workflow, Server, Code } from "lucide-react";
 import { ProficiencyDots } from "@/components/ProficiencyDots";
-import { useTranslations } from "next-intl"; // The correct hook for Client Components
+import { useTranslations } from "next-intl";
 
-// Interface definitions for the data it receives as props
 interface Skill {
   name: string;
   iconClassName: string;
@@ -21,19 +20,23 @@ interface SkillsGridProps {
   skills: SkillCategory[];
 }
 
-// Helper object for mapping category names to icons
 const categoryDetails = {
   Frontend: { icon: <Code className="h-8 w-8 text-foreground" /> },
   Backend: { icon: <Server className="h-8 w-8 text-foreground" /> },
-  DevOps: { icon: <Workflow className="h-8 w-8 text-foreground" /> },
+  "DevOps & Tools": { icon: <Workflow className="h-8 w-8 text-foreground" /> },
 };
 
-// This component no longer receives a `translations` prop.
 export function SkillsGrid({ skills }: SkillsGridProps) {
-  // It fetches ONLY the translations it needs using the client-side hook.
-  const t = useTranslations("SoftwareSkillsSection");
+  const t = useTranslations("software.SoftwareSkillsSection");
 
-  // Helper function to get the translated category title
+  if (!skills || skills.length === 0) {
+    return (
+      <p className="text-center text-muted-foreground">
+        No skills are currently available.
+      </p>
+    );
+  }
+
   const getCategoryTitle = (category: string) => {
     if (category === "Frontend") return t("category_frontend");
     if (category === "Backend") return t("category_backend");

@@ -10,7 +10,7 @@ import { Terminal } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
 export function SoftwareHeader() {
-  const t = useTranslations("SoftwareHeader");
+  const t = useTranslations("software.SoftwareHeader");
   const pathname = usePathname();
   const isMainSoftwarePage = pathname === "/";
 

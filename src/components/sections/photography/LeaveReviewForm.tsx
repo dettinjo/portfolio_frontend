@@ -1,6 +1,10 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
+import {
+  GoogleReCaptchaProvider,
+  useGoogleReCaptcha,
+} from "react-google-recaptcha-v3";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,8 +31,6 @@ const ratingCategories = [
   { id: "value", label: "Value" },
 ];
 
-// --- THIS IS THE DEFINITIVE FIX (PART 2) ---
-// Define specific types for the props instead of using `any`
 interface PreviewTestimonial {
   name: string;
   role: string;
@@ -37,7 +39,6 @@ interface PreviewTestimonial {
   ratings: Record<string, number>;
 }
 
-// Get the type of the translation function from the hook itself
 type TFunction = ReturnType<typeof useTranslations>;
 
 const PreviewCard = ({
@@ -113,8 +114,11 @@ const PreviewCard = ({
   );
 };
 
-export function LeaveReviewForm() {
+// Component with the actual form logic, to be wrapped by the Provider
+const ReviewFormContents = () => {
   const t = useTranslations("photography.LeaveReviewPage");
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const [step, setStep] = useState(1);
   const [authorName, setAuthorName] = useState("");
   const [role, setRole] = useState("");
@@ -150,34 +154,58 @@ export function LeaveReviewForm() {
     if (isFormComplete) setStep(2);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.error("reCAPTCHA not ready");
+      setSubmissionStatus("error");
+      return;
+    }
+
     setSubmissionStatus("submitting");
+
+    const recaptchaToken = await executeRecaptcha("testimonialSubmit");
+
     const submissionFormData = new FormData();
     submissionFormData.append(
       "data",
-      JSON.stringify({ authorName, role, quote, ratings })
+      JSON.stringify({
+        name: authorName,
+        role,
+        quote,
+        communication: ratings.communication,
+        creativity: ratings.creativity,
+        professionalism: ratings.professionalism,
+        value: ratings.value,
+      })
     );
-    if (photoFile)
-      submissionFormData.append("files.photo", photoFile, photoFile.name);
+
+    if (photoFile) {
+      submissionFormData.append("files.avatar", photoFile, photoFile.name);
+    }
+
+    // Add the reCAPTCHA token
+    submissionFormData.append("recaptcha", recaptchaToken);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/testimonials`,
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TESTIMONIAL_TOKEN}`,
-          },
           body: submissionFormData,
+          // No Authorization header needed, as the endpoint is public but protected by our middleware
         }
       );
-      if (!response.ok) throw new Error("Testimonial creation failed");
+
+      if (!response.ok) {
+        throw new Error("Testimonial creation failed");
+      }
       setStep(3);
       setSubmissionStatus("success");
     } catch (error) {
       console.error("Submission error:", error);
       setSubmissionStatus("error");
     }
-  };
+  }, [executeRecaptcha, authorName, role, quote, ratings, photoFile]);
 
   if (step === 3) {
     return (
@@ -237,16 +265,14 @@ export function LeaveReviewForm() {
               <div className="space-y-1.5">
                 <Label>{t("form.photoLabel")}</Label>
                 <div className="flex items-center gap-4">
-                  {/* The real input is now invisible but still functional */}
                   <Input
                     id="photo"
                     name="photo"
                     type="file"
                     accept="image/png, image/jpeg, image/webp"
                     onChange={handlePhotoChange}
-                    className="sr-only" // This class hides it visually but keeps it accessible
+                    className="sr-only"
                   />
-                  {/* This is our new, styled, and translatable button */}
                   <Label
                     htmlFor="photo"
                     className={cn(
@@ -256,7 +282,6 @@ export function LeaveReviewForm() {
                   >
                     {t("form.buttonUpload")}
                   </Label>
-                  {/* This span displays the selected file name or a default message */}
                   <span className="text-sm text-muted-foreground truncate">
                     {photoFile ? photoFile.name : t("form.noFileChosen")}
                   </span>
@@ -324,8 +349,7 @@ export function LeaveReviewForm() {
                 t("preview.buttonSubmitting")
               ) : (
                 <>
-                  {" "}
-                  <Send className="mr-2 h-4 w-4" /> {t("preview.buttonSubmit")}{" "}
+                  <Send className="mr-2 h-4 w-4" /> {t("preview.buttonSubmit")}
                 </>
               )}
             </Button>
@@ -338,5 +362,31 @@ export function LeaveReviewForm() {
         </div>
       )}
     </div>
+  );
+};
+
+// Main component that provides the reCAPTCHA context
+export function LeaveReviewForm() {
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+  if (!siteKey) {
+    console.error("reCAPTCHA Site Key is not configured in .env.local");
+    return (
+      <div className="container mx-auto max-w-2xl py-24 text-center">
+        <h2 className="text-2xl font-bold text-destructive">
+          Configuration Error
+        </h2>
+        <p className="text-muted-foreground mt-2">
+          The Google reCAPTCHA Site Key is missing. Please add it to your
+          environment variables.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <GoogleReCaptchaProvider reCaptchaKey={siteKey}>
+      <ReviewFormContents />
+    </GoogleReCaptchaProvider>
   );
 }

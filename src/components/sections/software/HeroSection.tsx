@@ -9,7 +9,7 @@ import { AnimatedGreeting } from "@/components/AnimatedGreeting";
 import { ArrowDown } from "lucide-react";
 
 export function HeroSection() {
-  const t = useTranslations("SoftwareHeroSection");
+  const t = useTranslations("software.SoftwareHeroSection");
 
   // 2. Remove the theme logic and define a single image source
   const avatarSrc = "/images/avatar.png";

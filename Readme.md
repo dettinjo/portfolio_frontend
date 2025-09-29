@@ -82,8 +82,10 @@ You will need to configure the following Content Types in the Strapi admin panel
 - Album: For grouping photography.
 - Photo: For individual photos, with a relation to an Album.
 - 
-## API Permissions:
-Remember to go to Settings > Roles > Public and grant public access (find, findOne) to your content types so the frontend can fetch the data.
+## API Permissions
+Remember to go to **Settings > Roles > Public** in the Strapi admin panel and grant the necessary permissions for each content type:
+-   For **Album**, **Photo**, **Software Project**, and **Skill Category**, enable the `find` and `findOne` actions.
+-   For **Testimonial**, enable the `find`, `findOne`, and **`create`** actions. The `create` permission is required for the review submission form to work.
 
 ## 2. Setup the Frontend (Next.js)
 Open a new terminal window for this part.

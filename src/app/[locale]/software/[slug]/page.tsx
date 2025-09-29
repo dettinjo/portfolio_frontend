@@ -8,51 +8,14 @@ import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { Metadata } from "next";
 import { WithContext, SoftwareApplication } from "schema-dts";
+import { fetchSoftwareProjectBySlug, fetchAllProjectSlugs } from "@/lib/strapi";
+import {
+  BlocksRenderer,
+  // --- THIS IS THE FIX: The unused type has been removed ---
+} from "@strapi/blocks-react-renderer";
 
-// ============================================================================
-// --- MOCK DATA & API FUNCTIONS ---
-// ============================================================================
-
-const projectsData = [
-  {
-    id: 1,
-    slug: "portfolio-website-v2",
-    title: "Portfolio Website",
-    description:
-      "A dynamic portfolio site built with Next.js, Strapi CMS, and shadcn/ui for a fully customizable experience.",
-    longDescription:
-      "This project is the very website you are currently viewing. It was developed from the ground up using modern web technologies. The core of the application is Next.js 14 with the App Router, enabling server-side rendering for fast load times and SEO benefits. The user interface was created with shadcn/ui and Tailwind CSS to ensure a clean, responsive, and theme-aware design. All content, including projects and skills, is dynamically fetched from a Strapi Headless CMS, allowing for easy updates without code changes.",
-    tags: ["Next.js", "React", "Strapi", "TypeScript", "Tailwind CSS"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1280&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1280&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1280&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1280&auto=format&fit=crop",
-    ],
-    projectType: "Full-Stack Web App",
-    liveUrl: "https://joeldettinger.de",
-    repoUrl: "https://github.com/dettinjo/my-portfolio",
-    developedAt: "2024-05",
-  },
-  {
-    id: 2,
-    slug: "e-commerce-platform-api",
-    title: "E-Commerce Platform API",
-    description:
-      "A robust backend API supporting product management, user authentication, and order processing.",
-    longDescription:
-      "A powerful RESTful API that serves as the backbone for an e-commerce platform. Developed with Node.js and Express, it utilizes MongoDB for flexible data persistence. Authentication is secured with JSON Web Tokens (JWT). The API covers endpoints for product catalogs, user management, shopping carts, and orders.",
-    tags: ["Node.js", "Express", "MongoDB", "JWT"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1280&auto=format&fit=crop",
-    gallery: [],
-    projectType: "Backend & API",
-    liveUrl: null,
-    repoUrl: "https://github.com/dettinjo/ecommerce-api",
-    developedAt: "2023-11",
-  },
-];
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 const techIconMap: { [key: string]: string } = {
   "Next.js": "devicon-nextjs-plain",
@@ -66,95 +29,93 @@ const techIconMap: { [key: string]: string } = {
   JWT: "devicon-jsonwebtokens-original",
 };
 
-export function generateStaticParams() {
-  return projectsData.map((project) => ({
+export async function generateStaticParams() {
+  const projects = await fetchAllProjectSlugs();
+  return projects.map((project) => ({
     slug: project.slug,
   }));
 }
-
-async function getProjectData(slug: string) {
-  // In a real app, this would fetch from Strapi
-  const project = projectsData.find((p) => p.slug === slug);
-  return Promise.resolve(project);
-}
-
-// ============================================================================
-// --- SEO METADATA GENERATION ---
-// ============================================================================
 
 type Props = {
   params: { slug: string; locale: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = await getProjectData(params.slug);
+  const project = await fetchSoftwareProjectBySlug(params.slug);
 
   if (!project) {
     return { title: "Project Not Found" };
   }
 
-  const softwareDomain =
-    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
+  const { title, description, coverImage } = project;
 
   return {
-    title: project.title,
-    description: project.description,
+    title: title,
+    description: description,
     openGraph: {
-      title: project.title,
-      description: project.description,
+      title: title,
+      description: description,
       images: [
         {
-          url: project.imageUrl,
+          url: `${STRAPI_URL}${coverImage?.url}`,
           width: 1280,
           height: 720,
-          alt: `Preview for ${project.title}`,
+          alt: `Preview for ${title}`,
         },
       ],
       type: "article",
       locale: params.locale,
     },
-    alternates: {
-      canonical: `https://${softwareDomain}/${project.slug}`,
-      languages: {
-        en: `https://${softwareDomain}/${project.slug}`,
-        de: `https://de.${softwareDomain}/${project.slug}`, // Example
-        "x-default": `https://${softwareDomain}/${project.slug}`,
-      },
-    },
   };
 }
 
-// ============================================================================
-// --- PAGE COMPONENT ---
-// ============================================================================
-
+// The main page component
 export default async function ProjectDetailPage({ params }: Props) {
-  const project = await getProjectData(params.slug);
-  const t = await getTranslations("ProjectDetailsPage");
+  const project = await fetchSoftwareProjectBySlug(params.slug);
+  const t = await getTranslations("software.ProjectDetailsPage");
   const format = await getFormatter({ locale: params.locale });
 
   if (!project) {
     notFound();
   }
 
+  const {
+    title,
+    description,
+    longDescription,
+    projectType,
+    developedAt,
+    liveUrl,
+    repoUrl,
+    tags,
+    coverImage,
+    gallery,
+  } = project;
+
   const jsonLd: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: project.title,
-    applicationCategory: project.projectType,
-    description: project.longDescription || project.description,
-    operatingSystem: "WEB",
+    name: title,
+    applicationCategory: projectType,
+    description: description,
     author: {
       "@type": "Person",
       name: "Joel Dettinger",
     },
   };
 
-  const hasLinks = project.liveUrl || project.repoUrl;
-  const images = project.gallery?.length ? project.gallery : [project.imageUrl];
+  const hasLinks = liveUrl || repoUrl;
+
+  const galleryImages =
+    gallery && gallery.length > 0
+      ? gallery.map((img) => `${STRAPI_URL}${img.url}`)
+      : coverImage
+      ? [`${STRAPI_URL}${coverImage.url}`]
+      : [];
+
   let formattedDate = null;
-  if (project.developedAt) {
-    const date = new Date(`${project.developedAt}-01T12:00:00Z`);
+  if (developedAt) {
+    const date = new Date(developedAt);
     formattedDate = format.dateTime(date, { year: "numeric", month: "long" });
   }
 
@@ -173,15 +134,15 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       <header>
         <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
-          {project.projectType}
+          {projectType}
         </p>
         <h1 className="mt-2 text-4xl md:text-5xl font-bold tracking-tight">
-          {project.title}
+          {title}
         </h1>
       </header>
 
       <div className="mt-8">
-        <ProjectGallery images={images} altPrefix={project.title} />
+        <ProjectGallery images={galleryImages} altPrefix={title} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
@@ -190,7 +151,11 @@ export default async function ProjectDetailPage({ params }: Props) {
             {t("about_title")}
           </h2>
           <div className="prose prose-neutral dark:prose-invert max-w-none mt-4 text-muted-foreground space-y-4">
-            <p>{project.longDescription || project.description}</p>
+            {longDescription ? (
+              <BlocksRenderer content={longDescription} />
+            ) : (
+              <p>{description}</p>
+            )}
           </div>
         </div>
 
@@ -215,7 +180,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                   {t("tech_title")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => {
+                  {(tags || []).map((tag) => {
                     const iconClassName = techIconMap[tag];
                     return (
                       <Badge
@@ -238,10 +203,10 @@ export default async function ProjectDetailPage({ params }: Props) {
                     {t("links_title")}
                   </h3>
                   <div className="flex flex-col gap-2">
-                    {project.liveUrl ? (
+                    {liveUrl && (
                       <Button asChild>
                         <a
-                          href={project.liveUrl}
+                          href={liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -249,11 +214,11 @@ export default async function ProjectDetailPage({ params }: Props) {
                           <ExternalLink className="ml-2 h-4 w-4" />
                         </a>
                       </Button>
-                    ) : null}
-                    {project.repoUrl ? (
+                    )}
+                    {repoUrl && (
                       <Button asChild>
                         <a
-                          href={project.repoUrl}
+                          href={repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -261,7 +226,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                           {t("source_code_button")}
                         </a>
                       </Button>
-                    ) : null}
+                    )}
                   </div>
                 </div>
               )}

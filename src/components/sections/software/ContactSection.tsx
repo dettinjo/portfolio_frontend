@@ -9,7 +9,7 @@ import { Github, Linkedin, Instagram, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 export function ContactSection() {
-  const t = useTranslations("SoftwareContactSection");
+  const t = useTranslations("software.SoftwareContactSection");
   const [submissionStatus, setSubmissionStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");

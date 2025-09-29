@@ -6,15 +6,13 @@ import { getTranslations } from "next-intl/server";
 
 // --- THIS IS THE DEFINITIVE FIX ---
 
-// We REMOVE the custom `type Props = { ... }` entirely.
-
-// The `generateMetadata` function's props are typed inline.
-// This explicitly tells TypeScript what to expect for this function.
+// The `generateMetadata` function now accepts props containing a Promise for params.
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const { locale } = await params; // We MUST await the promise here.
   const t = await getTranslations({
     locale,
     namespace: "photography.PhotographyPageSEO",

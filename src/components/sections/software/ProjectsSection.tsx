@@ -6,47 +6,32 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import type { SoftwareProject } from "@/lib/strapi";
 
-// Update the Project interface to include the new field
-interface Project {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  tags: string[];
-  imageUrl: string;
-  projectType: string; // <-- Neues Feld
-}
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 interface ProjectsSectionProps {
-  projects: Project[];
+  projects: SoftwareProject[];
+  techIconMap: { [key: string]: string };
 }
 
-const techIconMap: { [key: string]: string } = {
-  "Next.js": "devicon-nextjs-plain",
-  React: "devicon-react-original",
-  Strapi: "devicon-strapi-plain",
-  TypeScript: "devicon-typescript-plain",
-  "Tailwind CSS": "devicon-tailwindcss-plain",
-  "Node.js": "devicon-nodejs-plain",
-  Express: "devicon-express-original",
-  MongoDB: "devicon-mongodb-plain",
-  JWT: "devicon-jsonwebtokens-original",
-  Python: "devicon-python-plain",
-  FastAPI: "devicon-fastapi-plain",
-  PostgreSQL: "devicon-postgresql-plain",
-  Docker: "devicon-docker-plain",
-  "GitHub Actions": "devicon-githubactions-plain",
-  Vercel: "devicon-vercel-original",
-  "D3.js": "devicon-d3js-plain",
-  TensorFlow: "devicon-tensorflow-original",
-  "AI/ML": "devicon-google_ml_kit-original",
-  "CI/CD": "devicon-git-plain", // Using a representative icon for CI/CD
-  Datenvisualisierung: "devicon-grafana-original", // Using a representative icon
-};
+export function ProjectsSection({
+  projects,
+  techIconMap,
+}: ProjectsSectionProps) {
+  const t = useTranslations("software.SoftwareProjectsSection");
 
-export function ProjectsSection({ projects }: ProjectsSectionProps) {
-  const t = useTranslations("SoftwareProjectsSection");
+  if (!projects || projects.length === 0) {
+    return (
+      <section id="projekte" className="text-center py-12">
+        <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
+        <p className="mt-4 text-lg text-muted-foreground">
+          No projects are currently available.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section id="projekte" className="space-y-24">
@@ -56,63 +41,78 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
       </div>
 
       <div className="space-y-24">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div
-              className={`aspect-video relative ${
-                index % 2 === 1 ? "md:order-last" : ""
-              }`}
+        {projects.map((project, index) => {
+          const {
+            id,
+            title,
+            description,
+            tags,
+            coverImage,
+            projectType,
+            slug,
+          } = project;
+
+          const imageUrl = coverImage?.url
+            ? `${STRAPI_URL}${coverImage.url}`
+            : "/placeholder.jpg";
+
+          return (
+            <motion.div
+              key={id}
+              className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Image
-                src={project.imageUrl}
-                alt={`Preview image for ${project.title}`}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover rounded-xl border-2 border-foreground"
-              />
-            </div>
-
-            <div className="flex flex-col items-start">
-              {/* --- HIER WIRD DER PROJEKTTYP ANGEZEIGT --- */}
-              <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
-                {project.projectType}
-              </p>
-              <h3 className="text-3xl font-bold mt-2">{project.title}</h3>
-              <p className="mt-4 text-muted-foreground">
-                {project.description}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                {project.tags.map((tag) => {
-                  const iconClassName = techIconMap[tag];
-                  return (
-                    <Badge
-                      key={tag}
-                      variant="outline"
-                      className="gap-1.5 px-2 py-1" // Apply consistent padding and gap
-                    >
-                      {iconClassName && (
-                        <i className={`${iconClassName} text-base`}></i>
-                      )}
-                      <span>{tag}</span>
-                    </Badge>
-                  );
-                })}
+              <div
+                className={`aspect-video relative ${
+                  index % 2 === 1 ? "md:order-last" : ""
+                }`}
+              >
+                <Image
+                  src={imageUrl}
+                  alt={`Preview image for ${title}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover rounded-xl border-2 border-foreground"
+                />
               </div>
 
-              <Button asChild className="mt-8">
-                <Link href={`/${project.slug}`}>{t("button_details")}</Link>
-              </Button>
-            </div>
-          </motion.div>
-        ))}
+              <div className="flex flex-col items-start">
+                <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
+                  {projectType}
+                </p>
+                <h3 className="text-3xl font-bold mt-2">{title}</h3>
+                <p className="mt-4 text-muted-foreground">{description}</p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {(tags || []).map((tag) => {
+                    const iconClassName = techIconMap[tag];
+                    return (
+                      <Badge
+                        key={tag}
+                        variant="outline"
+                        className="gap-1.5 px-2 py-1"
+                      >
+                        {iconClassName && (
+                          <i className={`${iconClassName} text-base`}></i>
+                        )}
+                        <span>{tag}</span>
+                      </Badge>
+                    );
+                  })}
+                </div>
+
+                {/* --- THIS IS THE FIX --- */}
+                {/* The href now includes the /software prefix to match the file structure. */}
+                <Button asChild className="mt-8">
+                  <Link href={`/software/${slug}`}>{t("button_details")}</Link>
+                </Button>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );
