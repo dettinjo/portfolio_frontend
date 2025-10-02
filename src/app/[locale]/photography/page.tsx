@@ -11,10 +11,14 @@ const profileData = {
   avatarSrc: "/images/profile.png",
 };
 
-export default async function PhotographyPage() {
+export default async function PhotographyPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const t = await getTranslations("photography.PhotographyPage");
-  const rawAlbums = await fetchAlbums();
-  const rawTestimonials = await fetchTestimonials();
+  const rawAlbums = await fetchAlbums(locale);
+  const rawTestimonials = await fetchTestimonials(locale);
 
   const albums = rawAlbums
     .filter((album) => album && album.slug)

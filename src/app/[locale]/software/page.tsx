@@ -63,8 +63,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DevPage({ params }: Props) {
   const { locale } = await params;
-  const projectsData = await fetchSoftwareProjects();
-  const skillsData = await fetchSkills();
+  const projectsData = await fetchSoftwareProjects(locale);
+  const skillsData = await fetchSkills(locale);
   const t = await getTranslations({
     locale: locale,
     namespace: "software.SoftwareProjectsSection",

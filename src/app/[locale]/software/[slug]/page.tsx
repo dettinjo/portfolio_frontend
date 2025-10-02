@@ -41,7 +41,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = await fetchSoftwareProjectBySlug(params.slug);
+  const project = await fetchSoftwareProjectBySlug(params.slug, params.locale);
 
   if (!project) {
     return { title: "Project Not Found" };
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // The main page component
 export default async function ProjectDetailPage({ params }: Props) {
-  const project = await fetchSoftwareProjectBySlug(params.slug);
+  const project = await fetchSoftwareProjectBySlug(params.slug, params.locale);
   const t = await getTranslations("software.ProjectDetailsPage");
   const format = await getFormatter({ locale: params.locale });
 

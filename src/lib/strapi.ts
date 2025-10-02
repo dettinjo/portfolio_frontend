@@ -1,91 +1,33 @@
-// src/lib/strapi.ts
+// portfolio-frontend/src/lib/strapi.ts
 import qs from "qs";
 import { type BlocksContent } from '@strapi/blocks-react-renderer';
 
-// A flat representation of a Strapi Image object
-interface StrapiImage {
-  id: number;
-  url: string;
-  alternativeText: string | null;
-  width: number;
-  height: number;
-}
-
-interface StrapiResponseWrapper<T> {
-  data: T;
-}
-
-export interface SoftwareProject {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  longDescription?: BlocksContent;
-  projectType: string;
-  developedAt?: string;
-  liveUrl?: string;
-  repoUrl?: string;
-  tags: string[];
-  coverImage: StrapiImage | null;
-  gallery: StrapiImage[] | null;
-}
-
-export interface Skill {
-  id: number;
-  name: string;
-  iconClassName: string;
-  level: number;
-  url: string;
-}
-
-export interface SkillCategory {
-  id: number;
-  name: string;
-  order: number;
-  skills: Skill[];
-}
-
-export interface Album {
-  id: number;
-  slug: string;
-  title: string;
-  coverImage: StrapiImage;
-  images: StrapiImage[];
-}
-
-export interface Testimonial {
-    id: number;
-    quote: string;
-    name: string;
-    role: string;
-    avatar: StrapiImage | null;
-    communication: number;
-    creativity: number;
-    professionalism: number;
-    value: number;
-}
+// --- Interfaces remain the same ---
+interface StrapiImage { id: number; url: string; alternativeText: string | null; width: number; height: number; }
+interface StrapiResponseWrapper<T> { data: T; }
+export interface SoftwareProject { id: number; slug: string; title: string; description: string; longDescription?: BlocksContent; projectType: string; developedAt?: string; liveUrl?: string; repoUrl?: string; tags: string[]; coverImage: StrapiImage | null; gallery: StrapiImage[] | null; }
+export interface Skill { id: number; name: string; iconClassName: string; level: number; url: string; }
+export interface SkillCategory { id: number; name: string; order: number; skills: Skill[]; }
+export interface Album { id: number; slug: string; title: string; coverImage: StrapiImage; images: StrapiImage[]; }
+export interface Testimonial { id: number; quote: string; name: string; role: string; avatar: StrapiImage | null; communication: number; creativity: number; professionalism: number; value: number; }
 
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
-async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}): Promise<T> {
+// --- THIS IS THE FIX (Part 1): The core API function now accepts a locale ---
+async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}, locale?: string): Promise<T> {
   try {
-    const mergedOptions = {
-      headers: { 'Content-Type': 'application/json' },
-      ...options,
-    };
+    const mergedOptions = { headers: { 'Content-Type': 'application/json' }, ...options };
     
-    const queryString = qs.stringify(urlParamsObject, {
-      encodeValuesOnly: true,
-    });
+    // Add locale to the parameters if it's provided
+    const paramsWithLocale = { ...urlParamsObject, locale };
 
+    const queryString = qs.stringify(paramsWithLocale, { encodeValuesOnly: true });
     const requestUrl = `${STRAPI_URL}/api${path}${queryString ? `?${queryString}` : ''}`;
 
     const response = await fetch(requestUrl, mergedOptions);
     if (!response.ok) {
-      const errorBody = await response.text();
       console.error(`Error fetching ${requestUrl}: ${response.status} ${response.statusText}`);
-      console.error(`Error body:`, errorBody);
       throw new Error(`An error occurred please try again`);
     }
     const jsonData = await response.json();
@@ -96,75 +38,49 @@ async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}): Pr
   }
 }
 
+// --- THIS IS THE FIX (Part 2): All fetching functions now accept and pass the locale ---
 
-export async function fetchSoftwareProjects(): Promise<SoftwareProject[]> {
-  // --- THIS IS THE FIX ---
-  // The 'populate' parameter is now an object, which qs will correctly stringify
-  // into `populate[coverImage]=true&populate[gallery]=true`
-  return fetchAPI<SoftwareProject[]>('/software-projects', { 
-    populate: {
-      coverImage: true,
-      gallery: true,
-    }
-  });
+export async function fetchSoftwareProjects(locale?: string): Promise<SoftwareProject[]> {
+  return fetchAPI<SoftwareProject[]>('/software-projects', { populate: { coverImage: true, gallery: true } }, {}, locale);
 }
 
-export async function fetchSoftwareProjectBySlug(slug: string): Promise<SoftwareProject | null> {
+export async function fetchSoftwareProjectBySlug(slug: string, locale?: string): Promise<SoftwareProject | null> {
     const projects = await fetchAPI<SoftwareProject[]>('/software-projects', {
         filters: { slug: { $eq: slug } },
-        populate: {
-          coverImage: true,
-          gallery: true,
-        },
-    });
+        populate: { coverImage: true, gallery: true },
+    }, {}, locale);
     return projects?.[0] || null;
 }
 
-export async function fetchAllProjectSlugs(): Promise<{ slug: string }[]> {
-    const projects = await fetchAPI<{ slug: string }[]>('/software-projects', { fields: ['slug'] });
+export async function fetchAllProjectSlugs(locale?: string): Promise<{ slug: string }[]> {
+    const projects = await fetchAPI<{ slug: string }[]>('/software-projects', { fields: ['slug'] }, {}, locale);
     return projects.map(p => ({ slug: p.slug }));
 }
 
-export async function fetchSkills(): Promise<SkillCategory[]> {
+export async function fetchSkills(locale?: string): Promise<SkillCategory[]> {
     return fetchAPI<SkillCategory[]>('/skill-categories', {
-        populate: {
-          skills: true,
-        },
+        populate: { skills: true },
         sort: 'order:asc',
-    });
+    }, {}, locale);
 }
 
-export async function fetchAlbums(): Promise<Album[]> {
-    // --- THIS IS THE FIX ---
-    // The 'populate' parameter is now an object
-    return fetchAPI<Album[]>('/albums', { 
-      populate: {
-        coverImage: true,
-        images: true,
-      }
-    });
+export async function fetchAlbums(locale?: string): Promise<Album[]> {
+    return fetchAPI<Album[]>('/albums', { populate: { coverImage: true, images: true } }, {}, locale);
 }
 
-export async function fetchAllAlbumSlugs(): Promise<{ slug: string }[]> {
-    const albums = await fetchAPI<{ slug: string }[]>('/albums', { fields: ['slug'] });
+export async function fetchAllAlbumSlugs(locale?: string): Promise<{ slug: string }[]> {
+    const albums = await fetchAPI<{ slug: string }[]>('/albums', { fields: ['slug'] }, {}, locale);
     return albums.map(a => ({ slug: a.slug }));
 }
 
-export async function fetchTestimonials(): Promise<Testimonial[]> {
-    return fetchAPI<Testimonial[]>('/testimonials', { 
-      populate: {
-        avatar: true,
-      }
-    });
+export async function fetchTestimonials(locale?: string): Promise<Testimonial[]> {
+    return fetchAPI<Testimonial[]>('/testimonials', { populate: { avatar: true } }, {}, locale);
 }
 
-export async function fetchAlbumBySlug(slug: string): Promise<Album | null> {
+export async function fetchAlbumBySlug(slug: string, locale?: string): Promise<Album | null> {
     const albums = await fetchAPI<Album[]>('/albums', {
         filters: { slug: { $eq: slug } },
-        populate: {
-          images: true,
-          coverImage: true,
-        },
-    });
+        populate: { images: true, coverImage: true },
+    }, {}, locale);
     return albums?.[0] || null;
 }

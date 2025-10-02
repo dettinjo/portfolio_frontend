@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const album = await fetchAlbumBySlug(params.slug);
+  const album = await fetchAlbumBySlug(params.slug, params.locale);
 
   if (!album) {
     return { title: "Album Not Found" };
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // The main page component
 export default async function AlbumDetailPage({ params }: Props) {
-  const album = await fetchAlbumBySlug(params.slug);
+  const album = await fetchAlbumBySlug(params.slug, params.locale);
 
   if (!album) {
     notFound();
