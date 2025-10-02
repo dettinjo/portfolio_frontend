@@ -1,5 +1,8 @@
+// portfolio-frontend/src/components/sections/photography/PhotographyTabs.tsx
 "use client";
 
+// --- THIS IS THE FIX (Part 1): Import useState and useEffect ---
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PhotoGridSection } from "./PhotoGridSection";
 import { ServicesSection } from "./ServicesSection";
@@ -8,6 +11,7 @@ import { TestimonialsSection } from "./TestimonialsSection";
 import { Grid3x3, Briefcase, Star, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 
+// --- Interfaces remain the same ---
 interface Album {
   id: number;
   slug: string;
@@ -15,17 +19,13 @@ interface Album {
   coverImageUrl: string;
   images: string[];
 }
-
-// --- THIS IS THE FIX (Part 2) ---
-// The Testimonial interface now correctly allows the avatar to be string | null.
 interface Testimonial {
   quote: string;
   name: string;
   role: string;
-  avatar: string | null; // Changed from string
+  avatar: string | null;
   ratings: Record<string, number>;
 }
-
 interface PhotographyTabsProps {
   albums: Album[];
   testimonials: Testimonial[];
@@ -37,11 +37,36 @@ interface PhotographyTabsProps {
   };
 }
 
+const TABS_STORAGE_KEY = "photography-active-tab";
+
 export function PhotographyTabs({
   albums,
   testimonials,
   translations,
 }: PhotographyTabsProps) {
+  // --- THIS IS THE FIX (Part 2): State Management ---
+  // We use useState to manage the active tab. We start with a default.
+  const [activeTab, setActiveTab] = useState("feed");
+
+  // --- THIS IS THE FIX (Part 3): Load Saved State ---
+  // This useEffect runs ONLY ONCE when the component mounts on the client.
+  // It checks localStorage for a saved tab and updates the state if found.
+  useEffect(() => {
+    const savedTab = localStorage.getItem(TABS_STORAGE_KEY);
+    // You can add more validation here to ensure savedTab is one of the valid tab values
+    if (savedTab) {
+      setActiveTab(savedTab);
+    }
+  }, []); // The empty dependency array [] ensures this runs only once.
+
+  // --- THIS IS THE FIX (Part 4): Handle State Changes ---
+  // This function is called whenever a new tab is clicked.
+  // It updates our React state AND saves the new tab to localStorage.
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    localStorage.setItem(TABS_STORAGE_KEY, value);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -50,7 +75,13 @@ export function PhotographyTabs({
       className="sticky z-40 bg-background pt-4"
       style={{ top: "var(--header-offset, 56px)" }}
     >
-      <Tabs defaultValue="feed" className="mt-8 md:mt-12">
+      {/* --- THIS IS THE FIX (Part 5): Control the Tabs Component --- */}
+      {/* We replace `defaultValue` with `value` and add `onValueChange`. */}
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="mt-8 md:mt-12"
+      >
         <TabsList className="grid w-full grid-cols-4 bg-transparent p-0 border-b">
           <TabsTrigger
             value="feed"
