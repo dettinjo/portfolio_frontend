@@ -8,8 +8,6 @@ import { TestimonialsSection } from "./TestimonialsSection";
 import { Grid3x3, Briefcase, Star, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 
-// --- THIS IS THE DEFINITIVE FIX (PART 1) ---
-// Define specific types for our data instead of using `any`
 interface Album {
   id: number;
   slug: string;
@@ -18,15 +16,16 @@ interface Album {
   images: string[];
 }
 
+// --- THIS IS THE FIX (Part 2) ---
+// The Testimonial interface now correctly allows the avatar to be string | null.
 interface Testimonial {
   quote: string;
   name: string;
   role: string;
-  avatar: string;
+  avatar: string | null; // Changed from string
   ratings: Record<string, number>;
 }
 
-// Update the props interface to use the new types
 interface PhotographyTabsProps {
   albums: Album[];
   testimonials: Testimonial[];

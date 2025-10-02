@@ -1,6 +1,5 @@
 // src/lib/strapi.ts
 import qs from "qs";
-// --- THIS IS THE FIX (Part 1): Import the specific type for Strapi's Rich Text field ---
 import { type BlocksContent } from '@strapi/blocks-react-renderer';
 
 // A flat representation of a Strapi Image object
@@ -16,13 +15,11 @@ interface StrapiResponseWrapper<T> {
   data: T;
 }
 
-// Correct, flat interfaces for all content types
 export interface SoftwareProject {
   id: number;
   slug: string;
   title: string;
   description: string;
-  // --- THIS IS THE FIX (Part 2): Replace 'any' with the correct 'BlocksContent' type ---
   longDescription?: BlocksContent;
   projectType: string;
   developedAt?: string;
@@ -61,7 +58,7 @@ export interface Testimonial {
     quote: string;
     name: string;
     role: string;
-    avatarUrl: string;
+    avatar: StrapiImage | null;
     communication: number;
     creativity: number;
     professionalism: number;
@@ -99,14 +96,26 @@ async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}): Pr
   }
 }
 
+
 export async function fetchSoftwareProjects(): Promise<SoftwareProject[]> {
-  return fetchAPI<SoftwareProject[]>('/software-projects', { populate: 'coverImage' });
+  // --- THIS IS THE FIX ---
+  // The 'populate' parameter is now an object, which qs will correctly stringify
+  // into `populate[coverImage]=true&populate[gallery]=true`
+  return fetchAPI<SoftwareProject[]>('/software-projects', { 
+    populate: {
+      coverImage: true,
+      gallery: true,
+    }
+  });
 }
 
 export async function fetchSoftwareProjectBySlug(slug: string): Promise<SoftwareProject | null> {
     const projects = await fetchAPI<SoftwareProject[]>('/software-projects', {
         filters: { slug: { $eq: slug } },
-        populate: ['coverImage', 'gallery'],
+        populate: {
+          coverImage: true,
+          gallery: true,
+        },
     });
     return projects?.[0] || null;
 }
@@ -118,13 +127,22 @@ export async function fetchAllProjectSlugs(): Promise<{ slug: string }[]> {
 
 export async function fetchSkills(): Promise<SkillCategory[]> {
     return fetchAPI<SkillCategory[]>('/skill-categories', {
-        populate: 'skills',
+        populate: {
+          skills: true,
+        },
         sort: 'order:asc',
     });
 }
 
 export async function fetchAlbums(): Promise<Album[]> {
-    return fetchAPI<Album[]>('/albums', { populate: '*' });
+    // --- THIS IS THE FIX ---
+    // The 'populate' parameter is now an object
+    return fetchAPI<Album[]>('/albums', { 
+      populate: {
+        coverImage: true,
+        images: true,
+      }
+    });
 }
 
 export async function fetchAllAlbumSlugs(): Promise<{ slug: string }[]> {
@@ -133,13 +151,20 @@ export async function fetchAllAlbumSlugs(): Promise<{ slug: string }[]> {
 }
 
 export async function fetchTestimonials(): Promise<Testimonial[]> {
-    return fetchAPI<Testimonial[]>('/testimonials');
+    return fetchAPI<Testimonial[]>('/testimonials', { 
+      populate: {
+        avatar: true,
+      }
+    });
 }
 
 export async function fetchAlbumBySlug(slug: string): Promise<Album | null> {
     const albums = await fetchAPI<Album[]>('/albums', {
         filters: { slug: { $eq: slug } },
-        populate: ['images', 'coverImage'],
+        populate: {
+          images: true,
+          coverImage: true,
+        },
     });
     return albums?.[0] || null;
 }

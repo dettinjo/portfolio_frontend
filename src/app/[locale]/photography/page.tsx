@@ -16,36 +16,30 @@ export default async function PhotographyPage() {
   const rawAlbums = await fetchAlbums();
   const rawTestimonials = await fetchTestimonials();
 
-  // --- Data Transformation for Albums ---
   const albums = rawAlbums
     .filter((album) => album && album.slug)
-    .map((album) => {
-      // Check if coverImage exists and has a URL. If not, log it.
-      if (!album.coverImage?.url) {
-        console.warn(
-          `Album "${album.title}" (ID: ${album.id}) is missing a cover image. Using fallback.`
-        );
-      }
-      return {
-        id: album.id,
-        slug: album.slug,
-        title: album.title,
-        coverImageUrl: album.coverImage?.url
-          ? `${STRAPI_URL}${album.coverImage.url}`
-          : "/placeholder.jpg", // This fallback requires the file to exist in /public
-        images: (album.images || []).map((img) => `${STRAPI_URL}${img.url}`),
-      };
-    });
+    .map((album) => ({
+      id: album.id,
+      slug: album.slug,
+      title: album.title,
+      coverImageUrl: album.coverImage?.url
+        ? `${STRAPI_URL}${album.coverImage.url}`
+        : "/placeholder.jpg",
+      images: (album.images || []).map((img) => `${STRAPI_URL}${img.url}`),
+    }));
 
-  // --- THIS IS THE FIX for the TypeScript error ---
-  // We now correctly extract only the rating fields into the `ratings` object.
+  // --- THIS IS THE FIX ---
+  // The transformation now correctly handles the 'avatar' media object
   const testimonials = rawTestimonials
     .filter((testimonial) => testimonial && testimonial.name)
     .map((testimonial) => ({
       name: testimonial.name,
       quote: testimonial.quote,
       role: testimonial.role,
-      avatar: testimonial.avatarUrl,
+      // Get the avatar URL from the nested media object, provide null if it doesn't exist
+      avatar: testimonial.avatar?.url
+        ? `${STRAPI_URL}${testimonial.avatar.url}`
+        : null,
       ratings: {
         communication: testimonial.communication || 0,
         creativity: testimonial.creativity || 0,
