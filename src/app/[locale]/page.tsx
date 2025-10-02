@@ -1,16 +1,11 @@
 // portfolio-frontend/src/app/[locale]/page.tsx
+
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
+import Link from "next/link"; // Use standard Next.js Link
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { Footer } from "@/components/layout/Footer";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Code, Camera } from "lucide-react";
-import Link from "next/link"; // Use standard Next.js Link for external/cross-domain URLs
-import { Metadata } from "next";
+import { Terminal, Camera } from "lucide-react";
 
 // SEO Metadata for the landing page
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,14 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: `https://${rootDomain}`,
       languages: {
         en: `https://${rootDomain}`,
-        de: `https://${rootDomain}`, // Both languages are served from the same root domain
+        de: `https://${rootDomain}`,
         "x-default": `https://${rootDomain}`,
       },
     },
   };
 }
 
-// The new landing page component
+// The restored landing page component, now as an async Server Component
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
   const softwareDomain =
@@ -38,43 +33,36 @@ export default async function HomePage() {
   const photographyDomain =
     process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || "photosby.joeldettinger.de";
 
+  // This class perfectly captures the inverting hover effect you wanted.
+  const linkClassName =
+    "group flex flex-col items-center justify-center gap-6 rounded-xl border-2 border-foreground bg-transparent p-16 transition-all duration-300 text-foreground hover:scale-105 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
   return (
     <div className="relative flex min-h-dvh flex-col bg-background">
       <MinimalHeader />
       <main className="flex-1 flex items-center justify-center">
-        <div className="container mx-auto flex flex-col items-center justify-center gap-8 px-4 md:flex-row">
-          {/* Software Card */}
-          <Link href={`https://${softwareDomain}`} className="w-full max-w-sm">
-            <Card className="text-center transition-transform duration-300 hover:-translate-y-2 focus-visible:-translate-y-2">
-              <CardHeader className="items-center p-8">
-                <Code className="h-16 w-16 mb-4" />
-                <CardTitle className="text-3xl font-bold">
-                  {t("code")}
-                </CardTitle>
-                <CardDescription className="text-lg">
-                  Software Portfolio
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </Link>
+        <div className="container mx-auto flex min-h-screen items-center justify-center">
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-12 md:grid-cols-2">
+            {/* Software Link */}
+            <Link
+              href={`https://${softwareDomain}`}
+              className={linkClassName}
+              prefetch={false}
+            >
+              <Terminal className="h-28 w-28" />
+              <span className="text-3xl font-semibold">{t("code")}</span>
+            </Link>
 
-          {/* Photography Card */}
-          <Link
-            href={`https://${photographyDomain}`}
-            className="w-full max-w-sm"
-          >
-            <Card className="text-center transition-transform duration-300 hover:-translate-y-2 focus-visible:-translate-y-2">
-              <CardHeader className="items-center p-8">
-                <Camera className="h-16 w-16 mb-4" />
-                <CardTitle className="text-3xl font-bold">
-                  {t("photos")}
-                </CardTitle>
-                <CardDescription className="text-lg">
-                  Photography Portfolio
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </Link>
+            {/* Photography Link */}
+            <Link
+              href={`https://${photographyDomain}`}
+              className={linkClassName}
+              prefetch={false}
+            >
+              <Camera className="h-28 w-28" />
+              <span className="text-3xl font-semibold">{t("photos")}</span>
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />
