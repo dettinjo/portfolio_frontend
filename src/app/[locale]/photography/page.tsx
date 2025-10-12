@@ -1,3 +1,5 @@
+// portfolio-frontend/src/app/[locale]/photography/page.tsx
+
 import { getTranslations } from "next-intl/server";
 import { PhotographyTabs } from "@/components/sections/photography/PhotographyTabs";
 import { ProfileHeaderSection } from "@/components/sections/photography/ProfileHeaderSection";
@@ -11,11 +13,16 @@ const profileData = {
   avatarSrc: "/images/profile.png",
 };
 
-export default async function PhotographyPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+// --- THIS IS THE DEFINITIVE FIX (Part 1): Define the correct Props type ---
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+// --- THIS IS THE DEFINITIVE FIX (Part 2): Await the params Promise ---
+export default async function PhotographyPage({ params }: Props) {
+  // Await the promise to safely get the locale value
+  const { locale } = await params;
+
   const t = await getTranslations("photography.PhotographyPage");
   const rawAlbums = await fetchAlbums(locale);
   const rawTestimonials = await fetchTestimonials(locale);
@@ -32,15 +39,12 @@ export default async function PhotographyPage({
       images: (album.images || []).map((img) => `${STRAPI_URL}${img.url}`),
     }));
 
-  // --- THIS IS THE FIX ---
-  // The transformation now correctly handles the 'avatar' media object
   const testimonials = rawTestimonials
     .filter((testimonial) => testimonial && testimonial.name)
     .map((testimonial) => ({
       name: testimonial.name,
       quote: testimonial.quote,
       role: testimonial.role,
-      // Get the avatar URL from the nested media object, provide null if it doesn't exist
       avatar: testimonial.avatar?.url
         ? `${STRAPI_URL}${testimonial.avatar.url}`
         : null,

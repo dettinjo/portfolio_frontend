@@ -1,3 +1,5 @@
+// portfolio-frontend/src/app/[locale]/software/[slug]/page.tsx
+
 import { notFound } from "next/navigation";
 import { getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -8,14 +10,12 @@ import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { Metadata } from "next";
 import { WithContext, SoftwareApplication } from "schema-dts";
-import { fetchSoftwareProjectBySlug, fetchAllProjectSlugs } from "@/lib/strapi";
 import {
-  BlocksRenderer,
-  // --- THIS IS THE FIX: The unused type has been removed ---
-} from "@strapi/blocks-react-renderer";
-
-const STRAPI_URL =
-  process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
+  fetchSoftwareProjectBySlug,
+  fetchAllProjectSlugs,
+  getStrapiMedia,
+} from "@/lib/strapi";
+import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 
 const techIconMap: { [key: string]: string } = {
   "Next.js": "devicon-nextjs-plain",
@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const { title, description, coverImage } = project;
+  const imageUrl = getStrapiMedia(coverImage?.url);
 
   return {
     title: title,
@@ -55,29 +56,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: title,
       description: description,
-      images: [
-        {
-          url: `${STRAPI_URL}${coverImage?.url}`,
-          width: 1280,
-          height: 720,
-          alt: `Preview for ${title}`,
-        },
-      ],
+      images: imageUrl ? [{ url: imageUrl, alt: `Preview for ${title}` }] : [],
       type: "article",
       locale: params.locale,
     },
   };
 }
 
-// The main page component
 export default async function ProjectDetailPage({ params }: Props) {
   const project = await fetchSoftwareProjectBySlug(params.slug, params.locale);
-  const t = await getTranslations("software.ProjectDetailsPage");
-  const format = await getFormatter({ locale: params.locale });
 
   if (!project) {
     notFound();
   }
+
+  const t = await getTranslations("software.ProjectDetailsPage");
+  const format = await getFormatter({ locale: params.locale });
 
   const {
     title,
@@ -98,20 +92,16 @@ export default async function ProjectDetailPage({ params }: Props) {
     name: title,
     applicationCategory: projectType,
     description: description,
-    author: {
-      "@type": "Person",
-      name: "Joel Dettinger",
-    },
+    author: { "@type": "Person", name: "Joel Dettinger" },
   };
 
   const hasLinks = liveUrl || repoUrl;
 
-  const galleryImages =
+  const galleryImages = (
     gallery && gallery.length > 0
-      ? gallery.map((img) => `${STRAPI_URL}${img.url}`)
-      : coverImage
-      ? [`${STRAPI_URL}${coverImage.url}`]
-      : [];
+      ? gallery.map((img) => getStrapiMedia(img.url))
+      : [getStrapiMedia(coverImage?.url)]
+  ).filter(Boolean) as string[];
 
   let formattedDate = null;
   if (developedAt) {
@@ -126,7 +116,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Button asChild variant="ghost" className="-ml-4 mb-8">
-        <Link href="/#projekte">
+        <Link href="/">
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t("back_button")}
         </Link>
@@ -151,11 +141,16 @@ export default async function ProjectDetailPage({ params }: Props) {
             {t("about_title")}
           </h2>
           <div className="prose prose-neutral dark:prose-invert max-w-none mt-4 text-muted-foreground space-y-4">
-            {longDescription ? (
+            {/* --- THIS IS THE DEFINITIVE FIX --- */}
+            {/* We now explicitly check if longDescription is a non-empty array before rendering */}
+            {longDescription &&
+            Array.isArray(longDescription) &&
+            longDescription.length > 0 ? (
               <BlocksRenderer content={longDescription} />
             ) : (
               <p>{description}</p>
             )}
+            {/* --- END OF FIX --- */}
           </div>
         </div>
 

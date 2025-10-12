@@ -14,7 +14,16 @@ export interface Testimonial { id: number; quote: string; name: string; role: st
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
-// --- THIS IS THE FIX (Part 1): The core API function now accepts a locale ---
+export function getStrapiMedia(url: string | undefined | null): string | null {
+  if (!url) {
+    return null;
+  }
+  if (url.startsWith('http')) {
+    return url;
+  }
+  return `${STRAPI_URL}${url}`;
+}
+
 async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}, locale?: string): Promise<T> {
   try {
     const mergedOptions = { headers: { 'Content-Type': 'application/json' }, ...options };

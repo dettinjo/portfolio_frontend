@@ -15,9 +15,12 @@ const nextConfig: NextConfig = {
         port: '1337',
         pathname: '/uploads/**', // Be specific to the uploads folder
       },
-      // Keep the old ones if you still need them
       { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
+      {
+        protocol: 'https',
+        hostname: 'active-confidence-ee4dbe67cf.media.strapiapp.com',
+      },
     ],
   },
 };

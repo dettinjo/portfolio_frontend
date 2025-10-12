@@ -1,5 +1,4 @@
 // portfolio-frontend/src/components/sections/photography/LeaveReviewForm.tsx
-
 "use client";
 
 import React, { useState, useMemo, useEffect, useCallback } from "react";
@@ -35,7 +34,7 @@ const ratingCategories = [
 
 interface PreviewTestimonial {
   name: string;
-  event: string; // <-- FIX: Renamed from role
+  event: string;
   quote: string;
   avatar: string | null;
   ratings: Record<string, number>;
@@ -43,6 +42,7 @@ interface PreviewTestimonial {
 
 type TFunction = ReturnType<typeof useTranslations>;
 
+// This component does not need changes
 const PreviewCard = ({
   testimonial,
   t,
@@ -56,7 +56,6 @@ const PreviewCard = ({
     const ratedCategories = ratingValues.filter((val) => val > 0).length;
     return ratedCategories > 0 ? total / ratedCategories : 0;
   }, [testimonial.ratings]);
-
   return (
     <Card className="flex flex-col">
       <CardContent className="p-6">
@@ -77,8 +76,7 @@ const PreviewCard = ({
               {testimonial.name || t("preview.defaultName")}
             </p>
             <p className="text-sm text-muted-foreground">
-              {testimonial.event || t("preview.defaultRole")}{" "}
-              {/* <-- FIX: Use event */}
+              {testimonial.event || t("preview.defaultRole")}
             </p>
           </div>
         </div>
@@ -86,7 +84,6 @@ const PreviewCard = ({
           &quot;{testimonial.quote || t("preview.defaultQuote")}&quot;
         </p>
       </CardContent>
-      {/* ... rest of the component is the same */}
       <CardContent className="p-6 pt-0">
         <Separator className="mb-6" />
         <div className="space-y-4">
@@ -124,7 +121,7 @@ const ReviewFormContents = () => {
 
   const [step, setStep] = useState(1);
   const [authorName, setAuthorName] = useState("");
-  const [event, setEvent] = useState(""); // <-- FIX: Renamed from role
+  const [eventValue, setEventValue] = useState("");
   const [quote, setQuote] = useState("");
   const [ratings, setRatings] = useState<Record<string, number>>({
     communication: 3,
@@ -159,32 +156,29 @@ const ReviewFormContents = () => {
 
   const handleSubmit = useCallback(async () => {
     if (!executeRecaptcha) {
-      console.error("reCAPTCHA not ready");
       setSubmissionStatus("error");
       return;
     }
-
     setSubmissionStatus("submitting");
-
     const recaptchaToken = await executeRecaptcha("testimonialSubmit");
-
     const submissionFormData = new FormData();
     submissionFormData.append(
       "data",
       JSON.stringify({
         name: authorName,
-        event: event, // <-- FIX: Send 'event' not 'role'
-        quote: quote,
-        communication: ratings.communication,
-        creativity: ratings.creativity,
-        professionalism: ratings.professionalism,
-        value: ratings.value,
+        event: eventValue,
+        quote,
+        ...ratings,
       })
     );
 
+    // --- THIS IS THE DEFINITIVE FIX ---
+    // The key for the file must match the field name in the content type (`avatar`),
+    // not the special `files.avatar` convention, because we are using a custom controller.
     if (photoFile) {
-      submissionFormData.append("files.avatar", photoFile, photoFile.name);
+      submissionFormData.append("avatar", photoFile, photoFile.name);
     }
+    // --- END OF FIX ---
 
     submissionFormData.append("recaptcha", recaptchaToken);
 
@@ -196,7 +190,6 @@ const ReviewFormContents = () => {
           body: submissionFormData,
         }
       );
-
       if (!response.ok) throw new Error("Submission failed");
       setStep(3);
       setSubmissionStatus("success");
@@ -204,10 +197,9 @@ const ReviewFormContents = () => {
       console.error("Submission error:", error);
       setSubmissionStatus("error");
     }
-  }, [executeRecaptcha, authorName, event, quote, ratings, photoFile]); // <-- FIX: Add event to dependency array
+  }, [executeRecaptcha, authorName, eventValue, quote, ratings, photoFile]);
 
   if (step === 3) {
-    // ... success UI is fine
     return (
       <div className="container mx-auto max-w-2xl py-24 text-center">
         <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
@@ -219,7 +211,7 @@ const ReviewFormContents = () => {
 
   const previewData = {
     name: authorName,
-    event: event, // <-- FIX: Pass event to preview
+    event: eventValue,
     quote: quote,
     avatar: photoPreview,
     ratings: ratings,
@@ -250,18 +242,16 @@ const ReviewFormContents = () => {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  {/* --- FIX: This entire block now correctly points to 'event' --- */}
                   <Label htmlFor="event">{t("form.roleLabel")}</Label>
                   <Input
                     id="event"
                     name="event"
-                    value={event}
-                    onChange={(e) => setEvent(e.target.value)}
+                    value={eventValue}
+                    onChange={(e) => setEventValue(e.target.value)}
                     placeholder={t("form.rolePlaceholder")}
                   />
                 </div>
               </div>
-              {/* ... rest of the form is fine */}
               <div className="space-y-1.5">
                 <Label>{t("form.photoLabel")}</Label>
                 <div className="flex items-center gap-4">
@@ -349,8 +339,7 @@ const ReviewFormContents = () => {
                 t("preview.buttonSubmitting")
               ) : (
                 <>
-                  {" "}
-                  <Send className="mr-2 h-4 w-4" /> {t("preview.buttonSubmit")}{" "}
+                  <Send className="mr-2 h-4 w-4" /> {t("preview.buttonSubmit")}
                 </>
               )}
             </Button>
@@ -366,9 +355,19 @@ const ReviewFormContents = () => {
   );
 };
 
-export function LeaveReviewForm() {
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!siteKey) return null; // Or render an error message
+export function LeaveReviewForm({ siteKey }: { siteKey: string }) {
+  if (!siteKey) {
+    return (
+      <div className="container mx-auto max-w-2xl py-24 text-center">
+        <h2 className="text-2xl font-bold text-destructive">
+          Configuration Error
+        </h2>
+        <p className="text-muted-foreground mt-2">
+          The Google reCAPTCHA Site Key is missing.
+        </p>
+      </div>
+    );
+  }
   return (
     <GoogleReCaptchaProvider reCaptchaKey={siteKey}>
       <ReviewFormContents />

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import type { SoftwareProject } from "@/lib/strapi";
+import { getStrapiMedia } from "@/lib/strapi";
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
@@ -52,9 +53,8 @@ export function ProjectsSection({
             slug,
           } = project;
 
-          const imageUrl = coverImage?.url
-            ? `${STRAPI_URL}${coverImage.url}`
-            : "/placeholder.jpg";
+          const imageUrl =
+            getStrapiMedia(coverImage?.url) || "/placeholder.jpg";
 
           return (
             <motion.div
@@ -103,11 +103,8 @@ export function ProjectsSection({
                     );
                   })}
                 </div>
-
-                {/* --- THIS IS THE FIX --- */}
-                {/* The href now includes the /software prefix to match the file structure. */}
                 <Button asChild className="mt-8">
-                  <Link href={`/software/${slug}`}>{t("button_details")}</Link>
+                  <Link href={`/${slug}`}>{t("button_details")}</Link>
                 </Button>
               </div>
             </motion.div>
