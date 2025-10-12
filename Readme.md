@@ -2,7 +2,7 @@
 
 This repository contains the full source code for my personal portfolio website, showcasing my work in both software development and photography. The project is built as a monorepo, containing a headless Strapi backend and a modern Next.js frontend.
 
-The live portfolio can be viewed at: **[Link to your deployed website]**
+The live portfolio can be viewed at: **joeldettinger.de**
 
 ## Core Features
 
