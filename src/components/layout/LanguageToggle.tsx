@@ -4,29 +4,28 @@ import { useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { useAlternateLinks } from "@/context/AlternateLinksProvider";
-import { usePathname } from "@/i18n/navigation";
 
 export function LanguageToggle() {
-  const locale = useLocale();
-  const pathname = usePathname();
+  // 1. Get the CURRENT active locale for this page (e.g., 'en').
+  const currentLocale = useLocale();
   const { alternateSlugs } = useAlternateLinks();
 
-  const nextLocale = locale === "de" ? "en" : "de";
+  // 2. Determine the TARGET locale we want to switch to.
+  const nextLocale = currentLocale === "de" ? "en" : "de";
 
   const handleLanguageSwitch = () => {
-    // 1. Set the language cookie for the next locale.
+    // 3. Set the language cookie to our desired TARGET locale.
     const date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000); // Expires in 1 year
     document.cookie = `NEXT_LOCALE=${nextLocale};expires=${date.toUTCString()};path=/`;
 
-    // 2. Check if we have a specific translated slug for this page.
+    // 4. Navigate to the correct URL.
     if (alternateSlugs && alternateSlugs[nextLocale]) {
-      // If yes, perform a full navigation to that new URL.
+      // If a specific translated slug exists, navigate directly to it.
       window.location.href = alternateSlugs[nextLocale];
     } else {
-      // If not (e.g., on the homepage), just reload the current page.
-      // The middleware will see the new cookie and serve the correct content.
-      window.location.href = pathname;
+      // Otherwise (e.g., on the homepage), just reload. The middleware will handle the rest.
+      window.location.reload();
     }
   };
 
@@ -35,9 +34,9 @@ export function LanguageToggle() {
       variant="ghost"
       size="icon"
       onClick={handleLanguageSwitch}
-      aria-label={`Switch to ${nextLocale.toUpperCase()}`}
+      aria-label={`Switch language to ${nextLocale.toUpperCase()}`}
     >
-      {/* This now correctly shows the language you will switch TO. */}
+      {/* 5. The button's text now correctly displays the TARGET locale. */}
       <span className="text-sm font-semibold">{nextLocale.toUpperCase()}</span>
     </Button>
   );
