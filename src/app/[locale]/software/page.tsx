@@ -7,7 +7,12 @@ import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
 import { SkillsSection } from "@/components/sections/software/SkillsSection";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
-import { fetchSoftwareProjects, fetchSkills, type Skill } from "@/lib/strapi";
+import {
+  fetchSoftwareProjects,
+  fetchSkillCategories,
+  getTechIconMap,
+  type Skill,
+} from "@/lib/strapi";
 
 // ============================================================================
 // --- SEO METADATA GENERATION ---
@@ -61,18 +66,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // --- PAGE COMPONENT ---
 // ============================================================================
 
-export default async function DevPage({ params }: Props) {
+export default async function DevPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
-  const projectsData = await fetchSoftwareProjects(locale);
-  const skillsData = await fetchSkills(locale);
+
+  const [
+    projectsData,
+    skillsDataForDisplay,
+    techIconMap, // This is now guaranteed to be correct
+  ] = await Promise.all([
+    fetchSoftwareProjects(locale),
+    fetchSkillCategories(locale),
+    getTechIconMap(),
+  ]);
+
+  console.log(
+    "--- [DEBUG] 5. techIconMap received by Software Page:",
+    JSON.stringify(techIconMap, null, 2)
+  );
+
   const t = await getTranslations({
     locale: locale,
     namespace: "software.SoftwareProjectsSection",
   });
 
-  // --- DEFINITIVE FIX ---
-  // The logic now correctly handles the flat SkillCategory structure without .attributes
-  const skills = skillsData
+  const skillsForDisplay = skillsDataForDisplay
     .filter((cat) => cat && Array.isArray(cat.skills))
     .map((cat) => ({
       category: cat.name,
@@ -80,13 +101,6 @@ export default async function DevPage({ params }: Props) {
     }));
 
   const cleanProjectsData = projectsData.filter(Boolean);
-
-  const techIconMap: { [key: string]: string } = {};
-  skills.forEach((category) => {
-    category.skills.forEach((skill) => {
-      techIconMap[skill.name] = skill.iconClassName;
-    });
-  });
 
   const softwareDomain =
     process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
@@ -99,7 +113,6 @@ export default async function DevPage({ params }: Props) {
     url: `https://${softwareDomain}`,
     mainEntity: {
       "@type": "ItemList",
-      // --- FIX: Access properties directly, no .attributes needed ---
       itemListElement: cleanProjectsData.map((project, index) => ({
         "@type": "ListItem",
         position: index + 1,
@@ -115,19 +128,18 @@ export default async function DevPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
       <HeroSection />
-
       <div className="max-w-6xl mx-auto px-6">
         <div className="py-24">
           <ProjectsSection
             projects={cleanProjectsData}
-            techIconMap={techIconMap}
+            techIconMap={techIconMap} // Pass the correctly built map
           />
         </div>
         <ScrollIndicator href="#skills" />
         <div className="py-24">
-          <SkillsSection skills={skills} />
+          {/* Use the locale-specific data for display */}
+          <SkillsSection skills={skillsForDisplay} />
         </div>
         <ScrollIndicator href="#kontakt" />
         <div className="pt-24 pb-64 md:pb-96">

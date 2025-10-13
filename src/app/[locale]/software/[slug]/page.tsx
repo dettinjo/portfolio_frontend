@@ -9,69 +9,57 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { Metadata } from "next";
-import { WithContext, SoftwareApplication } from "schema-dts";
+import { WithContext, SoftwareApplication } from "schema-d-ts";
 import {
   fetchSoftwareProjectBySlug,
   fetchAllProjectSlugs,
   getStrapiMedia,
+  getTechIconMap,
 } from "@/lib/strapi";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 
-const techIconMap: { [key: string]: string } = {
-  "Next.js": "devicon-nextjs-plain",
-  React: "devicon-react-original",
-  Strapi: "devicon-strapi-plain",
-  TypeScript: "devicon-typescript-plain",
-  "Tailwind CSS": "devicon-tailwindcss-plain",
-  "Node.js": "devicon-nodejs-plain",
-  Express: "devicon-express-original",
-  MongoDB: "devicon-mongodb-plain",
-  JWT: "devicon-jsonwebtokens-original",
-};
-
 export async function generateStaticParams() {
   const projects = await fetchAllProjectSlugs();
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+  return projects.map((project) => ({ slug: project.slug }));
 }
 
 type Props = {
-  params: { slug: string; locale: string };
+  params: Promise<{ slug: string; locale: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = await fetchSoftwareProjectBySlug(params.slug, params.locale);
-
-  if (!project) {
-    return { title: "Project Not Found" };
-  }
-
+  const { slug, locale } = await params;
+  const project = await fetchSoftwareProjectBySlug(slug, locale);
+  if (!project) return { title: "Project Not Found" };
   const { title, description, coverImage } = project;
   const imageUrl = getStrapiMedia(coverImage?.url);
-
   return {
     title: title,
     description: description,
     openGraph: {
-      title: title,
-      description: description,
+      title,
+      description,
       images: imageUrl ? [{ url: imageUrl, alt: `Preview for ${title}` }] : [],
       type: "article",
-      locale: params.locale,
+      locale: locale,
     },
   };
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
-  const project = await fetchSoftwareProjectBySlug(params.slug, params.locale);
+  const { slug, locale } = await params;
+
+  const [project, techIconMap] = await Promise.all([
+    fetchSoftwareProjectBySlug(slug, locale),
+    getTechIconMap(),
+  ]);
 
   if (!project) {
     notFound();
   }
 
   const t = await getTranslations("software.ProjectDetailsPage");
-  const format = await getFormatter({ locale: params.locale });
+  const format = await getFormatter({ locale: locale });
 
   const {
     title,
@@ -96,7 +84,6 @@ export default async function ProjectDetailPage({ params }: Props) {
   };
 
   const hasLinks = liveUrl || repoUrl;
-
   const galleryImages = (
     gallery && gallery.length > 0
       ? gallery.map((img) => getStrapiMedia(img.url))
@@ -121,7 +108,6 @@ export default async function ProjectDetailPage({ params }: Props) {
           {t("back_button")}
         </Link>
       </Button>
-
       <header>
         <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
           {projectType}
@@ -130,19 +116,15 @@ export default async function ProjectDetailPage({ params }: Props) {
           {title}
         </h1>
       </header>
-
       <div className="mt-8">
         <ProjectGallery images={galleryImages} altPrefix={title} />
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
         <div className="md:col-span-2">
           <h2 className="text-2xl font-semibold border-b-2 border-foreground pb-2">
             {t("about_title")}
           </h2>
           <div className="prose prose-neutral dark:prose-invert max-w-none mt-4 text-muted-foreground space-y-4">
-            {/* --- THIS IS THE DEFINITIVE FIX --- */}
-            {/* We now explicitly check if longDescription is a non-empty array before rendering */}
             {longDescription &&
             Array.isArray(longDescription) &&
             longDescription.length > 0 ? (
@@ -150,10 +132,8 @@ export default async function ProjectDetailPage({ params }: Props) {
             ) : (
               <p>{description}</p>
             )}
-            {/* --- END OF FIX --- */}
           </div>
         </div>
-
         <aside className="space-y-8">
           <Card className="p-6">
             <CardHeader className="p-0">
@@ -175,8 +155,11 @@ export default async function ProjectDetailPage({ params }: Props) {
                   {t("tech_title")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
+                  {/* --- THIS IS THE DEFINITIVE FIX (PART 3) --- */}
                   {(tags || []).map((tag) => {
-                    const iconClassName = techIconMap[tag];
+                    // Trim and convert the tag to lowercase for the lookup.
+                    const cleanTag = tag.trim().toLowerCase();
+                    const iconClassName = techIconMap[cleanTag];
                     return (
                       <Badge
                         key={tag}
@@ -186,6 +169,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                         {iconClassName && (
                           <i className={`${iconClassName} text-base`}></i>
                         )}
+                        {/* Display the original tag name */}
                         <span>{tag}</span>
                       </Badge>
                     );

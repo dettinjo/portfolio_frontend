@@ -23,6 +23,11 @@ export function ProjectsSection({
 }: ProjectsSectionProps) {
   const t = useTranslations("software.SoftwareProjectsSection");
 
+  console.log(
+    "--- [DEBUG] 6. techIconMap received by ProjectsSection component:",
+    JSON.stringify(techIconMap, null, 2)
+  );
+
   if (!projects || projects.length === 0) {
     return (
       <section id="projekte" className="text-center py-12">
@@ -87,8 +92,11 @@ export function ProjectsSection({
                 <p className="mt-4 text-muted-foreground">{description}</p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
+                  {/* --- THIS IS THE DEFINITIVE FIX (PART 2) --- */}
                   {(tags || []).map((tag) => {
-                    const iconClassName = techIconMap[tag];
+                    // Trim and convert the tag to lowercase for the lookup.
+                    const cleanTag = tag.trim().toLowerCase();
+                    const iconClassName = techIconMap[cleanTag];
                     return (
                       <Badge
                         key={tag}
@@ -98,6 +106,7 @@ export function ProjectsSection({
                         {iconClassName && (
                           <i className={`${iconClassName} text-base`}></i>
                         )}
+                        {/* Display the original tag name for correct capitalization */}
                         <span>{tag}</span>
                       </Badge>
                     );

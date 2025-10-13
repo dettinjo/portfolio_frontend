@@ -1,6 +1,7 @@
 // portfolio-frontend/src/lib/strapi.ts
 import qs from "qs";
 import { type BlocksContent } from '@strapi/blocks-react-renderer';
+import { cache } from 'react';
 
 // --- Interfaces remain the same ---
 interface StrapiImage { id: number; url: string; alternativeText: string | null; width: number; height: number; }
@@ -14,6 +15,7 @@ export interface Testimonial { id: number; quote: string; name: string; role: st
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
+// ... getStrapiMedia and fetchAPI remain the same ...
 export function getStrapiMedia(url: string | undefined | null): string | null {
   if (!url) {
     return null;
@@ -28,7 +30,6 @@ async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}, loc
   try {
     const mergedOptions = { headers: { 'Content-Type': 'application/json' }, ...options };
     
-    // Add locale to the parameters if it's provided
     const paramsWithLocale = { ...urlParamsObject, locale };
 
     const queryString = qs.stringify(paramsWithLocale, { encodeValuesOnly: true });
@@ -47,7 +48,48 @@ async function fetchAPI<T>(path: string, urlParamsObject = {}, options = {}, loc
   }
 }
 
-// --- THIS IS THE FIX (Part 2): All fetching functions now accept and pass the locale ---
+
+// --- THIS IS THE DEFINITIVE FIX ---
+// We are reverting to the direct /api/skills endpoint but are now forcing a
+// high pagination limit to ensure all skills are fetched, bypassing any
+// restrictive default pagination from Strapi.
+export const getTechIconMap = cache(async () => {
+  console.log("--- [DEBUG] 1. ENTERING getTechIconMap (Final Strategy) ---");
+  try {
+    const allSkills = await fetchAPI<Skill[]>('/skills', {
+      fields: ['name', 'iconClassName'],
+      // Set a large page size to ensure all skills are returned in one request.
+      pagination: { pageSize: 250 }, 
+    });
+
+    console.log(`--- [DEBUG] 2. Fetched ${allSkills?.length || 0} skills from Strapi.`);
+
+    const techIconMap: { [key: string]: string } = {};
+    if (Array.isArray(allSkills)) {
+      for (const skill of allSkills) {
+        if (skill.name && skill.iconClassName) {
+          techIconMap[skill.name.toLowerCase()] = skill.iconClassName;
+        }
+      }
+    }
+    
+    console.log(`--- [DEBUG] 3. BUILT techIconMap with ${Object.keys(techIconMap).length} entries.`);
+    console.log("--- [DEBUG] 4. EXITING getTechIconMap ---");
+    return techIconMap;
+  } catch (error) {
+    console.error("--- [DEBUG] ERROR in getTechIconMap:", error);
+    return {}; // Return empty object on error
+  }
+});
+
+
+export async function fetchSkillCategories(locale?: string): Promise<SkillCategory[]> {
+    return fetchAPI<SkillCategory[]>('/skill-categories', {
+        populate: { skills: true },
+        sort: 'order:asc',
+    }, {}, locale);
+}
+
 
 export async function fetchSoftwareProjects(locale?: string): Promise<SoftwareProject[]> {
   return fetchAPI<SoftwareProject[]>('/software-projects', { populate: { coverImage: true, gallery: true } }, {}, locale);
