@@ -18,6 +18,7 @@ import {
 } from "@/lib/strapi";
 import { cn } from "@/lib/utils";
 import { LongTextRenderer } from "@/components/LongTextRenderer";
+import { AlternateLinksProvider } from "@/context/AlternateLinksProvider";
 
 export async function generateStaticParams() {
   const projects = await fetchAllProjectSlugs();
@@ -59,6 +60,13 @@ export default async function ProjectDetailPage({ params }: Props) {
     notFound();
   }
 
+  const alternateSlugs: Record<string, string> = {};
+  alternateSlugs[locale] = slug;
+  if (project.localizations) {
+    for (const localization of project.localizations) {
+      alternateSlugs[localization.locale] = localization.slug;
+    }
+  }
   const t = await getTranslations("software.ProjectDetailsPage");
   const format = await getFormatter({ locale: locale });
 
@@ -103,136 +111,138 @@ export default async function ProjectDetailPage({ params }: Props) {
   }
 
   return (
-    <article className="max-w-6xl mx-auto py-12 px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Button asChild variant="ghost" className="-ml-4 mb-8">
-        <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          {t("back_button")}
-        </Link>
-      </Button>
-      <header>
-        <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
-          {projectType}
-        </p>
-        <h1 className="mt-2 text-4xl md:text-5xl font-bold tracking-tight">
-          {title}
-        </h1>
-      </header>
-      <div className="mt-8">
-        <ProjectGallery images={galleryImages} altPrefix={title} />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
-        <div className="md:col-span-2">
-          <h2 className="text-2xl font-semibold border-b-2 border-foreground pb-2">
-            {t("about_title")}
-          </h2>
-          <div className="mt-4">
-            <LongTextRenderer content={longDescription} />
-          </div>
+    <AlternateLinksProvider value={{ alternateSlugs }}>
+      <article className="max-w-6xl mx-auto py-12 px-6">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <Button asChild variant="ghost" className="-ml-4 mb-8">
+          <Link href="/">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t("back_button")}
+          </Link>
+        </Button>
+        <header>
+          <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
+            {projectType}
+          </p>
+          <h1 className="mt-2 text-4xl md:text-5xl font-bold tracking-tight">
+            {title}
+          </h1>
+        </header>
+        <div className="mt-8">
+          <ProjectGallery images={galleryImages} altPrefix={title} />
         </div>
-        <aside className="space-y-8">
-          <Card className="p-6">
-            <CardHeader className="p-0">
-              <CardTitle className="text-lg">{t("details_title")}</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0 mt-6 space-y-6">
-              {formattedDate && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-semibold border-b-2 border-foreground pb-2">
+              {t("about_title")}
+            </h2>
+            <div className="mt-4">
+              <LongTextRenderer content={longDescription} />
+            </div>
+          </div>
+          <aside className="space-y-8">
+            <Card className="p-6">
+              <CardHeader className="p-0">
+                <CardTitle className="text-lg">{t("details_title")}</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0 mt-6 space-y-6">
+                {formattedDate && (
+                  <div>
+                    <h3 className="font-semibold text-sm mb-2">
+                      {t("developed_in_label")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {formattedDate}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <h3 className="font-semibold text-sm mb-2">
-                    {t("developed_in_label")}
+                    {t("tech_title")}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {formattedDate}
-                  </p>
-                </div>
-              )}
-              <div>
-                <h3 className="font-semibold text-sm mb-2">
-                  {t("tech_title")}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {(tags || []).map((tag) => {
-                    const cleanTag = tag.trim().toLowerCase();
-                    const techDetails = techDetailsMap[cleanTag];
-                    const iconClassName = techDetails?.iconClassName;
+                  <div className="flex flex-wrap gap-2">
+                    {(tags || []).map((tag) => {
+                      const cleanTag = tag.trim().toLowerCase();
+                      const techDetails = techDetailsMap[cleanTag];
+                      const iconClassName = techDetails?.iconClassName;
 
-                    if (techDetails?.url) {
+                      if (techDetails?.url) {
+                        return (
+                          <a
+                            key={tag}
+                            href={techDetails.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={cn(tagBaseClasses, clickableTagClasses)}
+                          >
+                            {iconClassName && (
+                              <i
+                                className={`${iconClassName} text-base mr-1.5 group-hover:text-background`}
+                              ></i>
+                            )}
+                            <span className="group-hover:text-background">
+                              {tag}
+                            </span>
+                          </a>
+                        );
+                      }
+
                       return (
-                        <a
+                        <Badge
                           key={tag}
-                          href={techDetails.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={cn(tagBaseClasses, clickableTagClasses)}
+                          variant="outline"
+                          className="gap-1.5 px-2 py-1"
                         >
                           {iconClassName && (
-                            <i
-                              className={`${iconClassName} text-base mr-1.5 group-hover:text-background`}
-                            ></i>
+                            <i className={`${iconClassName} text-base`}></i>
                           )}
-                          <span className="group-hover:text-background">
-                            {tag}
-                          </span>
-                        </a>
+                          <span>{tag}</span>
+                        </Badge>
                       );
-                    }
-
-                    return (
-                      <Badge
-                        key={tag}
-                        variant="outline"
-                        className="gap-1.5 px-2 py-1"
-                      >
-                        {iconClassName && (
-                          <i className={`${iconClassName} text-base`}></i>
-                        )}
-                        <span>{tag}</span>
-                      </Badge>
-                    );
-                  })}
-                </div>
-              </div>
-              {hasLinks && (
-                <div>
-                  <h3 className="font-semibold text-sm mb-2">
-                    {t("links_title")}
-                  </h3>
-                  <div className="flex flex-col gap-2">
-                    {liveUrl && (
-                      <Button asChild>
-                        <a
-                          href={liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {t("live_demo_button")}
-                          <ExternalLink className="ml-2 h-4 w-4" />
-                        </a>
-                      </Button>
-                    )}
-                    {repoUrl && (
-                      <Button asChild>
-                        <a
-                          href={repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Github className="mr-2 h-4 w-4" />
-                          {t("source_code_button")}
-                        </a>
-                      </Button>
-                    )}
+                    })}
                   </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </aside>
-      </div>
-    </article>
+                {hasLinks && (
+                  <div>
+                    <h3 className="font-semibold text-sm mb-2">
+                      {t("links_title")}
+                    </h3>
+                    <div className="flex flex-col gap-2">
+                      {liveUrl && (
+                        <Button asChild>
+                          <a
+                            href={liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {t("live_demo_button")}
+                            <ExternalLink className="ml-2 h-4 w-4" />
+                          </a>
+                        </Button>
+                      )}
+                      {repoUrl && (
+                        <Button asChild>
+                          <a
+                            href={repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Github className="mr-2 h-4 w-4" />
+                            {t("source_code_button")}
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </aside>
+        </div>
+      </article>
+    </AlternateLinksProvider>
   );
 }

@@ -5,12 +5,29 @@ import { cache } from 'react';
 // --- Interfaces remain the same ---
 interface StrapiImage { id: number; url: string; alternativeText: string | null; width: number; height: number; }
 interface StrapiResponseWrapper<T> { data: T; }
-export interface SoftwareProject { id: number; slug: string; title: string; description: string; longDescription?: string; projectType: string; developedAt?: string; liveUrl?: string; repoUrl?: string; tags: string[]; coverImage: StrapiImage | null; gallery: StrapiImage[] | null; }
 export interface Skill { id: number; name: string; iconClassName: string; level: number; url: string; }
 export interface SkillCategory { id: number; name: string; order: number; skills: Skill[]; }
 export interface Album { id: number; slug: string; title: string; coverImage: StrapiImage; images: StrapiImage[]; }
 export interface Testimonial { id: number; quote: string; name: string; role: string; avatar: StrapiImage | null; communication: number; creativity: number; professionalism: number; value: number; }
-
+export interface SoftwareProject {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  longDescription?: string;
+  projectType: string;
+  developedAt?: string;
+  liveUrl?: string;
+  repoUrl?: string;
+  tags: string[];
+  coverImage: StrapiImage | null;
+  gallery: StrapiImage[] | null;
+  localizations?: Array<{
+    id: number;
+    slug: string;
+    locale: string;
+  }>;
+}
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
@@ -84,8 +101,8 @@ export async function fetchSoftwareProjects(locale?: string): Promise<SoftwarePr
 export async function fetchSoftwareProjectBySlug(slug: string, locale?: string): Promise<SoftwareProject | null> {
     const projects = await fetchAPI<SoftwareProject[]>('/software-projects', {
         filters: { slug: { $eq: slug } },
-        fields: ['*'], // Explicitly request all scalar fields
-        populate: { coverImage: true, gallery: true }, // Populate only the relations
+        fields: ['*'],
+        populate: { coverImage: true, gallery: true, localizations: true },
     }, {}, locale);
     return projects?.[0] || null;
 }
