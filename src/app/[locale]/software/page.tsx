@@ -10,7 +10,7 @@ import { ScrollIndicator } from "@/components/ScrollIndicator";
 import {
   fetchSoftwareProjects,
   fetchSkillCategories,
-  getTechIconMap,
+  getTechDetailsMap,
   type Skill,
 } from "@/lib/strapi";
 
@@ -73,20 +73,12 @@ export default async function DevPage({
 }) {
   const { locale } = await params;
 
-  const [
-    projectsData,
-    skillsDataForDisplay,
-    techIconMap, // This is now guaranteed to be correct
-  ] = await Promise.all([
-    fetchSoftwareProjects(locale),
-    fetchSkillCategories(locale),
-    getTechIconMap(),
-  ]);
-
-  console.log(
-    "--- [DEBUG] 5. techIconMap received by Software Page:",
-    JSON.stringify(techIconMap, null, 2)
-  );
+  const [projectsData, skillsDataForDisplay, techDetailsMap] =
+    await Promise.all([
+      fetchSoftwareProjects(locale),
+      fetchSkillCategories(locale),
+      getTechDetailsMap(),
+    ]);
 
   const t = await getTranslations({
     locale: locale,
@@ -133,12 +125,11 @@ export default async function DevPage({
         <div className="py-24">
           <ProjectsSection
             projects={cleanProjectsData}
-            techIconMap={techIconMap} // Pass the correctly built map
+            techDetailsMap={techDetailsMap}
           />
         </div>
         <ScrollIndicator href="#skills" />
         <div className="py-24">
-          {/* Use the locale-specific data for display */}
           <SkillsSection skills={skillsForDisplay} />
         </div>
         <ScrollIndicator href="#kontakt" />

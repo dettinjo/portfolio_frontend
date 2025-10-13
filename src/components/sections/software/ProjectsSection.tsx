@@ -8,25 +8,28 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import type { SoftwareProject } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
+import { cn } from "@/lib/utils";
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 interface ProjectsSectionProps {
   projects: SoftwareProject[];
-  techIconMap: { [key: string]: string };
+  techDetailsMap: {
+    [key: string]: { iconClassName: string; url: string | null };
+  };
 }
 
 export function ProjectsSection({
   projects,
-  techIconMap,
+  techDetailsMap,
 }: ProjectsSectionProps) {
   const t = useTranslations("software.SoftwareProjectsSection");
 
-  console.log(
-    "--- [DEBUG] 6. techIconMap received by ProjectsSection component:",
-    JSON.stringify(techIconMap, null, 2)
-  );
+  const tagBaseClasses =
+    "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors focus:outline-none";
+  const clickableTagClasses =
+    "group border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background";
 
   if (!projects || projects.length === 0) {
     return (
@@ -92,21 +95,44 @@ export function ProjectsSection({
                 <p className="mt-4 text-muted-foreground">{description}</p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {/* --- THIS IS THE DEFINITIVE FIX (PART 2) --- */}
+                  {/* --- THIS IS THE DEFINITIVE FIX (PART 3) --- */}
                   {(tags || []).map((tag) => {
-                    // Trim and convert the tag to lowercase for the lookup.
                     const cleanTag = tag.trim().toLowerCase();
-                    const iconClassName = techIconMap[cleanTag];
+                    const techDetails = techDetailsMap[cleanTag];
+                    const iconClassName = techDetails?.iconClassName;
+
+                    // If the skill has a URL, render it as a styled link.
+                    if (techDetails?.url) {
+                      return (
+                        <a
+                          key={tag}
+                          href={techDetails.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cn(tagBaseClasses, clickableTagClasses)}
+                        >
+                          {iconClassName && (
+                            <i
+                              className={`${iconClassName} text-base mr-1.5 group-hover:text-background`}
+                            ></i>
+                          )}
+                          <span className="group-hover:text-background">
+                            {tag}
+                          </span>
+                        </a>
+                      );
+                    }
+
+                    // Otherwise, render a standard, non-clickable badge.
                     return (
                       <Badge
                         key={tag}
                         variant="outline"
-                        className="gap-1.5 px-2 py-1"
+                        className="gap-1.5 px-2.5 py-1"
                       >
                         {iconClassName && (
                           <i className={`${iconClassName} text-base`}></i>
                         )}
-                        {/* Display the original tag name for correct capitalization */}
                         <span>{tag}</span>
                       </Badge>
                     );

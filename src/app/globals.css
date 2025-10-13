@@ -37,7 +37,7 @@
 
   .dark {
     --background: 240 10% 10%;
-    --foreground: 240 10% 98%; /* <-- THE CRITICAL FIX IS HERE */
+    --foreground: 240 10% 98%;
     
     --card: 240 10% 10%;
     --card-foreground: 240 10% 98%;
@@ -51,7 +51,7 @@
     --secondary: 240 5% 20%;
     --secondary-foreground: 240 10% 98%;
 
-    --muted: 240 5% 20%; /* Muted is a darker gray in dark mode */
+    --muted: 240 5% 20%;
     --muted-foreground: 240 5% 65%;
 
     --accent: 240 5% 20%;
@@ -80,10 +80,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  .prose code::before,
+  .prose code::after {
+    content: none !important;
+  }
 }
 
-
-/* --- Definitive Devicon Color Fix --- */
 [class^="devicon-"] path,
 [class^="devicon-"] polygon,
 [class^="devicon-"] rect,

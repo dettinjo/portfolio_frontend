@@ -14,9 +14,10 @@ import {
   fetchSoftwareProjectBySlug,
   fetchAllProjectSlugs,
   getStrapiMedia,
-  getTechIconMap,
+  getTechDetailsMap,
 } from "@/lib/strapi";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import { cn } from "@/lib/utils";
+import { LongTextRenderer } from "@/components/LongTextRenderer";
 
 export async function generateStaticParams() {
   const projects = await fetchAllProjectSlugs();
@@ -49,10 +50,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug, locale } = await params;
 
-  const [project, techIconMap] = await Promise.all([
+  const [project, techDetailsMap] = await Promise.all([
     fetchSoftwareProjectBySlug(slug, locale),
-    getTechIconMap(),
+    getTechDetailsMap(),
   ]);
+
+  console.log(
+    "--- [DEBUG] SERVER LOG: Fetched project data:",
+    JSON.stringify(project, null, 2)
+  );
 
   if (!project) {
     notFound();
@@ -73,6 +79,11 @@ export default async function ProjectDetailPage({ params }: Props) {
     coverImage,
     gallery,
   } = project;
+
+  const tagBaseClasses =
+    "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold transition-colors focus:outline-none";
+  const clickableTagClasses =
+    "group border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background";
 
   const jsonLd: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
@@ -124,14 +135,8 @@ export default async function ProjectDetailPage({ params }: Props) {
           <h2 className="text-2xl font-semibold border-b-2 border-foreground pb-2">
             {t("about_title")}
           </h2>
-          <div className="prose prose-neutral dark:prose-invert max-w-none mt-4 text-muted-foreground space-y-4">
-            {longDescription &&
-            Array.isArray(longDescription) &&
-            longDescription.length > 0 ? (
-              <BlocksRenderer content={longDescription} />
-            ) : (
-              <p>{description}</p>
-            )}
+          <div className="mt-4">
+            <LongTextRenderer content={longDescription} />
           </div>
         </div>
         <aside className="space-y-8">
@@ -155,11 +160,32 @@ export default async function ProjectDetailPage({ params }: Props) {
                   {t("tech_title")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {/* --- THIS IS THE DEFINITIVE FIX (PART 3) --- */}
                   {(tags || []).map((tag) => {
-                    // Trim and convert the tag to lowercase for the lookup.
                     const cleanTag = tag.trim().toLowerCase();
-                    const iconClassName = techIconMap[cleanTag];
+                    const techDetails = techDetailsMap[cleanTag];
+                    const iconClassName = techDetails?.iconClassName;
+
+                    if (techDetails?.url) {
+                      return (
+                        <a
+                          key={tag}
+                          href={techDetails.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cn(tagBaseClasses, clickableTagClasses)}
+                        >
+                          {iconClassName && (
+                            <i
+                              className={`${iconClassName} text-base mr-1.5 group-hover:text-background`}
+                            ></i>
+                          )}
+                          <span className="group-hover:text-background">
+                            {tag}
+                          </span>
+                        </a>
+                      );
+                    }
+
                     return (
                       <Badge
                         key={tag}
@@ -169,7 +195,6 @@ export default async function ProjectDetailPage({ params }: Props) {
                         {iconClassName && (
                           <i className={`${iconClassName} text-base`}></i>
                         )}
-                        {/* Display the original tag name */}
                         <span>{tag}</span>
                       </Badge>
                     );
