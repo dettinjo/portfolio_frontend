@@ -115,7 +115,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   return (
     <AlternateLinksProvider value={{ alternateSlugs }}>
       <div className="relative flex min-h-dvh flex-col bg-background">
-        <SoftwareHeader />
+        <SoftwareHeader showNavLinks={false} />
         <main className="flex-1">
           <article className="max-w-6xl mx-auto py-12 px-6">
             <script

@@ -10,13 +10,18 @@ type Props = {
 export const metadata: Metadata = {
   title: "Code by Joel",
   description: "Software Development by Joel Dettinger",
-  icons: {
-    icon: {
-      url: "/favicon-software.svg",
-      type: "image/svg+xml",
+  icons: [
+    {
+      media: "(prefers-color-scheme: light)",
+      url: "/favicon-software-light.svg",
+      href: "/favicon-software-light.svg",
     },
-    shortcut: "/favicon-software.svg",
-  },
+    {
+      media: "(prefers-color-scheme: dark)",
+      url: "/favicon-software-dark.svg",
+      href: "/favicon-software-dark.svg",
+    },
+  ],
 };
 
 export default async function SoftwarePageLayout({ children, params }: Props) {

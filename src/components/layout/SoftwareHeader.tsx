@@ -4,15 +4,23 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { MobileNav } from "./MobileHeader";
 import { Terminal } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
-export function SoftwareHeader() {
+// --- THIS IS THE DEFINITIVE FIX (PART 1) ---
+// We add a new prop to explicitly control the navigation links.
+interface SoftwareHeaderProps {
+  showNavLinks?: boolean;
+}
+
+export function SoftwareHeader({ showNavLinks = false }: SoftwareHeaderProps) {
   const t = useTranslations("software.SoftwareHeader");
-  const pathname = usePathname();
-  const isMainSoftwarePage = pathname === "/";
+
+  // The unreliable `usePathname` logic has been completely removed.
+  // const pathname = usePathname();
+  // const isMainSoftwarePage = pathname === "/";
 
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -50,13 +58,15 @@ export function SoftwareHeader() {
           <Terminal className="h-6 w-6" />
         </Link>
 
-        {isMainSoftwarePage && (
+        {/* --- THIS IS THE DEFINITIVE FIX (PART 2) --- */}
+        {/* The visibility of the nav links is now controlled by the new prop. */}
+        {showNavLinks && (
           <div className="hidden items-center gap-6 text-sm md:flex">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="font-bold text-muted-foreground transition-colors hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground"
               >
                 {link.label}
               </a>
@@ -69,7 +79,7 @@ export function SoftwareHeader() {
             <LanguageToggle />
             <ThemeToggle />
           </div>
-          <MobileNav navLinks={isMainSoftwarePage ? navLinks : undefined}>
+          <MobileNav navLinks={showNavLinks ? navLinks : undefined}>
             <LanguageToggle />
             <ThemeToggle />
           </MobileNav>

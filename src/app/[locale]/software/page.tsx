@@ -117,7 +117,7 @@ export default async function DevPage({
 
   return (
     <div className="relative flex min-h-dvh flex-col bg-background">
-      <SoftwareHeader />
+      <SoftwareHeader showNavLinks={true} />
       <main className="flex-1">
         <script
           type="application/ld+json"

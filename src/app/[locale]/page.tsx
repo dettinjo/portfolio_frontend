@@ -14,6 +14,18 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Joel Dettinger - Software & Photography",
     description:
       "The central portfolio hub for Joel Dettinger, showcasing professional work in software development and photography.",
+    icons: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/favicon-home-light.svg",
+        href: "/favicon-home-light.svg",
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/favicon-home-dark.svg",
+        href: "/favicon-home-dark.svg",
+      },
+    ],
     alternates: {
       canonical: `https://${rootDomain}`,
       languages: {

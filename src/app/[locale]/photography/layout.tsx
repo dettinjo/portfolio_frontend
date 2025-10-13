@@ -24,10 +24,18 @@ export async function generateMetadata({
       default: t("siteName"),
     },
     description: "Photography by Joel Dettinger",
-    icons: {
-      icon: { url: "/favicon-photography.svg", type: "image/svg+xml" },
-      shortcut: "/favicon-photography.svg",
-    },
+    icons: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/favicon-photography-light.svg",
+        href: "/favicon-photography-light.svg",
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/favicon-photography-dark.svg",
+        href: "/favicon-photography-dark.svg",
+      },
+    ],
   };
 }
 

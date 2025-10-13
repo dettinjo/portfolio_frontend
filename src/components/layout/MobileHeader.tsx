@@ -38,9 +38,6 @@ export function MobileNav({ navLinks, children }: MobileNavProps) {
             <SheetTitle>Mobile Navigation Menu</SheetTitle>
           </SheetHeader>
         </VisuallyHidden>
-
-        {/* --- THIS IS THE FIX --- */}
-        {/* The main container now pushes all content to the bottom-right */}
         <div className="flex h-full flex-col justify-end items-end p-0">
           <SheetClose asChild>
             <Button
@@ -52,8 +49,6 @@ export function MobileNav({ navLinks, children }: MobileNavProps) {
               <X className="h-6 w-6" />
             </Button>
           </SheetClose>
-
-          {/* This inner div stacks the nav and toggles */}
           <div className="flex flex-col items-end gap-8">
             {navLinks && navLinks.length > 0 && (
               <nav className="grid gap-6 text-lg font-medium text-right">
@@ -61,7 +56,7 @@ export function MobileNav({ navLinks, children }: MobileNavProps) {
                   <SheetClose asChild key={link.href}>
                     <a
                       href={link.href}
-                      className="font-bold text-muted-foreground transition-colors hover:text-foreground"
+                      className="text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {link.label}
                     </a>

@@ -36,13 +36,15 @@
   }
 
   .dark {
-    --background: 240 10% 10%;
+    /* --- THIS IS THE DEFINITIVE FIX --- */
+    --background: 240 5.9% 10%;
     --foreground: 240 10% 98%;
     
-    --card: 240 10% 10%;
+    /* Update card and popover for consistency */
+    --card: 240 5.9% 10%;
     --card-foreground: 240 10% 98%;
 
-    --popover: 240 10% 10%;
+    --popover: 240 5.9% 10%;
     --popover-foreground: 240 10% 98%;
 
     --primary: 240 10% 98%;
@@ -71,11 +73,9 @@
     @apply border-border;
   }
   
-  /* --- THE FIX IS HERE --- */
   html {
     scroll-behavior: smooth;
   }
-  /* ----------------------- */
   
   body {
     @apply bg-background text-foreground;
