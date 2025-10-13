@@ -10,13 +10,10 @@ import type { SoftwareProject } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
 import { cn } from "@/lib/utils";
 
-const STRAPI_URL =
-  process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
-
 interface ProjectsSectionProps {
   projects: SoftwareProject[];
   techDetailsMap: {
-    [key: string]: { iconClassName: string; url: string | null };
+    [key: string]: { iconClassName: string | null; url: string | null };
   };
 }
 

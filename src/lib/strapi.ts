@@ -1,6 +1,5 @@
 // portfolio-frontend/src/lib/strapi.ts
 import qs from "qs";
-import { type BlocksContent } from '@strapi/blocks-react-renderer';
 import { cache } from 'react';
 
 // --- Interfaces remain the same ---

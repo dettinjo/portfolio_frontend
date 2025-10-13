@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { Metadata } from "next";
-import { WithContext, SoftwareApplication } from "schema-d-ts";
+import { WithContext, SoftwareApplication } from "schema-dts";
 import {
   fetchSoftwareProjectBySlug,
   fetchAllProjectSlugs,
@@ -54,11 +54,6 @@ export default async function ProjectDetailPage({ params }: Props) {
     fetchSoftwareProjectBySlug(slug, locale),
     getTechDetailsMap(),
   ]);
-
-  console.log(
-    "--- [DEBUG] SERVER LOG: Fetched project data:",
-    JSON.stringify(project, null, 2)
-  );
 
   if (!project) {
     notFound();
