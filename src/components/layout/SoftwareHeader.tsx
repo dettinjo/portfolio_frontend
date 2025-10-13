@@ -9,18 +9,12 @@ import { MobileNav } from "./MobileHeader";
 import { Terminal } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
-// --- THIS IS THE DEFINITIVE FIX (PART 1) ---
-// We add a new prop to explicitly control the navigation links.
 interface SoftwareHeaderProps {
   showNavLinks?: boolean;
 }
 
 export function SoftwareHeader({ showNavLinks = false }: SoftwareHeaderProps) {
   const t = useTranslations("software.SoftwareHeader");
-
-  // The unreliable `usePathname` logic has been completely removed.
-  // const pathname = usePathname();
-  // const isMainSoftwarePage = pathname === "/";
 
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -50,18 +44,15 @@ export function SoftwareHeader({ showNavLinks = false }: SoftwareHeaderProps) {
       transition={{ duration: 0.35, ease: "easeInOut" }}
       className="sticky top-0 z-50 w-full bg-background"
     >
-      <nav className="container mx-auto flex h-14 items-center justify-between">
+      <nav className="container mx-auto flex h-14 items-center justify-between relative">
         <Link
           href="/"
           className="flex items-center gap-3 font-bold text-lg transition-opacity hover:opacity-80"
         >
           <Terminal className="h-6 w-6" />
         </Link>
-
-        {/* --- THIS IS THE DEFINITIVE FIX (PART 2) --- */}
-        {/* The visibility of the nav links is now controlled by the new prop. */}
         {showNavLinks && (
-          <div className="hidden items-center gap-6 text-sm md:flex">
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-6 text-sm">
             {navLinks.map((link) => (
               <a
                 key={link.href}

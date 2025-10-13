@@ -7,13 +7,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: t("title"),
-    icons: {
-      icon: {
-        url: "/favicon-home.svg", // Das "Haus"-Icon verwenden
-        type: "image/svg+xml",
+    icons: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/favicon-privacy-light.svg",
+        href: "/favicon-privacy-light.svg",
       },
-      shortcut: "/favicon-home.svg",
-    },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/favicon-privacy-dark.svg",
+        href: "/favicon-privacy-dark.svg",
+      },
+    ],
   };
 }
 
