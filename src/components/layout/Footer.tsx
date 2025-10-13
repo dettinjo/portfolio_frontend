@@ -3,10 +3,10 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 
 export function Footer() {
   const t = useTranslations("Footer");
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
 
   return (
     <footer className="border-t">
@@ -18,18 +18,20 @@ export function Footer() {
         </div>
 
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <Link
-            href="/imprint"
+          {/* --- THIS IS THE DEFINITIVE FIX (PART 3) --- */}
+          {/* We revert to standard `<a>` tags with fully-qualified, absolute URLs. */}
+          <a
+            href={`https://${rootDomain}/imprint`}
             className="transition-colors hover:text-foreground"
           >
             {t("imprint")}
-          </Link>
-          <Link
-            href="/privacy_policy"
+          </a>
+          <a
+            href={`https://${rootDomain}/privacy_policy`}
             className="transition-colors hover:text-foreground"
           >
             {t("privacy")}
-          </Link>
+          </a>
         </div>
       </div>
     </footer>
