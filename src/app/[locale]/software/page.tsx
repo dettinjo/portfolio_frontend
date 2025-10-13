@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { CollectionPage, WithContext } from "schema-dts";
-
+import { SoftwareHeader } from "@/components/layout/SoftwareHeader";
+import { Footer } from "@/components/layout/Footer";
 import { ContactSection } from "@/components/sections/software/ContactSection";
 import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
@@ -115,28 +116,32 @@ export default async function DevPage({
   };
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <HeroSection />
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="py-24">
-          <ProjectsSection
-            projects={cleanProjectsData}
-            techDetailsMap={techDetailsMap}
-          />
+    <div className="relative flex min-h-dvh flex-col bg-background">
+      <SoftwareHeader />
+      <main className="flex-1">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <HeroSection />
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="py-24">
+            <ProjectsSection
+              projects={cleanProjectsData}
+              techDetailsMap={techDetailsMap}
+            />
+          </div>
+          <ScrollIndicator href="#skills" />
+          <div className="py-24">
+            <SkillsSection skills={skillsForDisplay} />
+          </div>
+          <ScrollIndicator href="#kontakt" />
+          <div className="pt-24 pb-64 md:pb-96">
+            <ContactSection />
+          </div>
         </div>
-        <ScrollIndicator href="#skills" />
-        <div className="py-24">
-          <SkillsSection skills={skillsForDisplay} />
-        </div>
-        <ScrollIndicator href="#kontakt" />
-        <div className="pt-24 pb-64 md:pb-96">
-          <ContactSection />
-        </div>
-      </div>
-    </>
+      </main>
+      <Footer />
+    </div>
   );
 }
