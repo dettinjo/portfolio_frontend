@@ -1,12 +1,12 @@
-"use client"; // Required for the useTheme hook
+"use client";
 
 import React from "react";
 import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 export function Footer() {
   const t = useTranslations("Footer");
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
 
   return (
     <footer className="border-t">
@@ -18,18 +18,18 @@ export function Footer() {
         </div>
 
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <a
-            href={`https://${rootDomain}/imprint`}
+          <Link
+            href="/imprint"
             className="transition-colors hover:text-foreground"
           >
             {t("imprint")}
-          </a>
-          <a
-            href={`https://${rootDomain}/privacy_policy`}
+          </Link>
+          <Link
+            href="/privacy_policy"
             className="transition-colors hover:text-foreground"
           >
             {t("privacy")}
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
