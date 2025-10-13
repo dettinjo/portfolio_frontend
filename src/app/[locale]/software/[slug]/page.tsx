@@ -18,7 +18,6 @@ import {
 } from "@/lib/strapi";
 import { cn } from "@/lib/utils";
 import { LongTextRenderer } from "@/components/LongTextRenderer";
-// --- THIS IS THE DEFINITIVE FIX (PART 3) ---
 import { AlternateLinksProvider } from "@/context/AlternateLinksProvider";
 import { SoftwareHeader } from "@/components/layout/SoftwareHeader";
 import { Footer } from "@/components/layout/Footer";
@@ -63,12 +62,9 @@ export default async function ProjectDetailPage({ params }: Props) {
     notFound();
   }
 
-  // --- THIS IS THE DEFINITIVE FIX (PART 4) ---
-  // Create the map of locales to their corresponding full paths.
   const alternateSlugs: Record<string, string> = {};
   if (project.localizations) {
     for (const localization of project.localizations) {
-      // We store the full path, e.g., '/mein-deutscher-slug'
       alternateSlugs[localization.locale] = `/${localization.slug}`;
     }
   }
@@ -117,7 +113,6 @@ export default async function ProjectDetailPage({ params }: Props) {
   }
 
   return (
-    // This structure is now correct and will not cause duplication.
     <AlternateLinksProvider value={{ alternateSlugs }}>
       <div className="relative flex min-h-dvh flex-col bg-background">
         <SoftwareHeader />

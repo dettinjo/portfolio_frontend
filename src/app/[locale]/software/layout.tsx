@@ -1,5 +1,3 @@
-import { SoftwareHeader } from "@/components/layout/SoftwareHeader";
-import { Footer } from "@/components/layout/Footer";
 import React from "react";
 import { Metadata } from "next";
 
