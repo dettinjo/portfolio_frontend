@@ -20,14 +20,11 @@ export function HeroSection() {
       id="hero"
       className="relative flex min-h-screen items-center justify-center"
     >
-      {/* --- THIS IS THE FIX --- */}
-      {/* The breakpoint is changed from 'md:' to 'lg:' to activate the grid on larger screens */}
       <div className="max-w-6xl mx-auto px-6 flex flex-col-reverse items-center gap-12 text-center lg:grid lg:grid-cols-2 lg:text-left">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          // The alignment breakpoint is also changed to 'lg:'
           className="flex flex-col items-center lg:items-start"
         >
           <AnimatedGreeting />
@@ -41,18 +38,18 @@ export function HeroSection() {
           </div>
         </motion.div>
         <motion.div
-          // The justification breakpoint is also changed to 'lg:'
           className="flex justify-center lg:justify-end"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          {/* The avatar size is also adjusted for the new breakpoint */}
-          <Avatar className="h-56 w-56 border-4 border-foreground lg:size-[418px]">
+          {/* --- THIS IS THE FIX --- */}
+          {/* The background class is changed from `bg-background` to `bg-foreground` */}
+          <Avatar className="h-56 w-56 border-4 border-foreground lg:size-[418px] group bg-foreground transition-shadow duration-300 ease-in-out hover:shadow-[0_0_35px_5px_hsl(var(--foreground)/0.2)]">
             <AvatarImage
               src={avatarSrc}
               alt="Profile picture of Joel Dettinger"
-              className="object-cover object-top scale-[1.2] origin-bottom"
+              className="object-cover object-top scale-[1.2] origin-bottom transition-transform duration-300 ease-in-out group-hover:scale-[1.25]"
             />
             <AvatarFallback>My Picture</AvatarFallback>
           </Avatar>
