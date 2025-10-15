@@ -13,7 +13,6 @@ interface ProjectGalleryProps {
 }
 
 export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
-  // --- DEFINITIVE FIX: Use the 'software' namespace ---
   const t = useTranslations("software.ProjectGallery");
 
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -73,18 +72,23 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
               startAlbumIndex={0}
               startPhotoIndex={index}
             >
-              <div className="group/image relative aspect-video w-full flex-shrink-0 snap-center cursor-pointer">
-                <Image
-                  src={imgSrc}
-                  alt={t("thumbnailAlt", {
-                    index: index + 1,
-                    prefix: altPrefix,
-                  })}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 75vw, 896px"
-                  className="object-cover transition-transform duration-300 group-hover/image:scale-105"
-                  priority={index === 0}
-                />
+              {/* --- THIS IS THE FIX (Part 1): The outer box now has consistent padding --- */}
+              <div className="group/image relative aspect-video w-full flex-shrink-0 snap-center cursor-pointer p-8">
+                {/* --- THIS IS THE FIX (Part 2): A new inner div acts as the image's frame --- */}
+                <div className="relative w-full h-full">
+                  <Image
+                    src={imgSrc}
+                    alt={t("thumbnailAlt", {
+                      index: index + 1,
+                      prefix: altPrefix,
+                    })}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 75vw, 896px"
+                    className="object-contain transition-transform duration-300 group-hover/image:scale-105"
+                    priority={index === 0}
+                  />
+                </div>
+                {/* This overlay correctly covers the entire padded, clickable area */}
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
                   <ZoomIn className="h-10 w-10 text-white" />
                 </div>

@@ -39,46 +39,38 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
           const imageUrl =
             getStrapiMedia(coverImage?.url) || "/placeholder.jpg";
 
-          const width = coverImage?.width || 16;
-          const height = coverImage?.height || 9;
-          const aspectRatio = width / height;
-
-          const isWideScreenshot = aspectRatio > 1.4;
-          const isPhoneMockup = aspectRatio < 0.7;
-          const isIcon = !isWideScreenshot && !isPhoneMockup;
-
           return (
             <AnimatedLink
               key={id}
               href={`/${slug}`}
-              // --- DEFINITIVE FIX 1: Enforce a minimum height on the entire card ---
               className="flex flex-col md:flex-row min-h-[410px] group rounded-xl overflow-hidden transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background hover:bg-foreground"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
+              {/* Box 1: The Padded Image Container */}
               <div
                 className={cn(
-                  "relative flex items-center justify-center md:w-1/2 min-h-[250px] md:min-h-0",
-                  isIcon && "p-16",
-                  isPhoneMockup && "p-8",
+                  "md:w-1/2 p-10 md:p-16", // Consistent padding is here
                   index % 2 === 1 ? "md:order-last" : ""
                 )}
               >
-                <Image
-                  src={imageUrl}
-                  alt={`Preview for ${title}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className={cn(
-                    isWideScreenshot ? "object-cover" : "object-contain"
-                  )}
-                />
+                {/* --- THIS IS THE FIX: A new inner div to act as the image's frame --- */}
+                <div className="relative w-full h-full">
+                  <Image
+                    src={imageUrl}
+                    alt={`Preview for ${title}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    // The image now correctly contains within the inner div
+                    className="object-contain"
+                  />
+                </div>
               </div>
 
-              {/* --- DEFINITIVE FIX 2: Re-establish the correct flexbox structure for spacing --- */}
-              <div className="flex flex-col p-10 md:p-16 md:w-1/2 group-hover:text-background">
+              {/* Box 2: The Text Container (This layout is correct) */}
+              <div className="flex flex-col md:w-1/2 p-10 md:p-16 group-hover:text-background">
                 <div className="flex-grow">
                   <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase group-hover:text-background">
                     {projectType}
@@ -90,8 +82,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                     {description}
                   </p>
                 </div>
-
-                <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-background">
+                <div className="flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-background">
                   <span>{t("button_details")}</span>
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </div>

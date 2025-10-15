@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Workflow, Server, Code } from "lucide-react";
 import { ProficiencyDots } from "@/components/ProficiencyDots";
 import { useTranslations } from "next-intl";
 
@@ -20,11 +19,7 @@ interface SkillsGridProps {
   skills: SkillCategory[];
 }
 
-const categoryDetails = {
-  Frontend: { icon: <Code className="h-8 w-8 text-foreground" /> },
-  Backend: { icon: <Server className="h-8 w-8 text-foreground" /> },
-  "DevOps & Tools": { icon: <Workflow className="h-8 w-8 text-foreground" /> },
-};
+// ...existing code...
 
 export function SkillsGrid({ skills }: SkillsGridProps) {
   const t = useTranslations("software.SoftwareSkillsSection");
@@ -55,17 +50,11 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
           <Card className="h-full border-0 shadow-none bg-transparent hover:shadow-none flex flex-col gap-4">
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                {
-                  categoryDetails[
-                    category.category as keyof typeof categoryDetails
-                  ]?.icon
-                }
-                <CardTitle className="text-2xl">
-                  {getCategoryTitle(category.category)}
-                </CardTitle>
-              </div>
+            <CardHeader className="flex justify-center items-center">
+              {/* Icon removed: centered category title */}
+              <CardTitle className="text-2xl text-center">
+                {getCategoryTitle(category.category)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4">
@@ -75,7 +64,7 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
                     href={skill.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex cursor-pointer items-center justify-between gap-3 rounded-lg border-2 border-foreground p-3 transition-colors duration-200 hover:bg-foreground"
+                    className="group flex cursor-pointer items-center justify-between gap-3 rounded-lg p-3 transition-colors duration-200 hover:bg-foreground"
                   >
                     <div className="flex items-center gap-3">
                       <i
@@ -96,3 +85,4 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
     </div>
   );
 }
+// ...existing code...
