@@ -49,21 +49,25 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {/* Box 1: The Padded Image Container */}
+              {/* --- THIS IS THE FIX --- */}
               <div
                 className={cn(
-                  "md:w-1/2 p-10 md:p-16", // Consistent padding is here
+                  // 1. Add a fixed height on mobile screens (e.g., h-64 which is 256px)
+                  "h-64",
+                  // 2. Reset the height on medium screens so flexbox can take over
+                  "md:h-auto md:w-1/2",
+                  // 3. Slightly reduce padding on mobile for more image space
+                  "p-8 md:p-16",
+                  // The existing order logic remains unchanged
                   index % 2 === 1 ? "md:order-last" : ""
                 )}
               >
-                {/* --- THIS IS THE FIX: A new inner div to act as the image's frame --- */}
                 <div className="relative w-full h-full">
                   <Image
                     src={imageUrl}
                     alt={`Preview for ${title}`}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    // The image now correctly contains within the inner div
                     className="object-contain"
                   />
                 </div>
