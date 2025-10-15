@@ -74,12 +74,10 @@ export default async function DevPage({
 }) {
   const { locale } = await params;
 
-  const [projectsData, skillsDataForDisplay, techDetailsMap] =
-    await Promise.all([
-      fetchSoftwareProjects(locale),
-      fetchSkillCategories(locale),
-      getTechDetailsMap(),
-    ]);
+  const [projectsData, skillsDataForDisplay] = await Promise.all([
+    fetchSoftwareProjects(locale),
+    fetchSkillCategories(locale),
+  ]);
 
   const t = await getTranslations({
     locale: locale,
@@ -126,10 +124,7 @@ export default async function DevPage({
         <HeroSection />
         <div className="max-w-6xl mx-auto px-6">
           <div className="py-24">
-            <ProjectsSection
-              projects={cleanProjectsData}
-              techDetailsMap={techDetailsMap}
-            />
+            <ProjectsSection projects={cleanProjectsData} />
           </div>
           <ScrollIndicator href="#skills" />
           <div className="py-24">

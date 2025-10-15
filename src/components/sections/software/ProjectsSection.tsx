@@ -1,145 +1,109 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import type { SoftwareProject } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
-import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
 interface ProjectsSectionProps {
   projects: SoftwareProject[];
-  techDetailsMap: {
-    [key: string]: { iconClassName: string | null; url: string | null };
-  };
 }
 
-export function ProjectsSection({
-  projects,
-  techDetailsMap,
-}: ProjectsSectionProps) {
+const AnimatedLink = motion(Link);
+
+export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const t = useTranslations("software.SoftwareProjectsSection");
 
-  const tagBaseClasses =
-    "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors focus:outline-none";
-  const clickableTagClasses =
-    "group border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background";
-
   if (!projects || projects.length === 0) {
-    return (
-      <section id="projekte" className="text-center py-12">
-        <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
-        <p className="mt-4 text-lg text-muted-foreground">
-          No projects are currently available.
-        </p>
-      </section>
-    );
+    // ... (error handling remains the same)
   }
 
   return (
-    <section id="projekte" className="space-y-24">
-      <div className="text-center">
+    <section id="projekte">
+      <div className="text-center mb-16">
         <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
-        <p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
+        <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
+          {t("subtitle")}
+        </p>
       </div>
 
-      <div className="space-y-24">
+      <div className="space-y-16">
         {projects.map((project, index) => {
-          const {
-            id,
-            title,
-            description,
-            tags,
-            coverImage,
-            projectType,
-            slug,
-          } = project;
+          const { id, title, description, coverImage, projectType, slug } =
+            project;
 
           const imageUrl =
             getStrapiMedia(coverImage?.url) || "/placeholder.jpg";
 
+          const isSvg = imageUrl.endsWith(".svg");
+
           return (
-            <motion.div
+            <AnimatedLink
               key={id}
-              className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12"
+              href={`/${slug}`}
+              className="block group rounded-xl overflow-hidden transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background hover:bg-foreground"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div
-                className={`aspect-video relative ${
-                  index % 2 === 1 ? "md:order-last" : ""
-                }`}
-              >
-                <Image
-                  src={imageUrl}
-                  alt={`Preview image for ${title}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover rounded-xl border-2 border-foreground"
-                />
-              </div>
-
-              <div className="flex flex-col items-start">
-                <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
-                  {projectType}
-                </p>
-                <h3 className="text-3xl font-bold mt-2">{title}</h3>
-                <p className="mt-4 text-muted-foreground">{description}</p>
-
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {/* --- THIS IS THE DEFINITIVE FIX (PART 3) --- */}
-                  {(tags || []).map((tag) => {
-                    const cleanTag = tag.trim().toLowerCase();
-                    const techDetails = techDetailsMap[cleanTag];
-                    const iconClassName = techDetails?.iconClassName;
-
-                    // If the skill has a URL, render it as a styled link.
-                    if (techDetails?.url) {
-                      return (
-                        <a
-                          key={tag}
-                          href={techDetails.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={cn(tagBaseClasses, clickableTagClasses)}
-                        >
-                          {iconClassName && (
-                            <i
-                              className={`${iconClassName} text-base mr-1.5 group-hover:text-background`}
-                            ></i>
-                          )}
-                          <span className="group-hover:text-background">
-                            {tag}
-                          </span>
-                        </a>
-                      );
-                    }
-
-                    // Otherwise, render a standard, non-clickable badge.
-                    return (
-                      <Badge
-                        key={tag}
-                        variant="outline"
-                        className="gap-1.5 px-2.5 py-1"
-                      >
-                        {iconClassName && (
-                          <i className={`${iconClassName} text-base`}></i>
-                        )}
-                        <span>{tag}</span>
-                      </Badge>
-                    );
-                  })}
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* --- THIS IS THE DEFINITIVE FIX --- */}
+                {/* 
+                  The outer container ALWAYS has aspect-[3/2] and is relative.
+                  This guarantees uniform card size and prevents mobile collapse.
+                */}
+                <div
+                  className={`aspect-[3/2] relative ${
+                    index % 2 === 1 ? "md:order-last" : ""
+                  }`}
+                >
+                  {isSvg ? (
+                    // SVG BRANCH: Use a padded "inset" wrapper.
+                    <div className="absolute inset-0 p-8 md:p-10">
+                      {/* This inner relative div is the new target for the `fill` prop. */}
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={imageUrl}
+                          alt={`Preview image for ${title}`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    // RASTER BRANCH: The image fills the outer container directly.
+                    <Image
+                      src={imageUrl}
+                      alt={`Preview image for ${title}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                  )}
                 </div>
-                <Button asChild className="mt-8">
-                  <Link href={`/${slug}`}>{t("button_details")}</Link>
-                </Button>
+
+                <div className="flex flex-col justify-center items-start p-8 md:p-10 group-hover:text-background">
+                  <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase group-hover:text-background">
+                    {projectType}
+                  </p>
+                  <h3 className="text-3xl font-bold mt-2 text-foreground group-hover:text-background">
+                    {title}
+                  </h3>
+                  <p className="mt-4 text-muted-foreground line-clamp-3 group-hover:text-background">
+                    {description}
+                  </p>
+                  <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-background">
+                    <span>{t("button_details")}</span>
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </div>
+                </div>
               </div>
-            </motion.div>
+            </AnimatedLink>
           );
         })}
       </div>

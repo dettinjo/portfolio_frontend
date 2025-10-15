@@ -95,7 +95,10 @@ export async function fetchSkillCategories(locale?: string): Promise<SkillCatego
 
 
 export async function fetchSoftwareProjects(locale?: string): Promise<SoftwareProject[]> {
-  return fetchAPI<SoftwareProject[]>('/software-projects', { populate: { coverImage: true, gallery: true } }, {}, locale);
+  return fetchAPI<SoftwareProject[]>('/software-projects', { 
+    populate: { coverImage: true, gallery: true },
+    sort: 'developedAt:desc' 
+  }, {}, locale);
 }
 
 export async function fetchSoftwareProjectBySlug(slug: string, locale?: string): Promise<SoftwareProject | null> {
