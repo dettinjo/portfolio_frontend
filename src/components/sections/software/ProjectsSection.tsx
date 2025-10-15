@@ -7,9 +7,12 @@ import { motion } from "framer-motion";
 import type { SoftwareProject } from "@/lib/strapi";
 import { getStrapiMedia } from "@/lib/strapi";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ProjectsSectionProps {
   projects: SoftwareProject[];
+  // --- THIS IS THE DEFINITIVE FIX (PART 2) ---
+  // The longestDescription prop is removed from the interface.
 }
 
 const AnimatedLink = motion(Link);
@@ -18,7 +21,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const t = useTranslations("software.SoftwareProjectsSection");
 
   if (!projects || projects.length === 0) {
-    // ... (error handling remains the same)
+    // ...
   }
 
   return (
@@ -50,50 +53,36 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* --- THIS IS THE DEFINITIVE FIX --- */}
-                {/* 
-                  The outer container ALWAYS has aspect-[3/2] and is relative.
-                  This guarantees uniform card size and prevents mobile collapse.
-                */}
+              {/* items-stretch is the default for grid, keeping equal height columns */}
+              <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+                {/* --- THIS IS THE DEFINITIVE FIX (PART 3) --- */}
+                {/* Image container reverts to the last known working layout, removing the complex nested solution. */}
                 <div
-                  className={`aspect-[3/2] relative ${
+                  className={cn(
+                    "relative flex items-center justify-center",
                     index % 2 === 1 ? "md:order-last" : ""
-                  }`}
-                >
-                  {isSvg ? (
-                    // SVG BRANCH: Use a padded "inset" wrapper.
-                    <div className="absolute inset-0 p-8 md:p-10">
-                      {/* This inner relative div is the new target for the `fill` prop. */}
-                      <div className="relative w-full h-full">
-                        <Image
-                          src={imageUrl}
-                          alt={`Preview image for ${title}`}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    // RASTER BRANCH: The image fills the outer container directly.
-                    <Image
-                      src={imageUrl}
-                      alt={`Preview image for ${title}`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
-                    />
                   )}
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={`Preview image for ${title}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className={cn(
+                      isSvg ? "object-contain p-8 md:p-12" : "object-cover"
+                    )}
+                  />
                 </div>
 
-                <div className="flex flex-col justify-center items-start p-8 md:p-10 group-hover:text-background">
+                <div className="flex flex-col justify-center items-start p-8 md:p-12 group-hover:text-background">
                   <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase group-hover:text-background">
                     {projectType}
                   </p>
                   <h3 className="text-3xl font-bold mt-2 text-foreground group-hover:text-background">
                     {title}
                   </h3>
+                  {/* --- THIS IS THE DEFINITIVE FIX (PART 4) --- */}
+                  {/* Restore line-clamp-3 for clean visual flow, accepting natural height differences. */}
                   <p className="mt-4 text-muted-foreground line-clamp-3 group-hover:text-background">
                     {description}
                   </p>
