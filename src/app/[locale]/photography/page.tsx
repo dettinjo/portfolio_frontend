@@ -26,6 +26,7 @@ export default async function PhotographyPage({ params }: Props) {
   const t = await getTranslations("photography.PhotographyPage");
   const rawAlbums = await fetchAlbums(locale);
   const rawTestimonials = await fetchTestimonials(locale);
+  const profileName = process.env.NEXT_PUBLIC_FULL_NAME || "Photographer";
 
   const albums = rawAlbums
     .filter((album) => album && album.slug)
@@ -59,9 +60,9 @@ export default async function PhotographyPage({ params }: Props) {
   return (
     <div className="container mx-auto max-w-5xl py-12 px-4 md:py-24">
       <ProfileHeaderSection
-        name={profileData.name}
+        name={profileName}
         bio={t("profileBio")}
-        avatarSrc={profileData.avatarSrc}
+        avatarSrc={"/images/profile.png"}
       />
 
       <PhotographyTabs

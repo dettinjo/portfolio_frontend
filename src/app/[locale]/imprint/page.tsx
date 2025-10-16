@@ -25,7 +25,32 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Imprintage() {
   const t = await getTranslations("ImprintPage");
 
-  // Helper-Komponente für strukturierten Inhalt
+  const values = {
+    name: process.env.NEXT_PUBLIC_FULL_NAME || "",
+    street: process.env.NEXT_PUBLIC_STREET_ADDRESS || "",
+    city: process.env.NEXT_PUBLIC_CITY_ADDRESS || "",
+    phone: process.env.NEXT_PUBLIC_PHONE_NUMBER || "[Not specified]",
+    email: process.env.NEXT_PUBLIC_EMAIL_ADDRESS || "",
+  };
+
+  // 2. Build the content arrays by calling `t()` for each line and passing the values
+  const section1Content = [
+    t("section1_content.name", values),
+    t("section1_content.street", values),
+    t("section1_content.city", values),
+    t("section1_content.country"), // This line has no variable
+  ];
+
+  const section2Content = [
+    t("section2_content.phone", values),
+    t("section2_content.email", values),
+  ];
+
+  const section3Content = [
+    t("section3_content.name", values),
+    t("section3_content.address", values),
+  ];
+
   const ContentBlock = ({
     title,
     content,
@@ -47,18 +72,9 @@ export default async function Imprintage() {
         {t("title")}
       </h1>
       <div className="mt-8 space-y-8 text-muted-foreground">
-        <ContentBlock
-          title={t("section1_title")}
-          content={t.raw("section1_content")}
-        />
-        <ContentBlock
-          title={t("section2_title")}
-          content={t.raw("section2_content")}
-        />
-        <ContentBlock
-          title={t("section3_title")}
-          content={t.raw("section3_content")}
-        />
+        <ContentBlock title={t("section1_title")} content={section1Content} />
+        <ContentBlock title={t("section2_title")} content={section2Content} />
+        <ContentBlock title={t("section3_title")} content={section3Content} />
         <div>
           <h2 className="text-2xl font-semibold">{t("disclaimer_title")}</h2>
           <div className="mt-4 space-y-4">

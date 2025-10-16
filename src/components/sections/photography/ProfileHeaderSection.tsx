@@ -39,13 +39,13 @@ export function ProfileHeaderSection({
         <div className="mt-6 flex items-center justify-center md:justify-start">
           <Button asChild variant="secondary">
             <a
-              href="https://instagram.com/joeldettinger"
+              href={`https://instagram.com/${process.env.NEXT_PUBLIC_INSTAGRAM_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Instagram profile for @joeldettinger"
+              aria-label={`Instagram profile for @${process.env.NEXT_PUBLIC_INSTAGRAM_USERNAME}`}
             >
-              <Instagram className="mr-2 h-4 w-4" />
-              @joeldettinger
+              <Instagram className="mr-2 h-4 w-4" />@
+              {process.env.NEXT_PUBLIC_INSTAGRAM_USERNAME}
             </a>
           </Button>
         </div>

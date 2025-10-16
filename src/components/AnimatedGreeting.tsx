@@ -6,7 +6,10 @@ import { useTranslations } from "next-intl";
 
 export function AnimatedGreeting() {
   const t = useTranslations("software.SoftwareHeroSection");
-  const greetingText = t("greeting");
+
+  const fullName = process.env.NEXT_PUBLIC_FULL_NAME || "";
+  const firstName = fullName.split(" ")[0];
+  const greetingText = t("greeting", { name: firstName });
 
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));

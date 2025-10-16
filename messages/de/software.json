@@ -5,7 +5,7 @@
     "contact": "Kontakt"
   },
   "SoftwareHeroSection": {
-    "greeting": "Hi, ich bin Joel",
+    "greeting": "Hi, ich bin {name}",
     "intro": "Ein Full-Stack Entwickler mit einer Leidenschaft für die Gestaltung und Realisierung von robusten, skalierbaren und benutzerfreundlichen Webanwendungen.",
     "button_projects": "Schau dir meine Arbeit an"
   },

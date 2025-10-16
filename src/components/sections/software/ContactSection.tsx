@@ -23,9 +23,8 @@ export function ContactSection() {
 
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT!,
+        `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`,
         {
-          // <-- REPLACE WITH YOUR FORMSPREE ID
           method: "POST",
           body: formData,
           headers: {
@@ -62,7 +61,7 @@ export function ContactSection() {
           <div className="mt-8 flex items-center justify-start gap-4">
             <p className="text-sm text-muted-foreground">{t("socials_text")}</p>
             <a
-              href="https://github.com/dettinjo"
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -70,7 +69,7 @@ export function ContactSection() {
               <Github className="h-6 w-6 text-muted-foreground transition-colors hover:text-foreground" />
             </a>
             <a
-              href="https://linkedin.com/in/joeldettinger/"
+              href={`https://linkedin.com/in/${process.env.NEXT_PUBLIC_LINKEDIN_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -78,7 +77,7 @@ export function ContactSection() {
               <Linkedin className="h-6 w-6 text-muted-foreground transition-colors hover:text-foreground" />
             </a>
             <a
-              href="https://instagram.com/[your-handle]"
+              href={`https://instagram.com/${process.env.NEXT_PUBLIC_INSTAGRAM_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"

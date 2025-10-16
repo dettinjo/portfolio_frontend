@@ -30,8 +30,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Environment Variables
+# Ignore all local environment files that contain sensitive secrets.
 .env*
+
+# But DO NOT ignore the example template file. The '!' negates the rule.
+# This file should always be committed to the repository.
+!.env.example
 
 # vercel
 .vercel

@@ -8,10 +8,12 @@ import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
 import { SkillsSection } from "@/components/sections/software/SkillsSection";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
+// --- THIS IS THE FIX (PART 1) ---
+// Import the new BackToTopButton component
+import { BackToTopButton } from "@/components/ui/BackToTopButton";
 import {
   fetchSoftwareProjects,
   fetchSkillCategories,
-  getTechDetailsMap,
   type Skill,
 } from "@/lib/strapi";
 
@@ -137,6 +139,9 @@ export default async function DevPage({
         </div>
       </main>
       <Footer />
+      {/* --- THIS IS THE FIX (PART 2) --- */}
+      {/* Add the button here, outside the main content flow */}
+      <BackToTopButton />
     </div>
   );
 }

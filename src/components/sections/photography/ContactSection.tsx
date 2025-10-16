@@ -25,7 +25,7 @@ export function ContactSection() {
 
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT!,
+        `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`,
         {
           method: "POST",
           body: formData,
@@ -65,12 +65,12 @@ export function ContactSection() {
             </p>
             <Button asChild variant="secondary">
               <a
-                href="https://instagram.com/joeldettinger"
+                href={`https://instagram.com/${process.env.NEXT_PUBLIC_INSTAGRAM_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Instagram className="mr-2 h-4 w-4" />
-                @joeldettinger
+                <Instagram className="mr-2 h-4 w-4" />@
+                {process.env.NEXT_PUBLIC_INSTAGRAM_USERNAME}
               </a>
             </Button>
           </div>

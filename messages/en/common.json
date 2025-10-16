@@ -19,22 +19,22 @@
   "ImprintPage": {
     "title": "Imprint",
     "section1_title": "Information pursuant to § 5 TMG",
-    "section1_content": [
-      "[Your Name]",
-      "[Your Street and House Number]",
-      "[Your Postal Code and City]",
-      "Germany"
-    ],
+     "section1_content": {
+      "name": "{name}",
+      "street": "{street}",
+      "city": "{city}",
+      "country": "Germany"
+    },
     "section2_title": "Contact",
-    "section2_content": [
-      "Phone: [Your Phone Number (optional)]",
-      "Email: [Your Email Address]"
-    ],
+    "section2_content": {
+      "phone": "Phone: {phone}",
+      "email": "Email: {email}"
+    },
     "section3_title": "Person responsible for content pursuant to § 18 Abs. 2 MStV",
-    "section3_content": [
-      "[Your Name]",
-      "[Your Address, if different from above]"
-    ],
+    "section3_content": {
+      "name": "{name}",
+      "address": "{street}, {city}"
+    },
     "disclaimer_title": "Disclaimer",
     "disclaimer_links_title": "Liability for Links",
     "disclaimer_links_content": "Our site contains links to external third-party websites, over whose content we have no influence. Therefore, we cannot assume any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages.",
@@ -46,12 +46,12 @@
     "section1_title": "1. Data Protection at a Glance",
     "section1_content": "This privacy policy informs you about the nature, scope, and purpose of the processing of personal data on our website.",
     "section2_title": "Data Controller",
-    "section2_content": [
-      "[Your Name]",
-      "[Your Street and House Number]",
-      "[Your Postal Code and City]",
-      "Email: [Your Email Address]"
-    ],
+    "section2_content": {
+      "name": "{name}",
+      "street": "{street}",
+      "city": "{city}",
+      "email": "Email: {email}"
+    },
     "section3_title": "2. Data Collection on This Website",
     "section3_hosting_title": "Hosting and Server Log Files",
     "section3_hosting_content": "Our website is hosted by Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA. Vercel automatically collects information in server log files each time the website is accessed. This data is not merged with other data sources. The basis for this data processing is Art. 6(1)(f) GDPR.",
@@ -59,6 +59,10 @@
     "section3_analytics_content": "We use the services Vercel Analytics and Speed Insights from our host, Vercel Inc. These services are designed to be privacy-friendly, do not collect personal data that would allow for user identification, and do not use cookies. The legal basis is our legitimate interest (Art. 6(1)(f) GDPR) in the analysis and optimization of our website.",
     "section3_contact_title": "Contact Form via Formspree",
     "section3_contact_content": "When you use our contact form, your provided information is transmitted to and processed by the service provider Formspree, Inc., 1201 Orange St, Ste 600, Wilmington, DE 19801, USA, to handle your request. The processing of this data is based on your consent (Art. 6(1)(a) GDPR).",
+    "section3_recaptcha_title": "Spam Protection via Google reCAPTCHA",
+    "section3_recaptcha_content": "To protect submission forms on this site, we use the reCAPTCHA service provided by Google LLC. This service determines whether a given submission was made by a human or by an automated process. This processing is based on our legitimate interest (Art. 6(1)(f) GDPR) in preventing spam and abuse. For this purpose, your IP address and other data required by the reCAPTCHA service may be transferred to Google.",
+    "section3_testimonials_title": "Submission of Testimonials/Reviews",
+    "section3_testimonials_content": "If you use our form to submit a testimonial, the data you provide (name, organization/event, your review, ratings, and optionally an uploaded photo) will be transmitted to and stored in our backend system (Strapi CMS) for the purpose of reviewing and publishing your feedback on our website. This data is processed based on your consent (Art. 6(1)(a) GDPR), which you give by submitting the form.",
     "section4_title": "3. Your Rights as a Data Subject",
     "section4_content": "Within the framework of the applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipients, and the purpose of the data processing, and, if applicable, a right to correction or deletion of this data."
   }
