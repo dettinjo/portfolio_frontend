@@ -45,9 +45,10 @@ export default async function HomePage() {
   const photographyDomain =
     process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || "photosby.joeldettinger.de";
 
-  // This class perfectly captures the inverting hover effect you wanted.
+  // --- THIS IS THE FIX ---
+  // The `border-2` and `border-foreground` classes have been removed.
   const linkClassName =
-    "group flex flex-col items-center justify-center gap-6 rounded-xl border-2 border-foreground bg-transparent p-16 transition-all duration-300 text-foreground hover:scale-105 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    "group flex flex-col items-center justify-center gap-6 rounded-xl bg-transparent p-16 transition-all duration-300 text-foreground hover:scale-105 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
   return (
     <div className="relative flex min-h-dvh flex-col bg-background">
