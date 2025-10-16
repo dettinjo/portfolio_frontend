@@ -37,9 +37,14 @@ export function TestimonialsSection({
       <div className="mb-12 text-center">
         <h2 className="text-3xl font-bold">{t("title")}</h2>
         <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
-        <div className="mt-6 flex items-center justify-center gap-2">
-          <Star className="h-6 w-6 fill-foreground text-foreground" />
-          <span className="text-xl font-bold">{totalAverage.toFixed(1)}</span>
+
+        <div className="mt-6 flex flex-col items-center justify-center gap-2">
+          <div className="flex items-center gap-2">
+            <Star className="h-8 w-8 fill-foreground text-foreground" />
+            <span className="text-3xl font-bold">
+              {totalAverage.toFixed(1)}
+            </span>
+          </div>
           <span className="text-muted-foreground">
             {t("averageRatingText", { count: totalReviews })}
           </span>
@@ -89,7 +94,7 @@ export function TestimonialsSection({
                         src={item.avatar ? item.avatar : undefined}
                         alt={item.name}
                       />
-                      <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback />
                     </Avatar>
                     <div>
                       <p className="font-semibold text-background">

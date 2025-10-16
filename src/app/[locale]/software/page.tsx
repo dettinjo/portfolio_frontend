@@ -80,7 +80,7 @@ export default async function DevPage({ params }: Props) {
     .filter((cat) => cat && Array.isArray(cat.skills))
     .map((cat) => ({
       category: cat.name,
-      skills: cat.skills.map((skill: Skill) => skill),
+      skills: [...cat.skills].sort((a, b) => b.level - a.level),
     }));
 
   const cleanProjectsData = projectsData.filter(Boolean);

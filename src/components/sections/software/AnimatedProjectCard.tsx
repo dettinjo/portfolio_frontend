@@ -46,19 +46,21 @@ export function AnimatedProjectCard({
       ref={cardRef}
       href={`/${slug}`}
       data-active={isActive}
-      // --- THIS IS THE FIX (PART 1) ---
-      // Add the `group` class here. This allows child elements to be styled
-      // based on the state of this parent component.
       className={cn(
-        "group flex flex-col md:flex-row min-h-[410px] rounded-xl overflow-hidden",
-        "transition-colors duration-500 ease-in-out",
+        "group flex flex-col md:flex-row min-h-[410px] rounded-xl overflow-hidden shadow-lg",
+        "transition-all duration-300 ease-in-out hover:shadow-2xl",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background",
         "data-[active=true]:bg-foreground"
       )}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      animate={{ scale: isActive ? 1.02 : 1 }}
+      // --- THIS IS THE FIX ---
+      // The duration has been reduced from 0.3 to 0.15 for a faster animation
+      transition={{ duration: 0.15 }}
+      whileHover={{ scale: 1.02 }}
+      whileFocus={{ scale: 1.02 }}
     >
       {/* Image Container */}
       <div
@@ -78,8 +80,7 @@ export function AnimatedProjectCard({
         </div>
       </div>
 
-      {/* --- THIS IS THE FIX (PART 2) --- */}
-      {/* All `data-[active=true]` variants are changed to `group-data-[active=true]` */}
+      {/* Text Content */}
       <div className="flex flex-col md:w-1/2 p-10 md:p-16">
         <div className="flex-grow">
           <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase transition-colors duration-500 group-data-[active=true]:text-background/70">

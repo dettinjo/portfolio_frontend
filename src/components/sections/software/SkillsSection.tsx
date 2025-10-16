@@ -1,9 +1,12 @@
-// This is a clean Server Component. It has no "use client" directive.
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { useState, useRef } from "react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { SkillsGrid } from "./SkillsGrid";
 import { ProficiencyLegend } from "@/components/ProficiencyLegend";
+import { cn } from "@/lib/utils";
 
-// Interface definitions for the data it will receive from the page
 interface Skill {
   name: string;
   iconClassName: string;
@@ -18,23 +21,46 @@ interface SkillsSectionProps {
   skills: SkillCategory[];
 }
 
-// The component is async so it can fetch its own translations
-export async function SkillsSection({ skills }: SkillsSectionProps) {
-  // It fetches ONLY the translations it is directly responsible for.
-  const t = await getTranslations("software.SoftwareSkillsSection");
+export function SkillsSection({ skills }: SkillsSectionProps) {
+  const t = useTranslations("software.SoftwareSkillsSection");
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Set active when the component is between 20% and 80% visible in the viewport
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setIsActive(latest > 0.2 && latest < 0.8);
+  });
 
   return (
-    <section id="skills">
+    <section id="skills" ref={sectionRef}>
       <div className="text-center mb-16">
         <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
           {t("subtitle")}
         </p>
       </div>
-      <SkillsGrid skills={skills} />
-      <div className="mt-16">
-        <ProficiencyLegend />
-      </div>
+
+      <motion.div
+        data-active={isActive}
+        className={cn(
+          "group rounded-xl p-8 md:p-12 transition-all duration-300",
+          // --- THIS IS THE FIX ---
+          // The shadow-2xl class has been removed from the active state
+          "data-[active=true]:bg-foreground"
+        )}
+        animate={{ scale: isActive ? 1.02 : 1 }}
+        transition={{ duration: 0.15 }}
+      >
+        <SkillsGrid skills={skills} />
+        <div className="mt-16">
+          <ProficiencyLegend />
+        </div>
+      </motion.div>
     </section>
   );
 }

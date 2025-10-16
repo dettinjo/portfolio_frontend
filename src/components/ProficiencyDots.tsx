@@ -18,13 +18,13 @@ export function ProficiencyDots({ level, maxLevel = 5 }: ProficiencyDotsProps) {
         return (
           <span
             key={dotLevel}
-            // This pure Tailwind approach now works because the CSS variables are correct.
+            // --- THIS IS THE FIX ---
             className={`
               h-2 w-2 rounded-full transition-colors duration-200
               ${
                 isFilled
-                  ? "bg-foreground group-hover:bg-background" // Filled: ink -> paper
-                  : "bg-muted group-hover:bg-background/30" // Empty: muted gray -> 30% paper
+                  ? "bg-foreground group-hover/item:bg-background group-data-[active=true]:bg-background group-data-[active=true]:group-hover/item:bg-foreground"
+                  : "bg-muted group-hover/item:bg-background/30 group-data-[active=true]:bg-background/30 group-data-[active=true]:group-hover/item:bg-foreground/30"
               }
             `}
           />

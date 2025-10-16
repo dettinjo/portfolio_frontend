@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, StarHalf } from "lucide-react"; // StarHalf is still needed
+import { Star, StarHalf } from "lucide-react";
 
 interface RatingStarsProps {
   rating: number;
@@ -8,45 +8,37 @@ interface RatingStarsProps {
 }
 
 export function RatingStars({ rating, max = 5 }: RatingStarsProps) {
-  // --- THIS IS THE DEFINITIVE FIX (PART 1): Standard Rounding ---
-  // This rounds the rating to the nearest 0.5.
-  // Example: 3.7 becomes 3.5, 3.8 becomes 4.0.
   const roundedRating = Math.round(rating * 2) / 2;
 
   return (
     <div className="flex items-center">
-      {/* --- THIS IS THE DEFINITIVE FIX (PART 2): Layered Icon Logic --- */}
       {Array.from({ length: max }).map((_, index) => {
         const starValue = index + 1;
 
         // Condition for a full star
         if (roundedRating >= starValue) {
           return (
-            <Star
-              key={index}
-              className="h-5 w-5 fill-foreground text-foreground"
-            />
+            <Star key={index} className="h-5 w-5 fill-current text-current" />
           );
         }
 
         // Condition for a half star
         if (roundedRating === starValue - 0.5) {
           return (
-            // We create a relative container to stack the icons
             <div key={index} className="relative h-5 w-5">
-              {/* The empty star is the bottom layer */}
-              <Star className="absolute top-0 left-0 h-5 w-5 fill-muted text-muted-foreground" />
-              {/* The half-filled star is the top layer */}
-              <StarHalf className="absolute top-0 left-0 h-5 w-5 fill-foreground text-foreground" />
+              {/* The empty star is the bottom layer, semi-transparent */}
+              <Star className="absolute top-0 left-0 h-5 w-5 fill-current/30 text-current/30" />
+              {/* The half-filled star is the top layer, fully opaque */}
+              <StarHalf className="absolute top-0 left-0 h-5 w-5 fill-current text-current" />
             </div>
           );
         }
 
-        // Otherwise, it's an empty star
+        // Otherwise, it's an empty star, semi-transparent
         return (
           <Star
             key={index}
-            className="h-5 w-5 fill-muted text-muted-foreground"
+            className="h-5 w-5 fill-current/30 text-current/30"
           />
         );
       })}

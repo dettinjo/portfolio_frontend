@@ -75,11 +75,7 @@ export function TestimonialDialog({
                 src={testimonial.avatar || undefined}
                 alt={testimonial.name}
               />
-              <AvatarFallback>
-                {testimonial.name
-                  ? testimonial.name.charAt(0).toUpperCase()
-                  : "?"}
-              </AvatarFallback>
+              <AvatarFallback />
             </Avatar>
             <div>
               <p className="font-semibold text-lg text-background">

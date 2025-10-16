@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProficiencyDots } from "@/components/ProficiencyDots";
 import { useTranslations } from "next-intl";
+import { Separator } from "@/components/ui/separator";
 
 interface Skill {
   name: string;
@@ -51,26 +52,34 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
         >
           <Card className="h-full border-0 shadow-none bg-transparent hover:shadow-none flex flex-col gap-4">
             <CardHeader className="flex justify-center items-center">
-              {/* Icon removed: centered category title */}
-              <CardTitle className="text-2xl text-center">
+              {/* --- THIS IS THE FIX --- */}
+              <CardTitle className="text-2xl text-center transition-colors duration-300 group-data-[active=true]:text-background">
                 {getCategoryTitle(category.category)}
               </CardTitle>
             </CardHeader>
+
+            <Separator className="w-2/4 mx-auto group-data-[active=true]:bg-background/20" />
+
             <CardContent>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
                 {category.skills.map((skill: Skill) => (
                   <a
                     key={skill.name}
                     href={skill.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex cursor-pointer items-center justify-between gap-3 rounded-lg p-3 transition-colors duration-200 hover:bg-foreground"
+                    // --- THIS IS THE FIX ---
+                    className="group/item flex cursor-pointer items-center justify-between gap-3 rounded-lg p-3 transition-colors duration-200 hover:bg-foreground group-data-[active=true]:hover:bg-background"
                   >
                     <div className="flex items-center gap-3">
                       <i
-                        className={`${skill.iconClassName} text-2xl text-foreground transition-colors duration-200 group-hover:text-background`}
+                        // --- THIS IS THE FIX ---
+                        className={`${skill.iconClassName} text-2xl text-foreground transition-colors duration-200 group-hover/item:text-background group-data-[active=true]:text-background group-data-[active=true]:group-hover/item:text-foreground`}
                       ></i>
-                      <span className="font-semibold text-foreground transition-colors duration-200 group-hover:text-background">
+                      <span
+                        // --- THIS IS THE FIX ---
+                        className="font-semibold text-foreground transition-colors duration-200 group-hover/item:text-background group-data-[active=true]:text-background group-data-[active=true]:group-hover/item:text-foreground"
+                      >
                         {skill.name}
                       </span>
                     </div>
