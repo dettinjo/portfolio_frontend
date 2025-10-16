@@ -188,10 +188,10 @@ This project was made possible by these incredible tools and libraries.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[issues-shield]: https://img.shields.io/github/issues/dettinjo/my-portfolio.svg?style=for-the-badge
-[issues-url]: https://github.com/dettinjo/my-portfolio/issues
-[license-shield]: https://img.shields.io/github/license/dettinjo/my-portfolio.svg?style=for-the-badge
-[license-url]: https://github.com/dettinjo/my-portfolio/blob/main/LICENSE
+[issues-shield]: https://img.shields.io/github/issues/dettinjo/portfolio_frontend.svg?style=for-the-badge
+[issues-url]: https://github.com/dettinjo/portfolio_frontend/issues
+[license-shield]: https://img.shields.io/github/license/dettinjo/portfolio_frontend.svg?style=for-the-badge
+[license-url]: https://github.com/dettinjo/portfolio_frontend/blob/main/LICENSE
 [product-screenshot]: src/res/screenshots/portfolio_home.svg
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
