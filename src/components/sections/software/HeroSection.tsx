@@ -1,22 +1,42 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+} from "framer-motion";
 import { useTranslations } from "next-intl";
 import { AnimatedGreeting } from "@/components/AnimatedGreeting";
 import { ArrowDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function HeroSection() {
   const t = useTranslations("software.SoftwareHeroSection");
 
   const avatarSrc = "/images/avatar.png";
 
+  const heroRef = useRef<HTMLElement>(null);
+  const [isAvatarActive, setIsAvatarActive] = useState(true);
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setIsAvatarActive(latest < 0.5);
+  });
+
   const { scrollY } = useScroll();
   const arrowOpacity = useTransform(scrollY, [0, 150, 300], [1, 1, 0]);
 
   return (
     <section
+      ref={heroRef}
       id="hero"
       className="relative flex min-h-screen items-center justify-center"
     >
@@ -44,12 +64,27 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           {/* --- THIS IS THE FIX --- */}
-          {/* The background class is changed from `bg-background` to `bg-foreground` */}
-          <Avatar className="h-56 w-56 border-4 border-foreground lg:size-[418px] group bg-foreground transition-shadow duration-300 ease-in-out hover:shadow-[0_0_35px_5px_hsl(var(--foreground)/0.2)]">
+          <Avatar
+            data-active={isAvatarActive}
+            className={cn(
+              "h-56 w-56 border-4 lg:size-[418px] group",
+              "transition-all duration-500 ease-in-out", // Transition all properties
+              // 1. Default (inactive) state: transparent background, muted border
+              "bg-transparent border-muted-foreground",
+              // 2. Active state overrides: filled background, main border, and glow
+              "data-[active=true]:bg-foreground",
+              "data-[active=true]:border-foreground",
+              "data-[active=true]:shadow-[0_0_35px_5px_hsl(var(--foreground)/0.2)]"
+            )}
+          >
             <AvatarImage
               src={avatarSrc}
               alt="Profile picture of Joel Dettinger"
-              className="object-cover object-top scale-[1.2] origin-bottom transition-transform duration-300 ease-in-out group-hover:scale-[1.25]"
+              className={cn(
+                "object-cover object-top scale-[1.2] origin-bottom transition-transform duration-500 ease-in-out",
+                // 3. Zoom effect is also tied to the active state
+                "group-data-[active=true]:scale-[1.25]"
+              )}
             />
             <AvatarFallback>My Picture</AvatarFallback>
           </Avatar>

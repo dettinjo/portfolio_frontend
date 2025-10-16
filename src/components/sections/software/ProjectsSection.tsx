@@ -1,22 +1,53 @@
+// src/components/sections/software/ProjectsSection.tsx
 "use client";
 
-import { Link } from "@/i18n/navigation";
-import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
 import type { SoftwareProject } from "@/lib/strapi";
-import { getStrapiMedia } from "@/lib/strapi";
-import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+// Import the new card component
+import { AnimatedProjectCard } from "./AnimatedProjectCard";
 
 interface ProjectsSectionProps {
   projects: SoftwareProject[];
 }
 
-const AnimatedLink = motion(Link);
-
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const t = useTranslations("software.SoftwareProjectsSection");
+  const [activeCardId, setActiveCardId] = useState<number | null>(null);
+
+  // Use a ref to store scroll progress of all cards without causing re-renders
+  const scrollProgressRef = useRef<{ [key: number]: number }>({});
+  const ticking = useRef(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const progressValues = scrollProgressRef.current;
+          let closestId = null;
+          let minDistance = Infinity;
+
+          // Find the card closest to the viewport center (progress 0.5)
+          for (const id in progressValues) {
+            const distance = Math.abs(progressValues[id] - 0.5);
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestId = parseInt(id, 10);
+            }
+          }
+
+          if (activeCardId !== closestId) {
+            setActiveCardId(closestId);
+          }
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [activeCardId]);
 
   if (!projects || projects.length === 0) {
     return null;
@@ -32,68 +63,18 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
       </div>
 
       <div className="grid grid-cols-1 gap-16">
-        {projects.map((project, index) => {
-          const { id, title, description, coverImage, projectType, slug } =
-            project;
-
-          const imageUrl =
-            getStrapiMedia(coverImage?.url) || "/placeholder.jpg";
-
-          return (
-            <AnimatedLink
-              key={id}
-              href={`/${slug}`}
-              className="flex flex-col md:flex-row min-h-[410px] group rounded-xl overflow-hidden transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background hover:bg-foreground"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              {/* --- THIS IS THE FIX --- */}
-              <div
-                className={cn(
-                  // 1. Add a fixed height on mobile screens (e.g., h-64 which is 256px)
-                  "h-64",
-                  // 2. Reset the height on medium screens so flexbox can take over
-                  "md:h-auto md:w-1/2",
-                  // 3. Slightly reduce padding on mobile for more image space
-                  "p-8 md:p-16",
-                  // The existing order logic remains unchanged
-                  index % 2 === 1 ? "md:order-last" : ""
-                )}
-              >
-                <div className="relative w-full h-full">
-                  <Image
-                    src={imageUrl}
-                    alt={`Preview for ${title}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Box 2: The Text Container (This layout is correct) */}
-              <div className="flex flex-col md:w-1/2 p-10 md:p-16 group-hover:text-background">
-                <div className="flex-grow">
-                  <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase group-hover:text-background">
-                    {projectType}
-                  </p>
-                  <h3 className="text-3xl font-bold mt-2 text-foreground group-hover:text-background">
-                    {title}
-                  </h3>
-                  <p className="mt-4 text-muted-foreground line-clamp-3 group-hover:text-background">
-                    {description}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-background">
-                  <span>{t("button_details")}</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </div>
-              </div>
-            </AnimatedLink>
-          );
-        })}
+        {projects.map((project, index) => (
+          <AnimatedProjectCard
+            key={project.id}
+            project={project}
+            index={index}
+            isActive={project.id === activeCardId}
+            onScrollProgressChange={(progress) => {
+              // Each card reports its progress back to the parent's ref
+              scrollProgressRef.current[project.id] = progress;
+            }}
+          />
+        ))}
       </div>
     </section>
   );
