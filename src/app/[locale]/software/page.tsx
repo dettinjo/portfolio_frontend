@@ -9,11 +9,7 @@ import { ProjectsSection } from "@/components/sections/software/ProjectsSection"
 import { SkillsSection } from "@/components/sections/software/SkillsSection";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
-import {
-  fetchSoftwareProjects,
-  fetchSkillCategories,
-  type Skill,
-} from "@/lib/strapi";
+import { fetchSoftwareProjects, fetchSkillCategories } from "@/lib/strapi";
 
 type Props = {
   params: Promise<{ locale: string }>;
