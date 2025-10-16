@@ -151,7 +151,10 @@
     "error": "Something went wrong. Please try again."
   },
   "PhotographyPageSEO": {
-    "siteName": "Photos by Joel",
+    "siteName": "Photos by {name}",
     "description": "Explore a collection of my photographic works showcasing my skills in various photography styles and techniques."
+  },
+  "AlbumPageSEO": {
+    "description": "A photography album titled '{title}' from the portfolio of {name}."
   }
 }

@@ -4,8 +4,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/Theme-Provider";
-
-// 1. Import the Vercel components here
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -15,15 +13,14 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: {
     template: "%s",
-    default: "Joel Dettinger - Software & Photography", // A fallback title
+    default: "Personal Portfolio",
   },
-  description: "Software Development and Photography by Joel Dettinger",
-  // Define alternates for hreflang tags here for the root page
+  description: "A personal portfolio showcasing software and photography.",
   alternates: {
     canonical: `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
     languages: {
       en: `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
-      de: `https://de.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, // Example alternate
+      de: `https://de.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
       "x-default": `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
     },
   },

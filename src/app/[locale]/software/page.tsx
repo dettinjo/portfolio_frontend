@@ -22,33 +22,38 @@ import {
 // ============================================================================
 
 type Props = {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
   const t = await getTranslations({
     locale: locale,
     namespace: "software.SoftwarePageSEO",
   });
+
+  const fullName = process.env.NEXT_PUBLIC_FULL_NAME || "Developer";
+  const firstName = fullName.split(" ")[0];
+  const siteTitle = t("siteName", { name: firstName });
+
   const softwareDomain =
     process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
 
   return {
-    title: t("siteName"),
+    title: siteTitle,
     description: t("description"),
     openGraph: {
-      title: t("siteName"),
+      title: siteTitle,
       description: t("description"),
       url: `https://${softwareDomain}`,
-      siteName: "Code by Joel",
+      siteName: siteTitle,
       images: [
         {
           url: `https://${rootDomain}/og-software.png`,
           width: 1200,
           height: 630,
-          alt: "An overview of software projects by Joel Dettinger",
+          alt: `An overview of software projects by ${fullName}`,
         },
       ],
       type: "website",

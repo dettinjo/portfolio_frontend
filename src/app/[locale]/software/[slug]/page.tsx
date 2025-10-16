@@ -96,7 +96,10 @@ export default async function ProjectDetailPage({ params }: Props) {
     name: title,
     applicationCategory: projectType,
     description: description,
-    author: { "@type": "Person", name: "Joel Dettinger" },
+    author: {
+      "@type": "Person",
+      name: process.env.NEXT_PUBLIC_FULL_NAME || "Developer",
+    },
   };
 
   const hasLinks = liveUrl || repoUrl;

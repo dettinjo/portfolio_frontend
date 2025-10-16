@@ -9,12 +9,16 @@
     "code": "Code",
     "photos": "Photos"
   },
+  "HomePageSEO": {
+    "title": "{name} - Software & Photography",
+    "description": "The central portfolio hub for {name}, showcasing professional work in software development and photography."
+  },
   "GalleryLightbox": {
     "dialogTitle": "{prefix} - Image {index}",
     "imageAlt": "{prefix} - Image {index}",
     "previousImage": "Previous image",
     "nextImage": "Next image",
-    "close": "Close lightbox"
+    "close": "Close Gallery"
   },
   "ImprintPage": {
     "title": "Imprint",

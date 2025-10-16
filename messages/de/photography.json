@@ -151,7 +151,10 @@
     "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
   },
   "PhotographyPageSEO": {
-    "siteName": "Fotos von Joel",
+    "siteName": "Fotos von {name}",
     "description": "Entdecken Sie eine Sammlung meiner fotografischen Arbeiten, die meine Fähigkeiten in verschiedenen Fotografie-Stilen und -Techniken zeigen."
+  },
+  "AlbumPageSEO": {
+    "description": "Ein Fotoalbum mit dem Titel '{title}' aus dem Portfolio von {name}."
   }
 }

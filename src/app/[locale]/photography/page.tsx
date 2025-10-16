@@ -8,19 +8,11 @@ import { fetchAlbums, fetchTestimonials } from "@/lib/strapi";
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
-const profileData = {
-  name: "Joel Dettinger",
-  avatarSrc: "/images/profile.png",
-};
-
-// --- THIS IS THE DEFINITIVE FIX (Part 1): Define the correct Props type ---
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
-// --- THIS IS THE DEFINITIVE FIX (Part 2): Await the params Promise ---
 export default async function PhotographyPage({ params }: Props) {
-  // Await the promise to safely get the locale value
   const { locale } = await params;
 
   const t = await getTranslations("photography.PhotographyPage");

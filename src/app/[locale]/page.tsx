@@ -9,11 +9,7 @@ import { Terminal, Camera } from "lucide-react";
 
 // SEO Metadata for the landing page
 export async function generateMetadata(): Promise<Metadata> {
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
   return {
-    title: "Joel Dettinger - Software & Photography",
-    description:
-      "The central portfolio hub for Joel Dettinger, showcasing professional work in software development and photography.",
     icons: [
       {
         media: "(prefers-color-scheme: light)",
@@ -26,27 +22,14 @@ export async function generateMetadata(): Promise<Metadata> {
         href: "/favicon-home-dark.svg",
       },
     ],
-    alternates: {
-      canonical: `https://${rootDomain}`,
-      languages: {
-        en: `https://${rootDomain}`,
-        de: `https://${rootDomain}`,
-        "x-default": `https://${rootDomain}`,
-      },
-    },
   };
 }
 
-// The restored landing page component, now as an async Server Component
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
-  const softwareDomain =
-    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
-  const photographyDomain =
-    process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || "photosby.joeldettinger.de";
+  const softwareDomain = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN;
+  const photographyDomain = process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN;
 
-  // --- THIS IS THE FIX ---
-  // The `border-2` and `border-foreground` classes have been removed.
   const linkClassName =
     "group flex flex-col items-center justify-center gap-6 rounded-xl bg-transparent p-16 transition-all duration-300 text-foreground hover:scale-105 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 

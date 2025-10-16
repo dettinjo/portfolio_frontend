@@ -4,26 +4,26 @@ import React from "react";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-// --- THIS IS THE DEFINITIVE FIX ---
-
-// The `generateMetadata` function now accepts props containing a Promise for params.
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params; // We MUST await the promise here.
+  const { locale } = await params;
   const t = await getTranslations({
     locale,
     namespace: "photography.PhotographyPageSEO",
   });
 
+  const fullName = process.env.NEXT_PUBLIC_FULL_NAME || "Photographer";
+  const firstName = fullName.split(" ")[0];
+  const siteTitle = t("siteName", { name: firstName });
+
   return {
     title: {
-      template: `%s | ${t("siteName")}`,
-      default: t("siteName"),
+      template: `%s | ${siteTitle}`,
+      default: siteTitle,
     },
-    description: "Photography by Joel Dettinger",
     icons: [
       {
         media: "(prefers-color-scheme: light)",
@@ -39,9 +39,6 @@ export async function generateMetadata({
   };
 }
 
-// The Layout component's props are also typed inline.
-// Since it doesn't use the `params` prop, we only need to define `children`.
-// This avoids any conflict with Next.js's internal `LayoutProps`.
 export default function PhotographyPageLayout({
   children,
 }: {

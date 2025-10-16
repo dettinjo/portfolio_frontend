@@ -51,7 +51,7 @@
     "developed_in_label": "Entwickelt im"
   },
    "SoftwarePageSEO": {
-    "siteName": "Software-Portfolio",
+    "siteName": "Code von {name}",
     "description": "Entdecken Sie eine Sammlung meiner Softwareentwicklungsprojekte, die meine Fähigkeiten in modernen Web-Technologien demonstrieren."
   },
   "ProjectGallery": {
