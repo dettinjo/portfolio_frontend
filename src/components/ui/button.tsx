@@ -9,9 +9,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // HIER FINDEN DIE ANPASSUNGEN STATT
         default:
           "border-2 border-foreground bg-transparent text-foreground shadow-sm hover:bg-foreground hover:text-background",
+        // --- THIS IS THE NEW VARIANT ---
+        inverted:
+          "border-2 border-background bg-transparent text-background shadow-sm hover:bg-background hover:text-foreground",
+        // ---------------------------------
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:

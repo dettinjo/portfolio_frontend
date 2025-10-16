@@ -3,12 +3,33 @@ import qs from "qs";
 import { cache } from 'react';
 
 // --- Interfaces remain the same ---
-interface StrapiImage { id: number; url: string; alternativeText: string | null; width: number; height: number; }
+interface StrapiImage { id: number; url: string; alternativeText: string | null; width: number; height: number; size: number | null; }
 interface StrapiResponseWrapper<T> { data: T; }
 export interface Skill { id: number; name: string; iconClassName: string; level: number; url: string; }
 export interface SkillCategory { id: number; name: string; order: number; skills: Skill[]; }
-export interface Album { id: number; slug: string; title: string; coverImage: StrapiImage; images: StrapiImage[]; }
-export interface Testimonial { id: number; quote: string; name: string; role: string; avatar: StrapiImage | null; communication: number; creativity: number; professionalism: number; value: number; }
+export interface Album {
+  id: number;
+  slug: string;
+  title: string;
+  coverImage: StrapiImage;
+  images: StrapiImage[];
+  localizations?: Array<{
+    id: number;
+    slug: string;
+    locale: string;
+  }>;
+}
+export interface Testimonial {
+  id: number;
+  quote: string;
+  name: string;
+  role: string;
+  avatar: StrapiImage | null;
+  communication: number;
+  creativity: number;
+  professionalism: number;
+  value: number;
+}
 export interface SoftwareProject {
   id: number;
   slug: string;
@@ -96,7 +117,7 @@ export async function fetchSkillCategories(locale?: string): Promise<SkillCatego
 
 export async function fetchSoftwareProjects(locale?: string): Promise<SoftwareProject[]> {
   return fetchAPI<SoftwareProject[]>('/software-projects', { 
-    populate: { coverImage: true, gallery: true },
+    populate: { coverImage: { fields: ['url', 'alternativeText', 'width', 'height', 'size'] }, gallery: true },
     sort: 'developedAt:desc' 
   }, {}, locale);
 }
@@ -105,7 +126,11 @@ export async function fetchSoftwareProjectBySlug(slug: string, locale?: string):
     const projects = await fetchAPI<SoftwareProject[]>('/software-projects', {
         filters: { slug: { $eq: slug } },
         fields: ['*'],
-        populate: { coverImage: true, gallery: true, localizations: true },
+        populate: { 
+          coverImage: { fields: ['url', 'alternativeText', 'width', 'height', 'size'] }, 
+          gallery: { fields: ['url', 'alternativeText', 'width', 'height', 'size'] }, 
+          localizations: true 
+        },
     }, {}, locale);
     return projects?.[0] || null;
 }
@@ -123,7 +148,7 @@ export async function fetchSkills(locale?: string): Promise<SkillCategory[]> {
 }
 
 export async function fetchAlbums(locale?: string): Promise<Album[]> {
-    return fetchAPI<Album[]>('/albums', { populate: { coverImage: true, images: true } }, {}, locale);
+    return fetchAPI<Album[]>('/albums', { populate: { coverImage: true, images: true, localizations: true } }, {}, locale);
 }
 
 export async function fetchAllAlbumSlugs(locale?: string): Promise<{ slug: string }[]> {
@@ -138,7 +163,7 @@ export async function fetchTestimonials(locale?: string): Promise<Testimonial[]>
 export async function fetchAlbumBySlug(slug: string, locale?: string): Promise<Album | null> {
     const albums = await fetchAPI<Album[]>('/albums', {
         filters: { slug: { $eq: slug } },
-        populate: { images: true, coverImage: true },
+        populate: { images: true, coverImage: true, localizations: true },
     }, {}, locale);
     return albums?.[0] || null;
 }

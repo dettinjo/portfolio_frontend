@@ -79,10 +79,9 @@ export function HeroSection() {
           >
             <AvatarImage
               src={avatarSrc}
-              alt="Profile picture of Joel Dettinger"
+              alt="Profile picture of me"
               className={cn(
                 "object-cover object-top scale-[1.2] origin-bottom transition-transform duration-500 ease-in-out",
-                // 3. Zoom effect is also tied to the active state
                 "group-data-[active=true]:scale-[1.25]"
               )}
             />

@@ -5,7 +5,7 @@
     "contact": "Kontakt"
   },
   "PhotographyPage": {
-    "profileBio": "Momente aus einzigartigen Perspektiven einfangen. Die Schnittstelle von Licht, Schatten und Emotionen durch die Linse erkunden. Verfügbar für Porträt-, Event- und Produktfotografie.",
+    "profileBio": "Mit über einem Jahrzehnt Erfahrung hinter der Kamera habe ich gelernt, dass gute Fotografie mehr ist als nur Komposition – es geht um Verbindung. Ob die Aufregung eines Events, die Emotionen einer Hochzeit, ein Porträt, das Charakter zeigt, oder Bilder, die eine Marke definieren – ich möchte Momente festhalten, die echt und lebendig wirken.",
     "tabs": {
       "feed": "Fotofeed",
       "services": "Leistungen",
@@ -20,7 +20,7 @@
   },
   "ServicesSection": {
     "title": "Pakete & Preise",
-    "subtitle": "Wählen Sie ein vordefiniertes Paket oder stellen Sie sich Ihr eigenes für ein maßgeschneidertes Erlebnis zusammen.",
+    "subtitle": "Wähle ein vordefiniertes Paket oder stelle dir dein eigenes für ein maßgeschneidertes Erlebnis zusammen.",
     "standard": {
       "title": "Standard-Paket",
       "description": "Ideal für wirkungsvolle Porträts oder Produktfotos.",
@@ -47,7 +47,7 @@
     },
     "individual": {
       "title": "Individuell",
-      "description": "Stellen Sie sich Ihr eigenes Paket zusammen."
+      "description": "Stelle dir dein eigenes Paket zusammen."
     },
     "calculator": {
       "sessionFee": "Grundgebühr",
@@ -78,20 +78,20 @@
   },
   "PhotoContactSection": {
     "title": "Interesse geweckt?",
-    "subtitle": "Schreiben Sie mir eine Nachricht für Buchungsanfragen, Kooperationen oder um einfach nur 'Hallo' zu sagen.",
+    "subtitle": "Schreibe mir eine Nachricht für Buchungsanfragen, Kooperationen oder um einfach nur 'Hallo' zu sagen.",
     "button_instagram": "Auf Instagram folgen",
     "form_name": "Name",
     "form_name_placeholder": "Ihr Name",
     "form_email": "E-Mail",
     "form_email_placeholder": "ihre@email.com",
     "form_message": "Nachricht",
-    "form_message_placeholder": "Erzählen Sie mir von Ihrem Projekt oder Ihrer Idee...",
+    "form_message_placeholder": "Erzähle mir von deinem Projekt oder deiner Idee...",
     "form_submit": "Anfrage senden",
     "form_submitting": "Sende...",
     "success_title": "Vielen Dank!",
     "success_message": "Ihre Anfrage wurde erfolgreich gesendet. Ich melde mich in Kürze.",
-    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-    "socials_text": "Oder finden Sie mich auf Instagram:"
+    "error_message": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "socials_text": "Oder finde mich auf Instagram:"
   },
   "TestimonialsSection": {
     "title": "Was Kunden sagen",
@@ -113,7 +113,7 @@
   },
   "LeaveReviewPage": {
     "title": "Bewertung abgeben",
-    "subtitle": "Teilen Sie Ihre Erfahrung, um anderen zu helfen.",
+    "subtitle": "Teile deine Erfahrung, um anderen zu helfen.",
     "form": {
       "nameLabel": "Ihr Name",
       "namePlaceholder": "z.B. Erika Mustermann",
@@ -122,8 +122,8 @@
       "photoLabel": "Foto hochladen (Optional)",
       "buttonUpload": "Datei auswählen",
       "noFileChosen": "Keine Datei ausgewählt",
-      "testimonialLabel": "Ihre Bewertung",
-      "testimonialPlaceholder": "Beschreiben Sie Ihre Erfahrung... was hat Ihnen am besten gefallen?",
+      "testimonialLabel": "Deine Bewertung",
+      "testimonialPlaceholder": "Beschreibe deine Erfahrung... was hat dir am besten gefallen?",
       "buttonPreview": "Speichern & Vorschau"
     },
     "ratings": {
@@ -135,24 +135,24 @@
     },
     "preview": {
       "title": "Bewertung überprüfen",
-      "subtitle": "So wird Ihr Feedback aussehen. Wenn Sie bereit sind, senden Sie es ab.",
+      "subtitle": "So wird dein Feedback aussehen. Wenn du bereit bist, sende es ab.",
       "buttonEdit": "Bearbeiten",
       "buttonSubmit": "Absenden",
       "buttonSubmitting": "Sende...",
       "overallRating": "Gesamtbewertung",
-      "defaultQuote": "Ihr wunderbares Feedback wird hier erscheinen...",
-      "defaultName": "Ihr Name",
+      "defaultQuote": "Dein wunderbares Feedback wird hier erscheinen...",
+      "defaultName": "Dein Name",
       "defaultRole": "Kunde"
     },
     "success": {
       "title": "Vielen Dank!",
-      "message": "Ihre Bewertung wurde übermittelt und wird nun überprüft."
+      "message": "Deine Bewertung wurde übermittelt und wird nun überprüft."
     },
-    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
   "PhotographyPageSEO": {
     "siteName": "Fotos von {name}",
-    "description": "Entdecken Sie eine Sammlung meiner fotografischen Arbeiten, die meine Fähigkeiten in verschiedenen Fotografie-Stilen und -Techniken zeigen."
+    "description": "Entdecke eine Sammlung meiner fotografischen Arbeiten, die meine Fähigkeiten in verschiedenen Fotografie-Stilen und -Techniken zeigen."
   },
   "AlbumPageSEO": {
     "description": "Ein Fotoalbum mit dem Titel '{title}' aus dem Portfolio von {name}."

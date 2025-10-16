@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { routing, isValidLocale } from './src/i18n/routing';
 
 // Get the domain names from your environment variables
-const SOFTWARE_DOMAIN = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || 'codeby.joeldettinger.de';
-const PHOTOGRAPHY_DOMAIN = process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || 'photosby.joeldettinger.de';
-const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'joeldettinger.de';
+const SOFTWARE_DOMAIN = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || '';
+const PHOTOGRAPHY_DOMAIN = process.env.NEXT_PUBLIC_PHOTOGRAPHY_DOMAIN || '';
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN || '';
 
 // A helper function to determine the user's preferred language
 function getLocale(request: NextRequest): string {
@@ -44,15 +44,12 @@ export function middleware(request: NextRequest) {
 
   // 2. Determine the internal content folder based on the domain
   if (hostname.includes(SOFTWARE_DOMAIN)) {
-    // A request to codeby.joeldettinger.de/some/path becomes an internal request
     // to /en/software/some/path
     finalPath = `/${locale}/software${pathname}`;
   } else if (hostname.includes(PHOTOGRAPHY_DOMAIN)) {
-    // A request to photosby.joeldettinger.de/some/path becomes an internal request
     // to /en/photography/some/path
     finalPath = `/${locale}/photography${pathname}`;
   } else {
-    // A request to the root domain joeldettinger.de/some/path becomes
     // an internal request to /en/some/path
     finalPath = `/${locale}${pathname}`;
   }

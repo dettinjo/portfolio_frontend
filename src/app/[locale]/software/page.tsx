@@ -8,8 +8,6 @@ import { HeroSection } from "@/components/sections/software/HeroSection";
 import { ProjectsSection } from "@/components/sections/software/ProjectsSection";
 import { SkillsSection } from "@/components/sections/software/SkillsSection";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
-// --- THIS IS THE FIX (PART 1) ---
-// Import the new BackToTopButton component
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
 import {
   fetchSoftwareProjects,
@@ -17,16 +15,12 @@ import {
   type Skill,
 } from "@/lib/strapi";
 
-// ============================================================================
-// --- SEO METADATA GENERATION ---
-// ============================================================================
-
 type Props = {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
   const t = await getTranslations({
     locale: locale,
     namespace: "software.SoftwarePageSEO",
@@ -36,9 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const firstName = fullName.split(" ")[0];
   const siteTitle = t("siteName", { name: firstName });
 
-  const softwareDomain =
-    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
+  const softwareDomain = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "";
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "";
 
   return {
     title: siteTitle,
@@ -70,15 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// ============================================================================
-// --- PAGE COMPONENT ---
-// ============================================================================
-
-export default async function DevPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function DevPage({ params }: Props) {
   const { locale } = await params;
 
   const [projectsData, skillsDataForDisplay] = await Promise.all([
@@ -100,8 +85,7 @@ export default async function DevPage({
 
   const cleanProjectsData = projectsData.filter(Boolean);
 
-  const softwareDomain =
-    process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "codeby.joeldettinger.de";
+  const softwareDomain = process.env.NEXT_PUBLIC_SOFTWARE_DOMAIN || "";
 
   const jsonLd: WithContext<CollectionPage> = {
     "@context": "https://schema.org",
@@ -144,8 +128,6 @@ export default async function DevPage({
         </div>
       </main>
       <Footer />
-      {/* --- THIS IS THE FIX (PART 2) --- */}
-      {/* Add the button here, outside the main content flow */}
       <BackToTopButton />
     </div>
   );

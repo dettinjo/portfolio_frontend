@@ -6,7 +6,7 @@ import { Heart } from "lucide-react";
 
 export function Footer() {
   const t = useTranslations("Footer");
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
 
   return (
     <footer className="border-t">

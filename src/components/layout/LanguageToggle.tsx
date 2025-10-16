@@ -21,8 +21,7 @@ export function LanguageToggle() {
     const path = "path=/";
 
     // 2. Get the root domain from environment variables
-    const rootDomain =
-      process.env.NEXT_PUBLIC_ROOT_DOMAIN || "joeldettinger.de";
+    const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "";
 
     // 3. Construct the base cookie string
     let cookieString = `NEXT_LOCALE=${nextLocale};${expires};${path}`;

@@ -25,7 +25,7 @@
   },
   "SoftwareContactSection": {
     "title": "Kontakt aufnehmen",
-    "subtitle": "Haben Sie ein Projekt im Sinn oder möchten Sie sich vernetzen? Ich freue mich darauf, von Ihnen zu hören.",
+    "subtitle": "Hast du ein Projekt im Sinn oder möchtest du dich vernetzen? Ich freue mich darauf, von dir zu hören.",
     "form_name": "Name",
     "form_name_placeholder": "Ihr Name",
     "form_email": "E-Mail",
@@ -34,10 +34,10 @@
     "form_message_placeholder": "Ihre Nachricht...",
     "form_submit": "Nachricht senden",
     "form_submitting": "Sende...",
-    "socials_text": "Oder finden Sie mich hier:",
+    "socials_text": "Oder finde mich hier:",
     "success_title": "Vielen Dank!",
     "success_message": "Ihre Nachricht wurde erfolgreich gesendet. Ich melde mich in Kürze.",
-    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    "error_message": "Etwas ist schiefgelaufen. Bitte versuchen es erneut."
   },
     "ProjectDetailsPage": {
     "back_button": "Zurück zu den Projekten",
@@ -52,7 +52,7 @@
   },
    "SoftwarePageSEO": {
     "siteName": "Code von {name}",
-    "description": "Entdecken Sie eine Sammlung meiner Softwareentwicklungsprojekte, die meine Fähigkeiten in modernen Web-Technologien demonstrieren."
+    "description": "Entdecken eine Sammlung meiner Softwareentwicklungsprojekte, die meine Fähigkeiten in modernen Web-Technologien demonstrieren."
   },
   "ProjectGallery": {
     "thumbnailAlt": "{prefix} - Screenshot {index}",

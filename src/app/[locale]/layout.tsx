@@ -13,11 +13,14 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+// UPDATED: The 'params' prop is now correctly typed as a Promise here too.
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  // Await the promise to get the locale.
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "HomePageSEO" });
   const fullName = process.env.NEXT_PUBLIC_FULL_NAME || "Portfolio";
   const firstName = fullName.split(" ")[0];

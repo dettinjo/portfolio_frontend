@@ -6,13 +6,20 @@ import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, ZoomIn } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
+// UPDATED: Added an optional 'variant' prop
 interface ProjectGalleryProps {
   images: string[];
   altPrefix: string;
+  variant?: "default" | "inverted";
 }
 
-export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
+export function ProjectGallery({
+  images,
+  altPrefix,
+  variant = "default",
+}: ProjectGalleryProps) {
   const t = useTranslations("software.ProjectGallery");
 
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -60,7 +67,15 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
 
   return (
     <div className="relative group">
-      <div className="overflow-hidden border-2 border-foreground rounded-lg shadow-md">
+      {/* UPDATED: Added conditional background and border colors */}
+      <div
+        className={cn(
+          "overflow-hidden border-2 rounded-lg shadow-md",
+          variant === "inverted"
+            ? "bg-foreground border-background"
+            : "border-foreground"
+        )}
+      >
         <div
           ref={galleryRef}
           className="flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth scrollbar-thin scrollbar-thumb-muted-foreground/50 scrollbar-track-transparent gap-0"
@@ -72,9 +87,7 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
               startAlbumIndex={0}
               startPhotoIndex={index}
             >
-              {/* --- THIS IS THE FIX (Part 1): The outer box now has consistent padding --- */}
               <div className="group/image relative aspect-video w-full flex-shrink-0 snap-center cursor-pointer p-8">
-                {/* --- THIS IS THE FIX (Part 2): A new inner div acts as the image's frame --- */}
                 <div className="relative w-full h-full">
                   <Image
                     src={imgSrc}
@@ -88,7 +101,6 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
                     priority={index === 0}
                   />
                 </div>
-                {/* This overlay correctly covers the entire padded, clickable area */}
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
                   <ZoomIn className="h-10 w-10 text-white" />
                 </div>
@@ -103,12 +115,14 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
         size="icon"
         onClick={scrollLeft}
         aria-label={t("scrollLeft")}
-        className={`absolute top-1/2 -translate-y-1/2 left-4 z-10 h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm transition-opacity hover:bg-background/90
-                    ${
-                      showLeftArrow
-                        ? "opacity-100"
-                        : "opacity-0 pointer-events-none"
-                    }`}
+        // UPDATED: Added conditional styling for inverted arrows
+        className={cn(
+          "absolute top-1/2 -translate-y-1/2 left-4 z-10 h-10 w-10 rounded-full backdrop-blur-sm transition-opacity",
+          variant === "inverted"
+            ? "bg-foreground/80 hover:bg-foreground/90 text-background"
+            : "bg-background/80 hover:bg-background/90 text-foreground",
+          showLeftArrow ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
       >
         <ArrowLeft className="h-6 w-6" />
       </Button>
@@ -118,12 +132,14 @@ export function ProjectGallery({ images, altPrefix }: ProjectGalleryProps) {
         size="icon"
         onClick={scrollRight}
         aria-label={t("scrollRight")}
-        className={`absolute top-1/2 -translate-y-1/2 right-4 z-10 h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm transition-opacity hover:bg-background/90
-                    ${
-                      showRightArrow
-                        ? "opacity-100"
-                        : "opacity-0 pointer-events-none"
-                    }`}
+        // UPDATED: Added conditional styling for inverted arrows
+        className={cn(
+          "absolute top-1/2 -translate-y-1/2 right-4 z-10 h-10 w-10 rounded-full backdrop-blur-sm transition-opacity",
+          variant === "inverted"
+            ? "bg-foreground/80 hover:bg-foreground/90 text-background"
+            : "bg-background/80 hover:bg-background/90 text-foreground",
+          showRightArrow ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
       >
         <ArrowRight className="h-6 w-6" />
       </Button>
