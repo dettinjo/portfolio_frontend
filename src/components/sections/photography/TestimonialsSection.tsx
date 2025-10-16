@@ -49,7 +49,7 @@ export function TestimonialsSection({
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }} // Animation triggers when 10% is visible
+        viewport={{ once: true, amount: 0.1 }}
         variants={{
           visible: { transition: { staggerChildren: 0.2 } },
         }}
@@ -70,21 +70,21 @@ export function TestimonialsSection({
               }}
             >
               <TestimonialDialog testimonial={item}>
-                <Card className="relative group flex flex-col cursor-pointer transition-transform duration-200 hover:-translate-y-1">
+                {/* --- CARD STYLES UPDATED --- */}
+                <Card className="relative group flex flex-col cursor-pointer bg-foreground text-background border-transparent transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-background/20 dark:hover:shadow-black/30">
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                    <ExternalLink className="h-4 w-4 text-background/70" />
                   </div>
                   <CardContent className="pt-6 flex-grow">
-                    <div className="mb-2">
+                    <div className="mb-2 text-background">
                       <RatingStars rating={averageRating} />
                     </div>
-                    <p className="text-muted-foreground italic line-clamp-4">
+                    <p className="text-background/80 italic line-clamp-4">
                       &quot;{item.quote}&quot;
                     </p>
                   </CardContent>
                   <CardFooter className="flex items-center gap-4 pb-6">
                     <Avatar>
-                      {/* FIX: Explicitly pass undefined if avatar is falsy (null or "") */}
                       <AvatarImage
                         src={item.avatar ? item.avatar : undefined}
                         alt={item.name}
@@ -92,10 +92,10 @@ export function TestimonialsSection({
                       <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {item.role}
+                      <p className="font-semibold text-background">
+                        {item.name}
                       </p>
+                      <p className="text-sm text-background/80">{item.role}</p>
                     </div>
                   </CardFooter>
                 </Card>

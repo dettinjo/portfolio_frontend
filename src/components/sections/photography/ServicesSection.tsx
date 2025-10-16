@@ -70,12 +70,12 @@ export function ServicesSection() {
   const packages = [
     {
       type: "standard",
-      icon: <Box className="h-8 w-8 text-foreground" />,
+      icon: <Box className="h-8 w-8 text-background" />,
       price: "120",
     },
     {
       type: "advanced",
-      icon: <Crown className="h-8 w-8 text-foreground" />,
+      icon: <Crown className="h-8 w-8 text-background" />,
       price: "380",
     },
   ];
@@ -115,8 +115,6 @@ export function ServicesSection() {
         </p>
       </div>
 
-      {/* --- THIS IS THE DEFINITIVE FIX --- */}
-      {/* The `items-start` class has been removed. The grid will now default to `items-stretch`. */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -132,43 +130,46 @@ export function ServicesSection() {
               visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
             }}
           >
-            <Card className="flex flex-col h-full">
+            {/* --- HOVER SCALE EFFECT ADDED --- */}
+            <Card className="flex flex-col h-full bg-foreground text-background border-transparent transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-background/20 dark:hover:shadow-black/30">
               <CardHeader className="p-6">
                 <div className="flex items-center gap-4">
                   {pkg.icon}
-                  <CardTitle className="text-2xl font-bold">
+                  <CardTitle className="text-2xl font-bold text-background">
                     {t(`${pkg.type}.title`)}
                   </CardTitle>
                 </div>
-                <CardDescription className="pt-1 min-h-[40px]">
+                <CardDescription className="pt-1 min-h-[40px] text-background/80">
                   {t(`${pkg.type}.description`)}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow p-6 pt-0">
-                <Separator className="mb-6" />
+                <Separator className="mb-6 bg-background/30" />
                 <ul className="space-y-4">
                   {t.raw(`${pkg.type}.items`).map((item: string) => (
                     <li key={item} className="flex items-start gap-3">
-                      <Check className="h-4 w-4 flex-shrink-0 text-green-500 mt-1" />
-                      <span className="text-muted-foreground">{item}</span>
+                      <Check className="h-4 w-4 flex-shrink-0 text-green-400 mt-1" />
+                      <span className="text-background/80">{item}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
               <CardFooter className="flex flex-col items-start gap-4 p-6 pt-0 mt-auto">
-                <Separator className="mb-6" />
+                <Separator className="mb-6 bg-background/30" />
                 <div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-background/70">
                     {t("price.fixed")}
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold">{pkg.price}</span>
-                    <span className="text-xl font-semibold text-muted-foreground">
+                    <span className="text-4xl font-bold text-background">
+                      {pkg.price}
+                    </span>
+                    <span className="text-xl font-semibold text-background/70">
                       EUR
                     </span>
                   </div>
                 </div>
-                <Button asChild className="w-full">
+                <Button asChild className="w-full" variant="inverted">
                   <a
                     href={`mailto:${yourEmail}?subject=${encodeURIComponent(
                       t(`${pkg.type}.subject`)
@@ -188,20 +189,21 @@ export function ServicesSection() {
             visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
           }}
         >
-          <Card className="flex flex-col border-2 border-primary shadow-lg shadow-primary/10 h-full">
+          {/* --- HOVER SCALE EFFECT ADDED --- */}
+          <Card className="flex flex-col bg-foreground text-background border-transparent shadow-lg shadow-foreground/20 h-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-background/20 dark:hover:shadow-black/30">
             <CardHeader className="p-6">
               <div className="flex items-center gap-4">
-                <Lightbulb className="h-8 w-8 text-primary" />
-                <CardTitle className="text-2xl font-bold text-primary">
+                <Lightbulb className="h-8 w-8 text-background" />
+                <CardTitle className="text-2xl font-bold text-background">
                   {t("individual.title")}
                 </CardTitle>
               </div>
-              <CardDescription className="pt-1 min-h-[40px]">
+              <CardDescription className="pt-1 min-h-[40px] text-background/80">
                 {t("individual.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow p-6 pt-0">
-              <Separator className="mb-6" />
+              <Separator className="mb-6 bg-background/30" />
               <div className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-sm">
@@ -219,6 +221,7 @@ export function ServicesSection() {
                     min={1}
                     max={8}
                     step={1}
+                    className="[&>span:first-child]:bg-background/20 [&>span>span]:bg-background"
                   />
                 </div>
                 <div className="space-y-2">
@@ -235,6 +238,7 @@ export function ServicesSection() {
                     min={5}
                     max={50}
                     step={1}
+                    className="[&>span:first-child]:bg-background/20 [&>span>span]:bg-background"
                   />
                 </div>
                 <div className="space-y-2">
@@ -256,6 +260,7 @@ export function ServicesSection() {
                     min={1}
                     max={3}
                     step={1}
+                    className="[&>span:first-child]:bg-background/20 [&>span>span]:bg-background"
                   />
                 </div>
                 <div className="space-y-2">
@@ -271,6 +276,7 @@ export function ServicesSection() {
                     placeholder="e.g., 20"
                     value={distance}
                     onChange={(e) => setDistance(e.target.value)}
+                    className="border-background/30 placeholder:text-background/50"
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -281,24 +287,27 @@ export function ServicesSection() {
                     id="express"
                     checked={addExpress}
                     onCheckedChange={setAddExpress}
+                    className="data-[state=checked]:bg-background data-[state=unchecked]:bg-background/30 [&>span]:bg-foreground"
                   />
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex flex-col items-start gap-4 p-6 pt-0 mt-auto">
-              <Separator className="mb-6" />
+              <Separator className="mb-6 bg-background/30" />
               <div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-background/70">
                   {t("price.estimated")}
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">{calculatedPrice}</span>
-                  <span className="text-xl font-semibold text-muted-foreground">
+                  <span className="text-4xl font-bold text-background">
+                    {calculatedPrice}
+                  </span>
+                  <span className="text-xl font-semibold text-background/70">
                     EUR
                   </span>
                 </div>
               </div>
-              <Button asChild className="w-full">
+              <Button asChild className="w-full" variant="inverted">
                 <a href={individualMailto}>
                   <Mail className="mr-2 h-4 w-4" /> {t("buttonIndividual")}
                 </a>
