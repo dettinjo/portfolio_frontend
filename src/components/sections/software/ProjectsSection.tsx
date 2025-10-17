@@ -4,8 +4,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import type { SoftwareProject } from "@/lib/strapi";
-// Import the new card component
 import { AnimatedProjectCard } from "./AnimatedProjectCard";
+import { motion } from "framer-motion"; // Make sure motion is imported
 
 interface ProjectsSectionProps {
   projects: SoftwareProject[];
@@ -15,7 +15,6 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const t = useTranslations("software.SoftwareProjectsSection");
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
-  // Use a ref to store scroll progress of all cards without causing re-renders
   const scrollProgressRef = useRef<{ [key: number]: number }>({});
   const ticking = useRef(false);
 
@@ -27,7 +26,6 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
           let closestId = null;
           let minDistance = Infinity;
 
-          // Find the card closest to the viewport center (progress 0.5)
           for (const id in progressValues) {
             const distance = Math.abs(progressValues[id] - 0.5);
             if (distance < minDistance) {
@@ -46,6 +44,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check on load
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeCardId]);
 
@@ -62,15 +61,16 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
         </p>
       </div>
 
+      {/* UPDATED: We use a simple div here as the wrapper */}
       <div className="grid grid-cols-1 gap-16">
         {projects.map((project, index) => (
+          // The AnimatedProjectCard component itself will handle its own scaling
           <AnimatedProjectCard
             key={project.id}
             project={project}
             index={index}
             isActive={project.id === activeCardId}
             onScrollProgressChange={(progress) => {
-              // Each card reports its progress back to the parent's ref
               scrollProgressRef.current[project.id] = progress;
             }}
           />

@@ -1,3 +1,4 @@
+// src/components/sections/software/HeroSection.tsx
 "use client";
 
 import { useRef, useState } from "react";
@@ -16,9 +17,7 @@ import { cn } from "@/lib/utils";
 
 export function HeroSection() {
   const t = useTranslations("software.SoftwareHeroSection");
-
   const avatarSrc = "/images/avatar.png";
-
   const heroRef = useRef<HTMLElement>(null);
   const [isAvatarActive, setIsAvatarActive] = useState(true);
 
@@ -57,24 +56,27 @@ export function HeroSection() {
             </Button>
           </div>
         </motion.div>
+
         <motion.div
           className="flex justify-center lg:justify-end"
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          animate={{
+            opacity: 1,
+            scale: isAvatarActive ? 1.05 : 1,
+          }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
         >
-          {/* --- THIS IS THE FIX --- */}
           <Avatar
             data-active={isAvatarActive}
             className={cn(
               "h-56 w-56 border-4 lg:size-[418px] group",
-              "transition-all duration-500 ease-in-out", // Transition all properties
-              // 1. Default (inactive) state: transparent background, muted border
+              "transition-all duration-500 ease-in-out",
               "bg-transparent border-muted-foreground",
-              // 2. Active state overrides: filled background, main border, and glow
               "data-[active=true]:bg-foreground",
-              "data-[active=true]:border-foreground",
-              "data-[active=true]:shadow-[0_0_35px_5px_hsl(var(--foreground)/0.2)]"
+              "data-[active=true]:border-foreground"
             )}
           >
             <AvatarImage
@@ -82,7 +84,10 @@ export function HeroSection() {
               alt="Profile picture of me"
               className={cn(
                 "object-cover object-top scale-[1.2] origin-bottom transition-transform duration-500 ease-in-out",
-                "group-data-[active=true]:scale-[1.25]"
+                "group-data-[active=true]:scale-[1.3]",
+                // --- THIS IS THE DEFINITIVE FIX ---
+                // Add a downward translation only when the parent group is active
+                "group-data-[active=true]:translate-y-4"
               )}
             />
             <AvatarFallback>My Picture</AvatarFallback>

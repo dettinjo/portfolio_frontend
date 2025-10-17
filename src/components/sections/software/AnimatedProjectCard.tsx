@@ -42,27 +42,23 @@ export function AnimatedProjectCard({
   const imageUrl = getStrapiMedia(coverImage?.url) || "/placeholder.jpg";
 
   return (
+    // UPDATED: The motion link handles its own animation, no staggered fade-in
     <AnimatedLink
       ref={cardRef}
       href={`/${slug}`}
       data-active={isActive}
       className={cn(
         "group flex flex-col md:flex-row min-h-[410px] rounded-xl overflow-hidden shadow-lg",
-        "transition-all duration-300 ease-in-out hover:shadow-2xl",
+        "transition-colors duration-300 ease-in-out", // Use transition for colors
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background",
         "data-[active=true]:bg-foreground"
       )}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
       animate={{ scale: isActive ? 1.02 : 1 }}
-      // --- THIS IS THE FIX ---
-      // The duration has been reduced from 0.3 to 0.15 for a faster animation
-      transition={{ duration: 0.15 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }} // Transition for the scale
       whileHover={{ scale: 1.02 }}
       whileFocus={{ scale: 1.02 }}
     >
-      {/* Image Container */}
+      {/* The rest of the component remains the same */}
       <div
         className={cn(
           "h-64 md:h-auto md:w-1/2 p-8 md:p-16",
@@ -79,8 +75,6 @@ export function AnimatedProjectCard({
           />
         </div>
       </div>
-
-      {/* Text Content */}
       <div className="flex flex-col md:w-1/2 p-10 md:p-16">
         <div className="flex-grow">
           <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase transition-colors duration-500 group-data-[active=true]:text-background/70">

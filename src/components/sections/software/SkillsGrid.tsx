@@ -1,27 +1,24 @@
+// src/components/sections/software/SkillsGrid.tsx
 "use client";
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SkillIcon } from "@/components/SkillIcon";
-import { ProficiencyDots } from "@/components/ProficiencyDots";
 import { Separator } from "@/components/ui/separator";
+import { ProficiencyBar } from "@/components/ProficiencyBar";
 
+// --- Interfaces remain the same ---
 interface Skill {
   name: string;
   iconClassName: string | null;
   level: number;
   url: string;
-  svgIcon?: {
-    url: string;
-    alternativeText?: string;
-  } | null;
+  svgIcon?: { url: string; alternativeText?: string } | null;
 }
-
 interface SkillCategory {
   category: string;
   skills: Skill[];
 }
-
 interface SkillsGridProps {
   skills: SkillCategory[];
 }
@@ -36,61 +33,62 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
   }
 
   return (
+    // UPDATED: This is now a regular div, no staggered animation
     <div className="flex flex-wrap justify-center gap-8">
-      {skills.map((category: SkillCategory, index: number) => (
-        <motion.div
+      {skills.map((category: SkillCategory) => (
+        // UPDATED: Changed back to a simple div, removing motion props
+        <div
           key={category.category}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
-          className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
+          className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)] xl:w-[calc(20%-1.6rem)]"
         >
+          {/* The rest of the component remains the same, with the bouncy hover animation intact */}
           <Card className="h-full border-0 shadow-none bg-transparent hover:shadow-none flex flex-col items-center">
-            <CardHeader className="flex justify-center items-center">
+            <CardHeader className="flex justify-center items-center px-6 pt-6 pb-3">
               <CardTitle className="text-2xl text-center transition-colors duration-300 group-data-[active=true]:text-background">
                 {category.category}
               </CardTitle>
             </CardHeader>
-
             <Separator className="w-2/4 mx-auto group-data-[active=true]:bg-background/20" />
-            <CardContent className="w-full p-0 flex justify-center">
-              <div className="inline-grid grid-cols-3 gap-0">
+            <CardContent className="w-full p-4 pt-3 flex justify-center">
+              <div className="inline-grid grid-cols-2 gap-0">
                 {category.skills.map((skill: Skill) => (
                   <div
                     key={skill.name}
-                    className="relative group/skill h-12 w-12 flex items-center justify-center"
+                    className="relative group/skill flex h-16 w-16 items-center justify-center"
                   >
                     <motion.a
                       href={skill.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex cursor-pointer items-center justify-center rounded-lg transition-all duration-200 group-hover/skill:bg-foreground group-hover/skill:px-3 group-hover/skill:py-2 group-hover/skill:shadow-lg group-data-[active=true]:group-hover/skill:bg-background"
-                      style={{ transformOrigin: "center center" }}
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.1 }}
+                      layout
                       transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 25,
+                        layout: {
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 15,
+                          mass: 0.5,
+                        },
                       }}
+                      className="flex cursor-pointer items-center justify-center rounded-lg transition-colors duration-200 
+                                 group-hover/skill:absolute group-hover/skill:z-10 group-hover/skill:h-auto group-hover/skill:w-auto 
+                                 group-hover/skill:p-3 group-hover/skill:shadow-lg
+                                 group-hover/skill:bg-foreground group-data-[active=true]:group-hover/skill:bg-background"
                     >
+                      {/* ... rest of the skill item */}
                       <div className="flex flex-col items-center gap-1.5">
                         <SkillIcon
                           iconClassName={skill.iconClassName}
                           svgIconUrl={skill.svgIcon?.url}
                           altText={skill.name}
-                          className="h-8 w-8 flex shrink-0 items-center justify-center text-2xl text-foreground transition-colors duration-200 group-hover/skill:text-background group-data-[active=true]:text-background group-data-[active=true]:group-hover/skill:text-foreground [&>svg]:h-7 [&>svg]:w-7"
+                          className="h-8 w-8 flex shrink-0 items-center justify-center text-2xl text-foreground transition-colors duration-200 
+                                     group-hover/skill:text-background group-data-[active=true]:text-background group-data-[active=true]:group-hover/skill:text-foreground 
+                                     [&>svg]:h-7 [&>svg]:w-7"
                         />
-
-                        {/* Title and level - hidden by default, shown on hover */}
                         <div className="hidden group-hover/skill:flex flex-col items-center gap-1">
                           <span className="whitespace-nowrap block text-center text-xs font-semibold text-background group-data-[active=true]:text-foreground">
                             {skill.name}
                           </span>
-                          <div className="[&>div]:text-background [&>div>div]:bg-background group-data-[active=true]:[&>div]:text-foreground group-data-[active=true]:[&>div>div]:bg-foreground">
-                            <ProficiencyDots level={skill.level} />
-                          </div>
+                          <ProficiencyBar level={skill.level} />
                         </div>
                       </div>
                     </motion.a>
@@ -99,7 +97,7 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       ))}
     </div>
   );

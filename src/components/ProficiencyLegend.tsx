@@ -1,16 +1,19 @@
+// src/components/ProficiencyLegend.tsx
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ProficiencyDots } from "./ProficiencyDots";
+import { ProficiencyBar } from "./ProficiencyBar";
 
 export function ProficiencyLegend() {
   const t = useTranslations("software.SoftwareSkillsSection");
 
   return (
-    // --- THIS IS THE FIX ---
-    <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground transition-colors duration-300 group-data-[active=true]:text-background/70">
+    <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground">
       <span>{t("legend_beginner")}</span>
-      <ProficiencyDots level={5} />
+      {/* We apply override styles here to make the bar visible on the page background */}
+      <div className="[&>div]:bg-muted [&>div>div]:bg-foreground">
+        <ProficiencyBar level={5} />
+      </div>
       <span>{t("legend_expert")}</span>
     </div>
   );

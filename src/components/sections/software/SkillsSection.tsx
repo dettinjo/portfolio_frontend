@@ -1,3 +1,4 @@
+// src/components/sections/software/SkillsSection.tsx
 "use client";
 
 import { useState, useRef } from "react";
@@ -7,6 +8,7 @@ import { SkillsGrid } from "./SkillsGrid";
 import { ProficiencyLegend } from "@/components/ProficiencyLegend";
 import { cn } from "@/lib/utils";
 
+// --- Interfaces remain the same ---
 interface Skill {
   name: string;
   iconClassName: string;
@@ -37,17 +39,19 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
 
   return (
     <section id="skills" ref={sectionRef}>
-      <div className="text-center mb-16">
+      {/* UPDATED: Adjusted margin-bottom from mb-12 to mb-8 */}
+      <div className="text-center mb-8">
         <h2 className="text-4xl font-bold tracking-tight">{t("title")}</h2>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
           {t("subtitle")}
         </p>
+        {/* The legend has been moved from here */}
       </div>
 
       <motion.div
         data-active={isActive}
         className={cn(
-          "group rounded-xl p-8 md:p-12 transition-all duration-300",
+          "group rounded-xl p-6 md:p-8 overflow-hidden transition-all duration-300",
           "data-[active=true]:bg-foreground"
         )}
         animate={{ scale: isActive ? 1.02 : 1 }}
@@ -55,6 +59,11 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
       >
         <SkillsGrid skills={skills} />
       </motion.div>
+
+      {/* NEW: The legend is now placed here, underneath the skills grid */}
+      <div className="mt-8">
+        <ProficiencyLegend />
+      </div>
     </section>
   );
 }
