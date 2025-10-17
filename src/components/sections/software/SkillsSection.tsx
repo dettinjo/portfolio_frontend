@@ -31,7 +31,6 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
     offset: ["start end", "end start"],
   });
 
-  // Set active when the component is between 20% and 80% visible in the viewport
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     setIsActive(latest > 0.2 && latest < 0.8);
   });
@@ -49,17 +48,12 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
         data-active={isActive}
         className={cn(
           "group rounded-xl p-8 md:p-12 transition-all duration-300",
-          // --- THIS IS THE FIX ---
-          // The shadow-2xl class has been removed from the active state
           "data-[active=true]:bg-foreground"
         )}
         animate={{ scale: isActive ? 1.02 : 1 }}
         transition={{ duration: 0.15 }}
       >
         <SkillsGrid skills={skills} />
-        <div className="mt-16">
-          <ProficiencyLegend />
-        </div>
       </motion.div>
     </section>
   );

@@ -18,7 +18,6 @@ export function ProficiencyDots({ level, maxLevel = 5 }: ProficiencyDotsProps) {
         return (
           <span
             key={dotLevel}
-            // --- THIS IS THE FIX ---
             className={`
               h-2 w-2 rounded-full transition-colors duration-200
               ${

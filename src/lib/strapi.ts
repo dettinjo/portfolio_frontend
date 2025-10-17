@@ -5,7 +5,10 @@ import { cache } from 'react';
 // --- Interfaces remain the same ---
 interface StrapiImage { id: number; url: string; alternativeText: string | null; width: number; height: number; size: number | null; }
 interface StrapiResponseWrapper<T> { data: T; }
-export interface Skill { id: number; name: string; iconClassName: string; level: number; url: string; }
+export interface Skill { id: number; name: string; iconClassName: string; level: number; url: string; svgIcon?: {
+    url: string;
+    alternativeText?: string;
+  }; }
 export interface SkillCategory { id: number; name: string; order: number; skills: Skill[]; }
 export interface Album {
   id: number;
@@ -109,7 +112,15 @@ export const getTechDetailsMap = cache(async () => {
 
 export async function fetchSkillCategories(locale?: string): Promise<SkillCategory[]> {
     return fetchAPI<SkillCategory[]>('/skill-categories', {
-        populate: { skills: true },
+        populate: {
+          skills: {
+            populate: {
+              svgIcon: {
+                fields: ['url', 'alternativeText']
+              }
+            }
+          }
+        },
         sort: 'order:asc',
     }, {}, locale);
 }
