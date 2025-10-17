@@ -111,7 +111,7 @@
       }
     }
   },
-  "LeaveReviewPage": {
+ "LeaveReviewPage": {
     "title": "Bewertung abgeben",
     "subtitle": "Teile deine Erfahrung, um anderen zu helfen.",
     "form": {
@@ -124,7 +124,8 @@
       "noFileChosen": "Keine Datei ausgewählt",
       "testimonialLabel": "Deine Bewertung",
       "testimonialPlaceholder": "Beschreibe deine Erfahrung... was hat dir am besten gefallen?",
-      "buttonPreview": "Speichern & Vorschau"
+      "buttonPreview": "Speichern & Vorschau",
+      "consentLabel": "Ich stimme zu, dass mein Name, meine Bewertung und optional mein hochgeladenes Foto auf dieser Webseite veröffentlicht werden dürfen. Die <privacyLink>Datenschutzerklärung</privacyLink> habe ich zur Kenntnis genommen."
     },
     "ratings": {
       "title": "Detaillierte Bewertungen",

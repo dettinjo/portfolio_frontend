@@ -45,7 +45,7 @@
     "disclaimer_copyright_title": "Copyright",
     "disclaimer_copyright_content": "The content and works created by the site operators on these pages are subject to German copyright law. The reproduction, processing, distribution, and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator."
   },
-  "PrivacyPage": {
+    "PrivacyPage": {
     "title": "Privacy Policy",
     "section1_title": "1. Data Protection at a Glance",
     "section1_content": "This privacy policy informs you about the nature, scope, and purpose of the processing of personal data on our website.",
@@ -66,7 +66,7 @@
     "section3_recaptcha_title": "Spam Protection via Google reCAPTCHA",
     "section3_recaptcha_content": "To protect submission forms on this site, we use the reCAPTCHA service provided by Google LLC. This service determines whether a given submission was made by a human or by an automated process. This processing is based on our legitimate interest (Art. 6(1)(f) GDPR) in preventing spam and abuse. For this purpose, your IP address and other data required by the reCAPTCHA service may be transferred to Google.",
     "section3_testimonials_title": "Submission of Testimonials/Reviews",
-    "section3_testimonials_content": "If you use our form to submit a testimonial, the data you provide (name, organization/event, your review, ratings, and optionally an uploaded photo) will be transmitted to and stored in our backend system (Strapi CMS) for the purpose of reviewing and publishing your feedback on our website. This data is processed based on your consent (Art. 6(1)(a) GDPR), which you give by submitting the form.",
+    "section3_testimonials_content": "If you use our form to submit a testimonial, the data you provide (name, organization/event, your review, ratings, and optionally an uploaded photo) will be transmitted to and stored in our backend system (Strapi CMS) for the purpose of reviewing and publishing your feedback on our website. This data is processed based on your consent (Art. 6(1)(a) GDPR), which you give by submitting the form. You can withdraw this consent at any time by contacting us, and your testimonial will be removed.",
     "section4_title": "3. Your Rights as a Data Subject",
     "section4_content": "Within the framework of the applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipients, and the purpose of the data processing, and, if applicable, a right to correction or deletion of this data."
   }

@@ -124,7 +124,8 @@
       "noFileChosen": "No file chosen",
       "testimonialLabel": "Your Review",
       "testimonialPlaceholder": "Describe your experience... what did you like best?",
-      "buttonPreview": "Save & Preview"
+      "buttonPreview": "Save & Preview",
+      "consentLabel": "I agree that my name, review, and optionally uploaded photo may be published on this website. I have read and understood the <privacyLink>Privacy Policy</privacyLink>."
     },
     "ratings": {
       "title": "Detailed Ratings",

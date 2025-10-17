@@ -1,4 +1,4 @@
-// portfolio-frontend/src/components/sections/photography/LeaveReviewForm.tsx
+// src/components/sections/photography/LeaveReviewForm.tsx
 "use client";
 
 import React, { useState, useMemo, useEffect, useCallback } from "react";
@@ -23,6 +23,8 @@ import { Star, CheckCircle2, Edit, Send } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { RatingStars } from "@/components/sections/photography/RatingStars";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
 const ratingCategories = [
@@ -42,7 +44,6 @@ interface PreviewTestimonial {
 
 type TFunction = ReturnType<typeof useTranslations>;
 
-// This component does not need changes
 const PreviewCard = ({
   testimonial,
   t,
@@ -132,8 +133,9 @@ const ReviewFormContents = () => {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [submissionStatus, setSubmissionStatus] = useState("idle");
+  const [consentGiven, setConsentGiven] = useState(false);
 
-  const isFormComplete = authorName && quote;
+  const isFormComplete = authorName && quote && consentGiven;
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -172,13 +174,9 @@ const ReviewFormContents = () => {
       })
     );
 
-    // --- THIS IS THE DEFINITIVE FIX ---
-    // The key for the file must match the field name in the content type (`avatar`),
-    // not the special `files.avatar` convention, because we are using a custom controller.
     if (photoFile) {
       submissionFormData.append("avatar", photoFile, photoFile.name);
     }
-    // --- END OF FIX ---
 
     submissionFormData.append("recaptcha", recaptchaToken);
 
@@ -308,6 +306,36 @@ const ReviewFormContents = () => {
                   />
                 </div>
               ))}
+
+              <div className="flex items-start space-x-3 pt-2">
+                <Checkbox
+                  id="consent"
+                  checked={consentGiven}
+                  onCheckedChange={(checked) =>
+                    setConsentGiven(checked as boolean)
+                  }
+                  // --- THIS IS THE FIX ---
+                  // The aria-label prop has been removed as it was causing the error and is redundant.
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <label
+                    htmlFor="consent"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.rich("form.consentLabel", {
+                      privacyLink: (chunks) => (
+                        <Link
+                          href="/privacy_policy"
+                          className="underline hover:text-primary"
+                        >
+                          {chunks}
+                        </Link>
+                      ),
+                    })}
+                  </label>
+                </div>
+              </div>
+
               <div className="pt-2">
                 <Button
                   type="submit"
