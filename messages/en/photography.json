@@ -114,9 +114,11 @@
   "LeaveReviewPage": {
     "title": "Leave a Review",
     "subtitle": "Share your experience to help others.",
+    "subtitleAlbum": "Your feedback on our session is greatly appreciated!",
     "form": {
       "nameLabel": "Your Name",
-      "namePlaceholder": "e.g. John Doe",
+      "anonymousName": "A Satisfied Client",
+      "namePlaceholderOptional": "Leave blank to remain anonymous",
       "roleLabel": "Organization / Event (Optional)",
       "rolePlaceholder": "e.g. Acme Inc. or Wedding",
       "photoLabel": "Upload Photo (Optional)",
@@ -147,7 +149,8 @@
     },
     "success": {
       "title": "Thank You!",
-      "message": "Your review has been submitted and is now under review."
+      "message": "Your review has been submitted and is now under review.",
+      "messageAlbum": "Your review has been successfully linked to your album. Thank you for your feedback!"
     },
     "error": "Something went wrong. Please try again."
   },
@@ -157,5 +160,54 @@
   },
   "AlbumPageSEO": {
     "description": "A photography album titled '{title}' from the portfolio of {name}."
+  },
+  "ApprovalPageSEO": {
+    "title": "Review Album: {albumTitle}",
+    "titleNotFound": "Album Not Found"
+  },
+  "ApprovalPage": {
+    "greeting": "Hi {clientName}, please select the images you approve for publication in my portfolio.",
+    "actionBar": {
+      "counter": "{selected} / {total} images selected",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All"
+    },
+    "imageCard": {
+      "commentAriaLabel": "Add or edit comment",
+      "commentTitle": "Image Feedback",
+      "commentDescription": "Leave any notes or requests for this image.",
+      "commentPlaceholder": "e.g., 'This one is my favorite!'",
+      "commentSaveButton": "Save"
+    },
+    "terms": {
+      "title": "Publication Agreement",
+      "content": "By submitting your approval, you grant permission for the selected images to be used in my public portfolio, on social media, and for other promotional purposes. Images that are not selected will remain private and will not be shared publicly.",
+      "consentLabel": "I agree to the publication terms.",
+      "consentDescription": "I confirm my selections and grant permission for the approved images to be published."
+    },
+    "submitButton": {
+      "loading": "Submitting...",
+      "approveAndReview": "Submit {count} Approvals & Continue to Review",
+      "approveOnly": "Submit {count} Approvals",
+      "noApprovalAndReview": "Submit Without Approvals & Continue to Review",
+      "noApproval": "Submit No Approvals"
+    },
+    "validation": {
+      "info": "Please select between {min} and {max} images.",
+      "min": "You must select at least {count} images.",
+      "max": "You cannot select more than {count} images."
+    },
+    "error": {
+      "title": "Error Loading Album",
+      "message": "The album could not be loaded. Please check the link and try again.",
+      "submitTitle": "Submission Failed",
+      "submitMessage": "Something went wrong. Please check your connection and try again.",
+      "downloadMessage": "Could not retrieve download links. Please try again later."
+    },
+    "success": {
+      "title": "Thank You!",
+      "message": "Your selections have been successfully submitted. I will be in touch shortly.",
+      "downloadButton": "Download {count} Approved Images"
+    }
   }
 }

@@ -111,12 +111,14 @@
       }
     }
   },
- "LeaveReviewPage": {
+  "LeaveReviewPage": {
     "title": "Bewertung abgeben",
     "subtitle": "Teile deine Erfahrung, um anderen zu helfen.",
+    "subtitleAlbum": "Dein Feedback zu unserem Shooting ist uns sehr wichtig!",
     "form": {
       "nameLabel": "Ihr Name",
-      "namePlaceholder": "z.B. Erika Mustermann",
+      "anonymousName": "Ein zufriedener Kunde",
+      "namePlaceholderOptional": "Leer lassen, um anonym zu bleiben",
       "roleLabel": "Organisation / Event (Optional)",
       "rolePlaceholder": "z.B. Acme Inc. oder Hochzeit",
       "photoLabel": "Foto hochladen (Optional)",
@@ -147,7 +149,8 @@
     },
     "success": {
       "title": "Vielen Dank!",
-      "message": "Deine Bewertung wurde übermittelt und wird nun überprüft."
+      "message": "Deine Bewertung wurde übermittelt und wird nun überprüft.",
+      "messageAlbum": "Deine Bewertung wurde erfolgreich mit deinem Album verknüpft. Vielen Dank für dein Feedback!"
     },
     "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
@@ -157,5 +160,54 @@
   },
   "AlbumPageSEO": {
     "description": "Ein Fotoalbum mit dem Titel '{title}' aus dem Portfolio von {name}."
+  },
+  "ApprovalPageSEO": {
+    "title": "Album-Freigabe: {albumTitle}",
+    "titleNotFound": "Album nicht gefunden"
+  },
+  "ApprovalPage": {
+    "greeting": "Hallo {clientName}, bitte wähle die Fotos aus, deren Veröffentlichung in meinem Portfolio du zustimmst.",
+    "actionBar": {
+      "counter": "{selected} / {total} Bilder ausgewählt",
+      "selectAll": "Alle auswählen",
+      "deselectAll": "Auswahl aufheben"
+    },
+    "imageCard": {
+      "commentAriaLabel": "Kommentar hinzufügen/bearbeiten",
+      "commentTitle": "Bild-Feedback",
+      "commentDescription": "Hinterlasse hier Anmerkungen oder Wünsche zu diesem Bild.",
+      "commentPlaceholder": "z.B. 'Dieses ist mein Favorit!'",
+      "commentSaveButton": "Speichern"
+    },
+    "terms": {
+      "title": "Veröffentlichungsvereinbarung",
+      "content": "Mit dem Absenden Ihrer Freigabe erteilen Sie die Erlaubnis, dass die ausgewählten Bilder in meinem öffentlichen Portfolio, auf sozialen Medien und für andere Werbezwecke verwendet werden dürfen. Nicht ausgewählte Bilder bleiben privat und werden nicht öffentlich geteilt.",
+      "consentLabel": "Ich stimme den Veröffentlichungsbedingungen zu.",
+      "consentDescription": "Ich bestätige meine Auswahl und erteile die Erlaubnis zur Veröffentlichung der freigegebenen Bilder."
+    },
+    "submitButton": {
+      "loading": "Wird gesendet...",
+      "approveAndReview": "{count} Freigaben senden & Bewertung abgeben",
+      "approveOnly": "{count} Freigaben senden",
+      "noApprovalAndReview": "Ohne Freigaben senden & Bewertung abgeben",
+      "noApproval": "Keine Freigaben senden"
+    },
+    "validation": {
+      "info": "Bitte wähle zwischen {min} und {max} Bildern aus.",
+      "min": "Du musst mindestens {count} Bilder auswählen.",
+      "max": "Du darfst nicht mehr als {count} Bilder auswählen."
+    },
+    "error": {
+      "title": "Fehler beim Laden des Albums",
+      "message": "Das Album konnte nicht geladen werden. Bitte überprüfe den Link und versuche es erneut.",
+      "submitTitle": "Senden fehlgeschlagen",
+      "submitMessage": "Etwas ist schiefgelaufen. Bitte überprüfe deine Verbindung und versuche es erneut.",
+      "downloadMessage": "Download-Links konnten nicht abgerufen werden. Bitte versuche es später erneut."
+    },
+    "success": {
+      "title": "Vielen Dank!",
+      "message": "Deine Auswahl wurde erfolgreich übermittelt. Ich melde mich in Kürze bei dir.",
+      "downloadButton": "{count} freigegebene Bilder herunterladen"
+    }
   }
 }

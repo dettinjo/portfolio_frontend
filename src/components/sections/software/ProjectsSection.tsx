@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import type { SoftwareProject } from "@/lib/strapi";
 import { AnimatedProjectCard } from "./AnimatedProjectCard";
-import { motion } from "framer-motion"; // Make sure motion is imported
 
 interface ProjectsSectionProps {
   projects: SoftwareProject[];

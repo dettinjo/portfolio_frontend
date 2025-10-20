@@ -21,6 +21,18 @@ export interface Album {
     slug: string;
     locale: string;
   }>;
+  approvalRequired?: boolean;
+  approvalToken?: string;
+  clientName?: string;
+  clientEmail?: string;
+  approvalStatus?: 'Pending' | 'Submitted' | 'Approved';
+  imageApprovals?: { imageId: number; approved: boolean; comment?: string }[];
+  selectionMin?: number;
+  selectionMax?: number;
+  allowDownloads?: boolean;
+  approvalTerms?: string; 
+  publicationConsent?: boolean;
+  testimonials?: Testimonial[];
 }
 export interface Testimonial {
   id: number;
@@ -174,7 +186,7 @@ export async function fetchTestimonials(locale?: string): Promise<Testimonial[]>
 export async function fetchAlbumBySlug(slug: string, locale?: string): Promise<Album | null> {
     const albums = await fetchAPI<Album[]>('/albums', {
         filters: { slug: { $eq: slug } },
-        populate: { images: true, coverImage: true, localizations: true },
+        populate: { images: true, coverImage: true, localizations: true, testimonials: true },
     }, {}, locale);
     return albums?.[0] || null;
 }

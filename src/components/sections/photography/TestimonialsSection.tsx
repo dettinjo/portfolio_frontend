@@ -75,7 +75,6 @@ export function TestimonialsSection({
               }}
             >
               <TestimonialDialog testimonial={item}>
-                {/* --- CARD STYLES UPDATED --- */}
                 <Card className="relative group flex flex-col cursor-pointer bg-foreground text-background border-transparent transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-background/20 dark:hover:shadow-black/30">
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <ExternalLink className="h-4 w-4 text-background/70" />

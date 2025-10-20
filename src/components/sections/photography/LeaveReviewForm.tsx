@@ -6,10 +6,10 @@ import {
   GoogleReCaptchaProvider,
   useGoogleReCaptcha,
 } from "react-google-recaptcha-v3";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -17,22 +17,13 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Star, CheckCircle2, Edit, Send } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { RatingStars } from "@/components/sections/photography/RatingStars";
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RatingStars } from "./RatingStars";
+import { useTranslations, useLocale } from "next-intl";
+import { TestimonialFormFields } from "./TestimonialFormFields";
 import { cn } from "@/lib/utils";
-
-const ratingCategories = [
-  { id: "communication", label: "Communication" },
-  { id: "creativity", label: "Creativity" },
-  { id: "professionalism", label: "Professionalism" },
-  { id: "value", label: "Value" },
-];
 
 interface PreviewTestimonial {
   name: string;
@@ -44,7 +35,7 @@ interface PreviewTestimonial {
 
 type TFunction = ReturnType<typeof useTranslations>;
 
-const PreviewCard = ({
+export const PreviewCard = ({
   testimonial,
   t,
 }: {
@@ -57,6 +48,7 @@ const PreviewCard = ({
     const ratedCategories = ratingValues.filter((val) => val > 0).length;
     return ratedCategories > 0 ? total / ratedCategories : 0;
   }, [testimonial.ratings]);
+
   return (
     <Card className="flex flex-col">
       <CardContent className="p-6">
@@ -89,17 +81,19 @@ const PreviewCard = ({
         <Separator className="mb-6" />
         <div className="space-y-4">
           <h3 className="font-semibold">{t("ratings.title")}</h3>
-          {ratingCategories.map((cat) => (
-            <div
-              key={cat.id}
-              className="flex items-center justify-between text-sm"
-            >
-              <span className="text-muted-foreground">
-                {t(`ratings.${cat.id}`)}
-              </span>
-              <RatingStars rating={testimonial.ratings[cat.id] || 0} />
-            </div>
-          ))}
+          {["communication", "creativity", "professionalism", "value"].map(
+            (cat) => (
+              <div
+                key={cat}
+                className="flex items-center justify-between text-sm"
+              >
+                <span className="text-muted-foreground">
+                  {t(`ratings.${cat}`)}
+                </span>
+                <RatingStars rating={testimonial.ratings[cat] || 0} />
+              </div>
+            )
+          )}
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0 flex-col items-start gap-6">
@@ -118,14 +112,19 @@ const PreviewCard = ({
 
 const ReviewFormContents = () => {
   const t = useTranslations("photography.LeaveReviewPage");
+  const locale = useLocale();
   const { executeRecaptcha } = useGoogleReCaptcha();
+  const searchParams = useSearchParams();
+  const albumId = searchParams.get("albumId");
+  const prefilledName = searchParams.get("clientName");
+  const prefilledEvent = searchParams.get("eventName");
 
   const [step, setStep] = useState(1);
-  const [authorName, setAuthorName] = useState("");
-  const [eventValue, setEventValue] = useState("");
+  const [authorName, setAuthorName] = useState(prefilledName || "");
+  const [eventValue, setEventValue] = useState(prefilledEvent || "");
   const [quote, setQuote] = useState("");
   const [ratings, setRatings] = useState<Record<string, number>>({
-    communication: 3,
+    communication: 4,
     creativity: 4,
     professionalism: 5,
     value: 4,
@@ -133,13 +132,13 @@ const ReviewFormContents = () => {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [submissionStatus, setSubmissionStatus] = useState("idle");
-  const [consentGiven, setConsentGiven] = useState(false);
 
-  const isFormComplete = authorName && quote && consentGiven;
+  const isFormComplete = !!quote;
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
       setPhotoFile(file);
       setPhotoPreview(URL.createObjectURL(file));
     }
@@ -163,14 +162,19 @@ const ReviewFormContents = () => {
     }
     setSubmissionStatus("submitting");
     const recaptchaToken = await executeRecaptcha("testimonialSubmit");
+
+    const finalName =
+      authorName.trim() === "" ? t("form.anonymousName") : authorName.trim();
+
     const submissionFormData = new FormData();
     submissionFormData.append(
       "data",
       JSON.stringify({
-        name: authorName,
+        name: finalName,
         event: eventValue,
         quote,
         ...ratings,
+        albumId: albumId ? parseInt(albumId) : null,
       })
     );
 
@@ -182,7 +186,7 @@ const ReviewFormContents = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/testimonials`,
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/testimonials?locale=${locale}`,
         {
           method: "POST",
           body: submissionFormData,
@@ -195,20 +199,33 @@ const ReviewFormContents = () => {
       console.error("Submission error:", error);
       setSubmissionStatus("error");
     }
-  }, [executeRecaptcha, authorName, eventValue, quote, ratings, photoFile]);
+  }, [
+    executeRecaptcha,
+    authorName,
+    eventValue,
+    quote,
+    ratings,
+    photoFile,
+    locale,
+    albumId,
+    t,
+  ]);
 
   if (step === 3) {
     return (
       <div className="container mx-auto max-w-2xl py-24 text-center">
         <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
         <h1 className="text-3xl font-bold">{t("success.title")}</h1>
-        <p className="text-muted-foreground mt-2">{t("success.message")}</p>
+        <p className="text-muted-foreground mt-2">
+          {albumId ? t("success.messageAlbum") : t("success.message")}
+        </p>
       </div>
     );
   }
 
   const previewData = {
-    name: authorName,
+    name:
+      authorName.trim() === "" ? t("form.anonymousName") : authorName.trim(),
     event: eventValue,
     quote: quote,
     avatar: photoPreview,
@@ -223,119 +240,35 @@ const ReviewFormContents = () => {
             <div className="text-center mb-6">
               <CardTitle className="text-3xl">{t("title")}</CardTitle>
               <CardDescription className="mt-1">
-                {t("subtitle")}
+                {albumId ? t("subtitleAlbum") : t("subtitle")}
               </CardDescription>
             </div>
-            <form onSubmit={handlePreview} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name">{t("form.nameLabel")}</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    placeholder={t("form.namePlaceholder")}
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="event">{t("form.roleLabel")}</Label>
-                  <Input
-                    id="event"
-                    name="event"
-                    value={eventValue}
-                    onChange={(e) => setEventValue(e.target.value)}
-                    placeholder={t("form.rolePlaceholder")}
-                  />
-                </div>
-              </div>
+            <form onSubmit={handlePreview} className="space-y-4">
+              <TestimonialFormFields
+                name={authorName}
+                onNameChange={setAuthorName}
+                isNameDisabled={false}
+                quote={quote}
+                onQuoteChange={setQuote}
+                ratings={ratings}
+                onRatingsChange={setRatings}
+                photoFile={photoFile}
+                onPhotoChange={handlePhotoChange}
+              />
               <div className="space-y-1.5">
-                <Label>{t("form.photoLabel")}</Label>
-                <div className="flex items-center gap-4">
-                  <Input
-                    id="photo"
-                    name="photo"
-                    type="file"
-                    accept="image/png, image/jpeg, image/webp"
-                    onChange={handlePhotoChange}
-                    className="sr-only"
-                  />
-                  <Label
-                    htmlFor="photo"
-                    className={cn(
-                      buttonVariants({ variant: "outline" }),
-                      "cursor-pointer"
-                    )}
-                  >
-                    {t("form.buttonUpload")}
-                  </Label>
-                  <span className="text-sm text-muted-foreground truncate">
-                    {photoFile ? photoFile.name : t("form.noFileChosen")}
-                  </span>
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="message">{t("form.testimonialLabel")}</Label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  value={quote}
-                  onChange={(e) => setQuote(e.target.value)}
-                  placeholder={t("form.testimonialPlaceholder")}
-                  className="min-h-[120px]"
-                  required
+                <Label htmlFor="event">{t("form.roleLabel")}</Label>
+                <Input
+                  id="event"
+                  name="event"
+                  value={eventValue}
+                  onChange={(e) => setEventValue(e.target.value)}
+                  placeholder={t("form.rolePlaceholder")}
+                  disabled={!!prefilledEvent}
+                  className={cn(
+                    !!prefilledEvent && "cursor-not-allowed bg-muted/50"
+                  )}
                 />
               </div>
-              <Separator />
-              {ratingCategories.map((cat) => (
-                <div key={cat.id} className="space-y-2">
-                  <div className="flex justify-between items-center text-sm">
-                    <Label htmlFor={cat.id}>{t(`ratings.${cat.id}`)}</Label>
-                    <span className="font-semibold">{ratings[cat.id]} / 5</span>
-                  </div>
-                  <Slider
-                    id={cat.id}
-                    value={[ratings[cat.id]]}
-                    onValueChange={([val]) =>
-                      setRatings((prev) => ({ ...prev, [cat.id]: val }))
-                    }
-                    min={0}
-                    max={5}
-                    step={1}
-                  />
-                </div>
-              ))}
-
-              <div className="flex items-start space-x-3 pt-2">
-                <Checkbox
-                  id="consent"
-                  checked={consentGiven}
-                  onCheckedChange={(checked) =>
-                    setConsentGiven(checked as boolean)
-                  }
-                  // --- THIS IS THE FIX ---
-                  // The aria-label prop has been removed as it was causing the error and is redundant.
-                />
-                <div className="grid gap-1.5 leading-none">
-                  <label
-                    htmlFor="consent"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {t.rich("form.consentLabel", {
-                      privacyLink: (chunks) => (
-                        <Link
-                          href="/privacy_policy"
-                          className="underline hover:text-primary"
-                        >
-                          {chunks}
-                        </Link>
-                      ),
-                    })}
-                  </label>
-                </div>
-              </div>
-
               <div className="pt-2">
                 <Button
                   type="submit"
@@ -354,6 +287,7 @@ const ReviewFormContents = () => {
             <h1 className="text-3xl font-bold">{t("preview.title")}</h1>
             <p className="text-muted-foreground">{t("preview.subtitle")}</p>
           </div>
+          {/* --- DEFINITIVE FIX: Use 't' instead of 't_review' --- */}
           <PreviewCard testimonial={previewData} t={t} />
           <div className="mt-6 grid grid-cols-2 gap-4">
             <Button variant="outline" onClick={() => setStep(1)}>
