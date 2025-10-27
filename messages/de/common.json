@@ -1,5 +1,5 @@
 {
-"PhotographyHeader": {
+  "PhotographyHeader": {
     "galleries": "Galerie",
     "services": "Services",
     "contact": "Kontakt"
@@ -74,5 +74,47 @@
     "section3_testimonials_content": "Wenn Sie unser Formular zur Einreichung einer Bewertung nutzen, werden die von Ihnen bereitgestellten Daten (Name, Organisation/Event, Ihre Bewertung, Detailbewertungen und optional ein hochgeladenes Foto) an unser Backend-System (Strapi CMS) übermittelt und dort gespeichert. Dies geschieht zum Zweck der Prüfung und Veröffentlichung Ihres Feedbacks auf unserer Webseite. Die Verarbeitung dieser Daten erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die Sie durch das Absenden des Formulars erteilen. Sie können diese Einwilligung jederzeit widerrufen, indem Sie uns kontaktieren; Ihre Bewertung wird dann entfernt.",
     "section4_title": "3. Ihre Rechte als Betroffener",
     "section4_content": "Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten."
+  },
+  "Auth": {
+    "LoginPage": {
+      "title": "Anmelden",
+      "description": "Greifen Sie auf Ihre persönlichen Fotoalben zu.",
+      "emailLabel": "E-Mail",
+      "passwordLabel": "Passwort",
+      "submitButton": "Mit E-Mail anmelden",
+      "googleButton": "Mit Google anmelden",
+      "noAccount": "Haben Sie noch kein Konto?",
+      "registerLink": "Registrieren",
+      "loginFailed": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten."
+    },
+    "RegisterPage": {
+      "title": "Registrieren",
+      "description": "Erstellen Sie Ihr Kundenkonto.",
+      "usernameLabel": "Benutzername",
+      "emailLabel": "E-Mail",
+      "passwordLabel": "Passwort",
+      "submitButton": "Konto erstellen",
+      "googleButton": "Mit Google registrieren",
+      "hasAccount": "Haben Sie bereits ein Konto?",
+      "loginLink": "Anmelden",
+      "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut."
+    },
+    "CallbackPage": {
+      "title": "Verbinde...",
+      "message": "Verbindung wird hergestellt, bitte warten..."
+    },
+    "DashboardPage": {
+      "title": "Dashboard",
+      "welcome": "Willkommen, {username}!",
+      "logout": "Abmelden",
+      "albumsTitle": "Ihre Alben",
+      "noAlbums": "Ihnen sind noch keine Alben zugewiesen.",
+      "loading": "Ihr Dashboard wird geladen...",
+      "albumStatus": "Status: {status}",
+      "status": {
+        "unknown": "Ausstehend"
+      },
+      "viewAlbum": "Album ansehen"
+    }
   }
 }

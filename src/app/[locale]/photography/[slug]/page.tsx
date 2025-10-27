@@ -7,7 +7,6 @@ import {
   getStrapiMedia,
 } from "@/lib/strapi";
 import { getTranslations } from "next-intl/server";
-// ADD THESE IMPORTS for Structured Data
 import { WithContext, ImageGallery, BreadcrumbList } from "schema-dts";
 
 const STRAPI_URL =
@@ -27,7 +26,7 @@ export async function generateStaticParams() {
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, locale } = params;
+  const { slug, locale } = await params;
   const album = await fetchAlbumBySlug(slug, locale);
   if (!album) {
     return { title: "Album Not Found" };
@@ -79,7 +78,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // The main page component
 export default async function AlbumDetailPage({ params }: Props) {
-  const album = await fetchAlbumBySlug(params.slug, params.locale);
+  const { slug, locale } = await params;
+  const album = await fetchAlbumBySlug(slug, locale);
 
   if (!album) {
     notFound();

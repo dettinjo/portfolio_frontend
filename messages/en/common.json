@@ -1,5 +1,5 @@
 {
-"Footer": {
+  "Footer": {
     "made_with": "Made with",
     "by_me": "by me",
     "imprint": "Imprint",
@@ -23,7 +23,7 @@
   "ImprintPage": {
     "title": "Imprint",
     "section1_title": "Information pursuant to § 5 TMG",
-     "section1_content": {
+    "section1_content": {
       "name": "{name}",
       "street": "{street}",
       "city": "{city}",
@@ -45,7 +45,7 @@
     "disclaimer_copyright_title": "Copyright",
     "disclaimer_copyright_content": "The content and works created by the site operators on these pages are subject to German copyright law. The reproduction, processing, distribution, and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator."
   },
-    "PrivacyPage": {
+  "PrivacyPage": {
     "title": "Privacy Policy",
     "section1_title": "1. Data Protection at a Glance",
     "section1_content": "This privacy policy informs you about the nature, scope, and purpose of the processing of personal data on our website.",
@@ -69,5 +69,47 @@
     "section3_testimonials_content": "If you use our form to submit a testimonial, the data you provide (name, organization/event, your review, ratings, and optionally an uploaded photo) will be transmitted to and stored in our backend system (Strapi CMS) for the purpose of reviewing and publishing your feedback on our website. This data is processed based on your consent (Art. 6(1)(a) GDPR), which you give by submitting the form. You can withdraw this consent at any time by contacting us, and your testimonial will be removed.",
     "section4_title": "3. Your Rights as a Data Subject",
     "section4_content": "Within the framework of the applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipients, and the purpose of the data processing, and, if applicable, a right to correction or deletion of this data."
+  },
+  "Auth": {
+    "LoginPage": {
+      "title": "Login",
+      "description": "Access your personal photo albums.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submitButton": "Login with Email",
+      "googleButton": "Login with Google",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register",
+      "loginFailed": "Login failed. Please check your credentials and try again."
+    },
+    "RegisterPage": {
+      "title": "Register",
+      "description": "Create your customer account.",
+      "usernameLabel": "Username",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submitButton": "Create Account",
+      "googleButton": "Register with Google",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Login",
+      "registrationFailed": "Registration failed. Please try again."
+    },
+    "CallbackPage": {
+      "title": "Connecting...",
+      "message": "Connecting, please wait..."
+    },
+    "DashboardPage": {
+      "title": "Dashboard",
+      "welcome": "Welcome, {username}!",
+      "logout": "Logout",
+      "albumsTitle": "Your Albums",
+      "noAlbums": "You don't have any albums assigned to you yet.",
+      "loading": "Loading your dashboard...",
+      "albumStatus": "Status: {status}",
+      "status": {
+        "unknown": "Pending"
+      },
+      "viewAlbum": "View Album"
+    }
   }
 }

@@ -8,6 +8,7 @@ import { routing, isValidLocale } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import React from "react";
 import { Metadata } from "next";
+import { AuthProvider } from "@/context/AuthContext";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -48,7 +49,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
+      <AuthProvider>{children}</AuthProvider>
     </NextIntlClientProvider>
   );
 }
